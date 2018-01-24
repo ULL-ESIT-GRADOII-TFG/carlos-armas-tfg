@@ -1,0 +1,3 @@
+[submodule "ghedsh"]
+	path = ghedsh
+	url = git@github.com:ULL-ESIT-GRADOII-TFG/ghedsh.git
