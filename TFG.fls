@@ -1,8 +1,8 @@
-PWD /Users/carlos/Desktop/TFM-SyTWA
+PWD /Users/carlos/Desktop/carlos-armas-tfg
 INPUT /usr/local/texlive/2017/texmf.cnf
 INPUT /usr/local/texlive/2017/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/carlos/Desktop/TFM-SyTWA/TFG.tex
+INPUT /Users/carlos/Desktop/carlos-armas-tfg/TFG.tex
 OUTPUT TFG.log
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/extsizes/extreport.cls
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/extsizes/extreport.cls
