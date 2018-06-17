@@ -21,78 +21,77 @@ Asimismo, GitHub dispone de un programa denominado {\it GitHub Education} que of
 \bigskip
 
 A los docentes se les ofrece la posibilidad de crear organizaciones para cada clase, mediante repositorios privados que se crean automáticamente para el conjunto de estudiantes y equipos,
-a partir de las asignaciones realizadas por los profesores de las asignaturas a través la herramienta {\it GitHub ClassRoom }.
+a partir de las asignaciones realizadas por los profesores de las asignaturas a través la herramienta {\it GitHub Classroom }.
 \bigskip
 
 En cuanto a los estudiantes, se les da acceso gratuito a herramientas de desarrollo, plataformas de alojamiento y nuevas características en GitHub gracias a {\it Student Developer Pack }.
 \bigskip
 
-En este contexto, multitud de docentes se plantean el desarrollo de metodologías e implantación de herramientas
+En este contexto, multitud de docentes se plantean la necesidad del desarrollo de metodologías e implantación de herramientas
 que asistan al profesorado en la evaluación de las tareas y actividades de programación, principalmente.
 %---------------------------------------------------------------------------------
 \section{Estado actual del arte}
 \label{1:sec:2}
+Con el fin de integrar el uso del control de versiones en las aulas, GitHub desarrolló una herramienta de línea de comandos bajo el nombre de {\it Teachers Pet}. Ésta herramienta proponía que cada aula fuese una
+organización, lo que permitía a los profesores (que serían los propietarios de la organización) administrar todos los repositorios dentro de la misma. Con esta forma de trabajar se lograban dos objetivos:
+\begin{itemize}
+  \item Facilitar a los profesores la distribución de código de inicio a los alumnos.
+  \item Los profesores eran capaces de acceder a las tareas de los alumnos para resolver preguntas y comprobar el progreso.
+\end{itemize}
+Sin embargo, cayó en desuso y se dejó de desarrollar. La principal razón fue que los comandos se hacían excesivamente largos en determinadas tareas, puesto que era necesario especificar múltiples opciones.
+\bigskip
 
-Actualmente, hay numerosos sistemas de control de versiones. Todos ellos proporcionan mecanismos de almacenamiento del código, de modificación y de consulta histórica del mismo, a la vez que proporcionan un entorno colaborativo en el que los usuarios pueden colaborar e interactuar entre sí.
-
-En el caso particular de GitHub, además de proporcionar lo mencionado anteriormente, observando el creciente número de estudiantes que utiliza la plataforma, ha creado herramientas específicas para facilitar sus desarrollos (ej: Student Developer Pack) y provee a profesores de herramientas para gestionar dichos desarrollos (ej: GitHub Classrooms).
-
-Sin embargo, estas herramientas de gestión de desarrollos requieren una administración interactiva por parte del profesor. No cuentan aún con funcionalidades de automatización de tareas.
-
+Actualmente, GitHub dispone de una plataforma, {\it GitHub Classroom}, que mejora la experiencia de usuario respecto a {\it Teachers Pet}, dado que dispone de una interfaz amigable en el navegador que simplifica
+la configuración de las aulas y asignaciones. No obstante, en esta plataforma existen algunas limitaciones:
+\begin{itemize}
+  \item No dispone de alguna funcionalidad dentro de ella que permita al profesor crear un repositorio de evaluación para calificar las tareas.
+  \item No da soporte a herramientas de integración continua, como {\it Travis CI}, {\it CircleCI}, {\it Jenkins}, etc.
+  \item En muchos casos, el nombre de usuario que ha escogido el alumno al registrarse en GitHub no permite identificarlo. Además, el sistema para añadir información adicional del alumno es incómodo de usar,
+  puesto que la información se inserta individualmente.
+\end{itemize}
 %---------------------------------------------------------------------------------
 \section{Objetivos y actividades a realizar}
 \label{1:sec:3}
 
-En este proyecto se persigue integrar los conocimientos adquiridos durante los estudios del Máster y,
-en especial, del itinerario de Tecnologías de la Información para solucionar problemas actuales de aplicaciones y servicios Web.
+El principal objetivo de este Trabajo de Fin de Grado es desarrollar una interfaz de línea de comandos, bajo el nombre de {\it GitHub Education Shell},
+que utilice la misma metodología que {\it Teachers Pet} y {\it GitHub Classroom} y que aporte una solución a las limitaciones que poseen dichas herramientas, así como priorizar
+la realización de tareas a gran escala más comunes en entornos educativos.
+\bigskip
 
-Los objetivos propuestos para alcanzar en este Trabajo de Fin de Máster ha sido los siguientes:
+Para lograr dichos objetivos, se han definido diferentes actividades:
 \begin{itemize}
-  \item Conocer, dominar y practicar con lenguajes y herramientas de desarrollo de aplicaciones Web
-    en el servidor (Node.js, npm).
-  %\item Conocer, dominar y practicar con diferentes lenguajes y librerías en el cliente.
-  \item Conocer, practicar y dominar de herramientas de Desarrollo Dirigido por Pruebas en entornos
-web y la Integración Contínua.
-  %\item Conocer, practicar y dominar diferentes lenguajes de marcas y de estilo.
-  %\item Conocer, practicar y dominar diferentes mecanismos de despliegue.
-  \item Conocer, practicar y familiarizarse con diferentes mecanismos de seguridad, autentificación
-y autorización.
-  \item Conocer, practicar y dominar diferentes herramientas colaborativas y de control de versiones.
-  \item Conocer, practicar y dominar Metodologías Ágiles de desarrollo de software.
+  \item {\bf A1.} Estudio del funcionamiento de la API ({\it Application Programming Interface}) de GitHub y su implementación oficial en Ruby, {\it Octokit}.
+  \item {\bf A2.} Analizar aplicaciones similares e identificar aspectos a mejorar.
+  \item {\bf A3.} Comprensión del código de la última versión de la gema {\it ghedsh}.
+  \item {\bf A4.} Estudio de aspectos positivos y negativos del diseño de dicha gema.
+  \item {\bf A5.} Refactorización del código fuente, aplicando patrones de diseño.
+  \item {\bf A6.} Estudio de nuevas funcionalidades para incorporar.
+  \item {\bf A7.} Implementación de las funcionalidades escogidas.
+  \item {\bf A8.} Definir estructura básica de pruebas.
+  \item {\bf A9.} Documentación del código.
 \end{itemize}
 \bigskip
 
-Y las actividades a realizar en el mismo son las que se describen a continuación:
-\begin{itemize}
-  \item Revisión bibliográfica y estado del arte.
-  \item Desarrollar una herramienta de línea de comandos escrita en Node.js que permita automatizar tareas relacionadas con repositorios de GitHub:
-  \begin{itemize}
-    \item Autenticación con GitHub.
-    \item Listar organizaciones, asignaciones y repositorios de GitHub del usuario.
-    \item Automatizar la descarga de repositorios.
-    \item Automatizar la ejecución de scripts en los repositorios (TDD, creación de entorno, evaluación de código...).
-    \item Recopilar la información obtenida de la automatización de tareas y presentarla al usuario (PDF, HTML...).
-  \end{itemize}
-  \item Redacción de la memoria.
-  \item Preparación de la presentación oral.
-\end{itemize}
+En la siguiente tabla se muestra el plan de trabajo con la duración de las actividades:
+\input{tables/plan_trabajo.tex}
 
 %---------------------------------------------------------------------------------
-\section{Tecnología usada}
-\label{1:sec:3}
+\section{Tecnología empleada}
+\label{1:sec:4}
  
-Para llevar a cabo el desarrollo de esta herramienta se planteó realizar el desarrollo en \ceis{Node.js}, creando una librería modular que se pudiese instalar mediante el gestor de paquetes de Node.js (NPM).
+En cuanto a la tecnología empleada, el lenguaje de programación escogido para el desarrollo ha sido {\it Ruby},
+puesto que la versión anterior también está escrita en este lenguaje.
+\bigskip
 
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.3\textwidth]{images/nodejs-logo}
-\end{center}
-\end{figure}
+Para que el programa utilice los datos de GitHub del usuario, se ha utilizado la API REST v3. En concreto,
+la librería oficial escrita en Ruby, {\it Octokit}, la cual proporciona una gran cantidad de métodos para realizar diferentes acciones, como, por ejemplo,
+crear repositorios y administrar su configuración, crear equipos y acceder a la información del usuario, entre otros.
+Para la autenticación del usuario, se generará un {\it token} automáticamente con los permisos requeridos para el uso del programa.
 
-Además, se ha hecho uso de otras tecnologías enumeradas a continuación:
+Por otro lado, en cuanto al ecosistema de {\it Ruby}, tenemos:
 \begin{itemize}
-  \item NPM            \includegraphics[width=0.15\textwidth]{images/npm}
-  \item GitHub         \includegraphics[width=0.1\textwidth]{images/github}
-  \item GitBook        \includegraphics[width=0.3\textwidth]{images/gitbook}
-  \item Travis-CI      \includegraphics[width=0.3\textwidth]{images/travis-ci-logo}
+  \item {\it Rubygems}: servicio de alojamiento de gemas para la comunidad de Ruby.
+  \item {\it Bundler}: proporciona un entorno para manejar las dependencias de un proyecto Ruby, añadiendo las versiones que son necesarias.
+  \item {\it YARD}: herramienta para la documentción del código fuente.
+  \item {\it RSpec}: librería para la definición de pruebas.
 \end{itemize}
