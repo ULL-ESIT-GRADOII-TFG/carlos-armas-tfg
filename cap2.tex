@@ -3,45 +3,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+En este capítulo dos se va a describir el desarrollo del proyecto. Se dividirá en dos fases bien diferenciadas, una primera fase que consiste en el análisis y refactorización del código fuente de la versión anterior de
+{\it GitHub Education Shell}, y una segunda fase que trata de la incorporación de nuevas funcionalidades a la herramienta.
+\bigskip
 
-En el capítulo anterior se ha descrito el estado del arte actual y se ha definido el Trabajo de Fin de Máster, especificado los objetivos, actividades a desarrollar y las tecnologías empleadas para su desarrollo. A continuación, se describirá la metodología de trabajo seguida.
+Por otro lado, también cabe nombrar la metodología de trabajo empleada. Situándonos en el marco de las metodologías ágiles, {\it Scrum} fue la metodología que mejor encajaba, teniendo en cuenta las características del proyecto.
+Se ha optado por un desarrollo incremental, en lugar de una planificación y ejecución estricta de las tareas. Además, en numerosas ocasiones,
+se produjeron solapamientos de las diferentes partes del desarrollo, en vez de un ciclo secuencial. También fueron frecuentes las reuniones con el tutor, en las que se comentaban tanto avances como dificultades.
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-\section{Metodología usada}
+\section{Primera fase: análisis y refactorización.}
 \label{2:sec:1}
 
-Se ha llevado a cabo una metodología de trabajo ágil, común en el campo de la Ingeniería Informática, con reuniones periódicas en las que se definían una serie de tareas u objetivos (iteración) y que se presentaban la siguiente reunión. 
-De este modo, con la entrega de prototipos funcionales de la aplicación, se han ido testeando, corrigiendo y mejorando las 
-funcionalidades, al mismo tiempo que detectando problemas no contemplados en las fases previas de diseño.
-
-Esta metodología, además, ha propiciado la generación de ideas que se han traducido en nuevas características.
+En esta sección, se explicará detalladamente el proceso fundamental de la primera fase de este Trabajo de Fin de Grado.
 
 
 %---------------------------------------------------------------------------------
-\subsection{GitHub}
+\subsection{Análisis}
 \label{subsec:2.1.1}
 
-Para llevar a cabo esta metodología, se ha usado GitHub como herramienta de Control de Versiones (CVS).
-Todo el código implementado se alojaba en dicha herramienta, permitiendo así su cómoda modificación y actualización.
+El análisis del código fuente correspondiente a la primera versión de {\it ghedsh}, se ha llevado a cabo con la finalidad de identificar aquellas partes mejorables del diseño e implementación,
+puesto que una de las prioridades es facilitar el desarrollo colaborativo y, para ello, se requiere que el código sea limpio y fácil de entender, lo más auto-explicativo posible.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{images/github1}
-\caption{Captura del repositorio del paquete NPM en GitHub}
-\label{fig:github1}
-\end{center}
-\end{figure}
-
-El trabajo se dividía en ramas, de modo que la versión estable de la aplicación (rama \verb|master|) quedara aislada de la 
-versión en desarrollo (rama \verb|develop|) y de la rama experimental (rama \verb|test|).
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.47\textwidth]{images/github2}
+%\includegraphics[width=0.47\textwidth]{images/}
 \caption{Ramas del repositorio}
-\label{fig:github2}
+%\label{fig:github2}
 \end{center}
 \end{figure}
 
@@ -50,9 +39,9 @@ La documentación adicional para llevar a cabo los desarrollos de cada iteració
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=1\textwidth]{images/github3}
+%\includegraphics[width=1\textwidth]{images/}
 \caption{Apartado de issues}
-\label{fig:github3}
+%\label{fig:github3}
 \end{center}
 \end{figure}
 
@@ -61,14 +50,6 @@ La documentación adicional para llevar a cabo los desarrollos de cada iteració
 \label{subsec:2.1.2}
 
 Como herramienta de integración continua, se ha utilizado Travis-CI, con el fin de asegurarnos el despliegue de la aplicación era satisfactorio tras cada cambio subido a la herramienta de control de versiones (GitHub).
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=1.1\textwidth]{images/travis-ci}
-\caption{Herramienta de integración continua}
-\label{fig:travisci}
-\end{center}
-\end{figure}
 
 %---------------------------------------------------------------------------------
 \subsection{Experiencia de usuario}
