@@ -23,7 +23,8 @@ El análisis del código fuente correspondiente a la primera versión de {\it gh
 puesto que una de las prioridades era facilitar el desarrollo colaborativo y, para ello, se requiere que el código sea limpio y fácil de entender, lo más auto-explicativo posible.
 \bigskip
 
-\subsubsection{Estructura del repositorio}
+\subsection{Estructura del repositorio}
+\label{2.1.1}
 En la figura \ref{fig:masterv1}, se muestra la estructura del repositorio de la primera versión de {\it ghedsh}, en concreto, de la rama \verb master. Dicha estructura corresponde con la forma estándar
 de organizar el código de las gemas.
 
@@ -47,7 +48,8 @@ A continuación, se explicarán los componentes principales del repositorio:
 \end{itemize}
 \bigskip
 
-\subsubsection{Contenido del repositorio}
+\subsection{Contenido del repositorio}
+\label{2.1.2}
 El primer paso del análisis consistió en comprender exactamente el flujo del programa. Ésto es necesario dado que, para identificar las partes mejorables del diseño inicial, requiere entenderlo en profundidad.
 \bigskip
 
@@ -103,7 +105,8 @@ Los ficheros principales se describirán según la funcionalidad que desempeñan
 \end{itemize}
 \bigskip
 
-\subsubsection{Code Smell}
+\subsection{Code Smell}
+\label{2.1.3}
 Una vez analizado el planteamiento inicial, se han detectado una serie de debilidades en el diseño que han dado lugar a diversos {\it code smell} \cite{B11}.
 Un {\it code smell} se define como cualquier característica del código fuente que, posiblemente, indica un problema más profundo. No son considerados como {\it bugs}, puesto que no impiden que un programa funcione de manera correcta.
 \bigskip
@@ -116,9 +119,58 @@ los posibles casos de uso, aporta indicaciones para respetar ciertos principios 
 \bigskip
 
 En el apartado de refactorización se explicará cómo se ha procedido para solucionarlos. A continuación, se expondrán los {\it code smells} más significativos encontrados en la primera versión de {\it ghedsh}. 
-\begin{itemize}
-  \item \textbf{Switch Statements}: uno de los síntomas más comunes en código orientado a objetos.
-\end{itemize}
+
+  \subsubsection{{\it \textbf{Switch Statements}}}
+  Suele ser muy característico de los códigos orientados a objetos. Esencialmente, el problema con las sentencias \verb switch-case  o sentencias \verb if  es la duplicación de código.
+  Al utilizarlas con un conjunto de números o cadenas (normalmente, asignadas a constantes) que conforman una lista de valores permitidos para una entidad, existe una dependencia en ellas para decidir la entidad correcta a utilizar en cada momento.
+  \bigskip
+
+  Como consecuencia, al añadir nuevos casos, debemos localizar todas estas sentencias en el código y modificarlas.
+  Para ilustrarlo con ejemplos, véase las figuras \ref{fig:constantes}, \ref{fig:switch-smell} y \ref{fig:switch-smell2}.
+  \bigskip
+
+  \begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.18\textwidth]{images/constantes}
+    \caption{Constantes numéricas que deciden la entidad a utilizar.}
+    \label{fig:constantes}
+    \end{center}
+  \end{figure}
+
+  \begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.89\textwidth]{images/switch-smell}
+    \caption{Ejemplo de switch smell, en interface.rb.}
+    \label{fig:switch-smell}
+    \end{center}
+  \end{figure}
+  \bigskip
+
+  \begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.70\textwidth]{images/switch-smell2}
+    \caption{Otro caso de switch smell, en repo.rb.}
+    \label{fig:switch-smell2}
+    \end{center}
+  \end{figure}
+  \bigskip
+
+  Este tipo de {\it smell} es el más repetido a lo largo del código de la primera versión de {\it ghedsh}, por lo que gran parte del proceso de refactorización se ha centrado en este aspecto.
+  \bigskip
+
+  \subsubsection{{\it \textbf{Long Method}}} 
+  Se trata de un {\it smell} que se clasifica a nivel de métodos. Como su nombre indica (método largo), consiste en un método que ha crecido demasiado. 
+  \bigskip
+
+  Escribir código suele ser más fácil que interpretarlo. Por ello, muchas veces este {\it smell} pasa desapercibido hasta que el método toma un tamaño considerable y dificulta saber qué es lo que realmente hace. Por esta razón,
+  definir métodos más cortos con un nombre significativo, facilita la mantenibilidad del código y su lectura.
+  \bigskip
+
+  \subsubsection{{\it \textbf{Large Class}}}
+  {\it Large Class} se clasifica dentro de los {\it smells} a nivel de clases. Indica que una clase definida ha crecido excesivamente en tamaño ({\it God Object} \cite{B12}), es decir, realiza demasiadas cosas y que, seguramente, su funcionalidad puede descomponerse
+  en clases más pequeñas y más fáciles de manejar. Como suele ocurrir en los casos anteriormente nombrados, éste {\it smell} propicia también la duplicación de código.
+
+
 
   
 %---------------------------------------------------------------------------------
