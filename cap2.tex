@@ -18,11 +18,11 @@ se produjeron solapamientos de las diferentes partes del desarrollo, en vez de u
 
 En esta sección, se explicará detalladamente el proceso fundamental de la primera fase de este Trabajo de Fin de Grado.
 \bigskip
-%---------------------------------------------------------------------------------
+
 El análisis del código fuente correspondiente a la primera versión de {\it ghedsh}, se ha llevado a cabo con la finalidad de identificar aquellas partes mejorables del diseño e implementación,
 puesto que una de las prioridades era facilitar el desarrollo colaborativo y, para ello, se requiere que el código sea limpio y fácil de entender, lo más auto-explicativo posible.
 \bigskip
-
+%-------------------------------------------------------------------------------
 \subsection{Estructura del repositorio}
 \label{2.1.1}
 En la figura \ref{fig:masterv1}, se muestra la estructura del repositorio de la primera versión de {\it ghedsh}, en concreto, de la rama \verb master. Dicha estructura corresponde con la forma estándar
@@ -47,7 +47,7 @@ A continuación, se explicarán los componentes principales del repositorio:
   su versión, plataforma soportada, versión de Ruby requerida y nombre y correo electrónico del autor o autores.
 \end{itemize}
 \bigskip
-
+%----------------------------------------------------------------------
 \subsection{Contenido del repositorio}
 \label{2.1.2}
 El primer paso del análisis consistió en comprender exactamente el flujo del programa. Ésto es necesario dado que, para identificar las partes mejorables del diseño inicial, requiere entenderlo en profundidad.
@@ -104,7 +104,7 @@ Los ficheros principales se describirán según la funcionalidad que desempeñan
   \item \verb system.rb : este fichero se encarga de crear los directorios de configuración de {\it ghedsh}.
 \end{itemize}
 \bigskip
-
+%--------------------------------------------------------------------------------------
 \subsection{Code Smell}
 \label{2.1.3}
 Una vez analizado el planteamiento inicial, se han detectado una serie de debilidades en el diseño que han dado lugar a diversos {\it code smell} \cite{B11}.
@@ -119,7 +119,7 @@ los posibles casos de uso, aporta indicaciones para respetar ciertos principios 
 \bigskip
 
 En el apartado de refactorización se explicará cómo se ha procedido para solucionarlos. A continuación, se expondrán los {\it code smells} más significativos encontrados en la primera versión de {\it ghedsh}. 
-
+%--------------------------------------------------------------------------------------
   \subsubsection{{\it \textbf{Switch Statements}}}
   Suele ser muy característico de los códigos orientados a objetos. Esencialmente, el problema con las sentencias \verb switch-case  o sentencias \verb if  es la duplicación de código.
   Al utilizarlas con un conjunto de números o cadenas (normalmente, asignadas a constantes) que conforman una lista de valores permitidos para una entidad, existe una dependencia en ellas para decidir la entidad correcta a utilizar en cada momento.
@@ -157,7 +157,7 @@ En el apartado de refactorización se explicará cómo se ha procedido para solu
 
   Este tipo de {\it smell} es el más repetido a lo largo del código de la primera versión de {\it ghedsh}, por lo que gran parte del proceso de refactorización se ha centrado en este aspecto.
   \bigskip
-
+%-------------------------------------------------------------------------------------
   \subsubsection{{\it \textbf{Long Method}}} 
   Se trata de un {\it smell} que se clasifica a nivel de métodos. Como su nombre indica (método largo), consiste en un método que ha crecido demasiado. 
   \bigskip
@@ -165,10 +165,10 @@ En el apartado de refactorización se explicará cómo se ha procedido para solu
   Escribir código suele ser más fácil que interpretarlo. Por ello, muchas veces este {\it smell} pasa desapercibido hasta que el método toma un tamaño considerable y dificulta saber qué es lo que realmente hace. Por esta razón,
   definir métodos más cortos con un nombre significativo, facilita la mantenibilidad del código y su lectura.
   \bigskip
-
+%----------------------------------------------------------------------------
   \subsubsection{{\it \textbf{Large Class}}}
   {\it Large Class} se clasifica dentro de los {\it smells} a nivel de clases. Indica que una clase definida ha crecido excesivamente en tamaño ({\it God Object} \cite{B12}), es decir, realiza demasiadas cosas y que, seguramente, su funcionalidad puede descomponerse
-  en clases más pequeñas y más fáciles de manejar. Como suele ocurrir en los casos anteriormente nombrados, éste {\it smell} propicia también la duplicación de código.
+  en clases más pequeñas y fáciles de manejar. Como suele ocurrir en los casos anteriormente nombrados, éste {\it smell} propicia también la duplicación de código.
 
 
 
@@ -176,4 +176,49 @@ En el apartado de refactorización se explicará cómo se ha procedido para solu
 %---------------------------------------------------------------------------------
 \section{Segunda fase: refactorización}
 \label{2:sec:2}
+
+En este apartado, se explicará el proceso de refactorización efectuado en el código fuente de {\it ghedsh}. El principal objetivo es el cumplimiento del principio {\it Open/Closed} \cite{B13}, que pertenece a un grupo de cinco principios fundamentales (S.O.L.I.D \cite{B14}) de la programación orientada a objetos y cuya finalidad es
+hacer los diseños de software más comprensibles, flexibles y mantenibles.
+%-----------------------------------------------------------------------------------
+\subsection{Principios de diseño S.O.L.I.D}
+\label{2.2.1}
+Se desarrollará ahora el significado de este acrónimo:
+\begin{itemize}
+  \item {\it \textbf{S}ingle responsibility}: establece que una clase debería de tener sólo una responsabilidad, es decir, si fuera necesario modificar dicha clase, debe ser por un único motivo.
+  \item {\it \textbf{O}pen/Closed}: una entidad software debería estar abierta para extensión y cerrada para modificación. En el siguiente párrafo se explicará con más detalle este principio.
+  \item {\it \textbf{L}iskov substitution}: los objetos de un programa deberían ser sustituíbles por subtipos de ese objeto, sin afectar al correcto funcionamiento de ese programa.
+  \item {\it \textbf{I}nterface segregation}: indica que es preferible muchas interfaces cliente específicas, en lugar de una interfaz de propósito general.
+  \item {\it \textbf{D}ependency inversion}: sugiere que se debe depender de abstracciones, no de implementaciones. Esto da lugar a la técnica inyección de dependencias.
+\end{itemize}
+\bigskip
+
+Como se ha indicado anteriormente, se procederá a detallar el principio {\it Open/Closed}, puesto que es bastante necesario desde el punto de vista del desarrollo de {\it ghedsh}. La principal razón es que, si otro desarrollador desea incluir nuevas funcionalidades, no necesitaría cambiar el código original de la gema.
+\bigskip
+
+Este principio establece que, las entidades de software, ya sean módulos, funciones, clases, etcétera, deberían estar abiertas para la extensión de su comportamiento, pero cerradas para su modificación. Ésto se consigue, por ejemplo, mediante herencia, reescribiendo los métodos de la clase madre, pudiendo incluso ser abstracta dicha clase.
+Otra manera sería por medio de inyección de dependencias, que tienen la misma interfaz pero distinto funcionamiento.
+
 %---------------------------------------------------------------------------------
+\subsection{Refactorización: Strategy pattern}
+\label{2.2.2}
+En esta sección se expondrá el proceso que se ha seguido para eliminar el {\it switch smell}. El proceso ha consistido, fundamentalmente,
+en la aplicación del patrón estrategia (en inglés, {\it Strategy pattern} \cite{jspatterns:2012}).
+\bigskip
+
+{\it Strategy} es un patrón que permite a un programa seleccionar un algoritmo particular en tiempo de ejecución. El propósito de este patrón es proporcionar una manera clara 
+de definir familias de algoritmos, encapsulando cada uno como objeto para poder intercambiarlos fácilmente. El principal beneficio de este modelo es que el objeto cliente puede elegir aquel algoritmo que le conviene y
+permutarlo dinámicamente según sus necesidades.
+\bigskip
+
+En cuanto a cómo se ha aplicado este patrón, ha sido necesario modificar el diseño inicial propuesto en la primera versión de {\it ghedsh}.
+De manera que en el directorio \verb /lib \verb /actions , se han reescrito las clases que allí se encontraban y su propósito también ha cambiado, dado que ya no se agrupan métodos para repositorios, organizaciones, equipos, etcétera, sino que ahora
+contendrán las acciones permitidas en cada uno de estos contextos.
+\bigskip
+
+A partir de la segunda versión, en \verb /lib \verb /actions , se encuentran las siguientes clases:
+\begin{itemize}
+  \item \verb orgs.rb : se define la clase \verb Organization , contiene los métodos de las acciones permitidas para las organizaciones.
+  \item \verb system.rb : contiene la clase que se encarga de gestionar los directorios de configuración de {\it ghedsh}, así como guardar la configuración del usuario.
+  \item \verb teams.rb : se define la clase \verb Team , que incluye los métodos de las acciones permitidas para los equipos.
+  \item \verb user.rb : incluye en la clase \verb User , los métodos correspondientes a las acciones que se permiten en el contexto de usuario.
+\end{itemize}

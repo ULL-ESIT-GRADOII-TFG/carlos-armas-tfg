@@ -1,8 +1,0 @@
-@BOOK{Fowler:1999,
-   author     = {Martin Fowler, Kent Beck, John Brant, William Opdyke, don Roberts},
-   title     = {{Refactoring: Improving the Design of Existing Code}},
-   year       = {1999},
-   publisher = {Addison-Wesley}
-  }
-
-  
