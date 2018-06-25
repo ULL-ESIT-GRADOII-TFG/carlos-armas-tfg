@@ -3,200 +3,64 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Finalizada la etapa de desarrollo del Trabajo de Fin de Máster, se procede a describir la herramienta implementada.
-
-
-La herramienta se ha denominado \verb1ghshell1, abreviatura de 'GitHub Shell'. Se ha publicado en NPM\cite{URL:NPM} para su fácil distribución e instalación:
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{images/npm1}
-\caption{Página del gestor de paquetes NPM}
-\label{fig:npm}
-\end{center}
-\end{figure}
-
-Las funcionalidades implementadas en \verb|ghshell|, se describen a continuación.
-
-%---------------------------------------------------------------------------------
-\section{Funcionalidades requeridas}
-\label{3:sec:1}
-
-%------------------------------------------------------------------------------------------------------------
-\subsection{Autenticación con GitHub}
-\label{subsec:3.1.1}
-    
-    Una vez que el usuario se autentifica con GitHub, se genera un token personal, que se usa posteriormente para acceder a la API de Github. Este token se almacena cifrado en el equipo del usuario, por lo que las siguientes ocasiones que utilice la herramienta no hará falta que vuelva a iniciar sesión:
-        
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.7\textwidth]{images/ghshell1}
-		\caption{Login de usuario}
-		\label{fig:ghshell1}
-		\end{center}
-		\end{figure}
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.6\textwidth]{images/ghshell2-1}
-		\caption{Usuario autenticado}
-		\label{fig:ghshell2-1}
-		\end{center}
-		\end{figure}
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell2-3}
-		\caption{Token personal en GitHub}
-		\label{fig:ghshell2-3}
-		\end{center}
-		\end{figure}
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.6\textwidth]{images/ghshell2-4}
-		\caption{Login automático una vez generado el token}
-		\label{fig:ghshell2-4}
-		\end{center}
-		\end{figure}
-		
-	Si el usuario cierra sesión en la herramienta, se eliminará el token en GitHub y en el equipo:
-	
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.6\textwidth]{images/ghshell2-2}
-		\caption{Logout de usuario}
-		\label{fig:ghshell2-2}
-		\end{center}
-		\end{figure}
-
-%------------------------------------------------------------------------------------------------------------
-\subsection{Listar organizaciones, asignaciones y repositorios de GitHub del usuario}
-\label{subsec:3.1.2}   
-    
-    Con el comando \verb'orgs -l', se puede listar las organizaciones del usuario y usando \verb'repos -l', se listarán los repositorios del usuario. También se puede acceder 'virtualmente' a las organizaciones y listar los repositorios que contiene, así como las asignaciones.
+Este capítulo se centrará en explicar las características que incorpora {\it ghedsh} tras la etapa de desarrollo tratada en el capítulo anterior.
 \bigskip
 
-    NOTA: se puede consultar toda la información referente a los comandos del programa en el Apéndice 2.
-        
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.9\textwidth]{images/ghshell3}
-		\caption{Lista de organizaciones del usuario}
-		\label{fig:ghshell3}
-		\end{center}
-		\end{figure}
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.9\textwidth]{images/ghshell4}
-		\caption{Lista de repositorios de una organización}
-		\label{fig:ghshell4}
-		\end{center}
-		\end{figure}
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.9\textwidth]{images/ghshell5}
-		\caption{Asignaciones dentro de otra organización}
-		\label{fig:ghshell5}
-		\end{center}
-		\end{figure}
-    Las asignaciones son un conjunto de repositorios que corresponden a una tarea asignada por los profesores a los alumnos.
-		
-	También es posible acceder 'virtualmente' a los repositorios y realizar acciones sobre ellos:
-	
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell5-1}
-		\caption{Acceso a un repositorio de una organización}
-		\label{fig:ghshell5-1}
-		\end{center}
-		\end{figure}
+Se hará una distinción entre comandos del núcleo y comandos incorporados ({\it built-in commands}). Los comandos del núcleo, son aquellos que no trabajan con los datos de GitHub del usuario pero que, sin embargo, son
+esenciales desde el punto de vista la usabilidad y experiencia de usuario con el CLI.
+\bigskip
+
+Por otro lado, los comandos incorporados sí trabajan con los datos de GitHub del usuario identificado. Permiten realizar diversas tareas, priorizando la rapidez en la ejecución de las mismas y la facilidad de uso de la herramienta.
+
+%---------------------------------------------------------------------------------
+\section{Autenticación con credenciales de GitHub}
+\label{3:sec:1}
+
+El contenido de esta sección pretende explicar el proceso de autenticación que debe seguir el usuario al usar {\it ghedsh} por primera vez.
+\bigskip
+
+Dicho proceso es necesario, puesto que se trabajan con los datos que dispone el usuario en GitHub. Además, la API REST v3 requiere, para ciertas consultas (en especial, modificaciones como crear repositorios, equipos y administrar la configuración), verificar la identidad del usuario. Si no fuera así, se podrían llevar a cabo comportamientos indeseados.
+\bigskip
+
+En {\it ghedsh}, se realiza la autenticación con {\it OAuth access token}\cite{B16}, que consiste, en una definición muy simplificada, en una cadena de caracteres alfanuméricos que actúa como una contraseña. No obstante,
+en este caso de uso es mucho más potente y segura. Las principales ventajas son:
+\begin{itemize}
+	\item Es revocable, es decir, el {\it token} puede dejar de ser válido, eliminando el acceso para ese {\it token} en particular, sin que el usuario tenga que cambiar su contraseña en todos sus accesos.
+	\item Sus permisos son configurables, esto es, un {\it token} puede ser válido sólo para ciertos recursos de una API. De esta manera, se conceden permisos de forma más controlada.
+\end{itemize}
+
+Para sintetizar este apartado, el usuario que utilice por primera vez {\it ghedsh}, debe verificar su identidad mediante sus credenciales (nombre de usuario y contraseña) de GitHub y se
+generará de forma automática un {\it token} de acceso con los permisos necesarios para usar la herramienta.
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.45\textwidth]{images/login-example}
+	\caption{Ejemplo de autenticación al usar ghedsh por primera vez.}
+	\label{fig:masterv1}
+	\end{center}
+\end{figure}
 
 %------------------------------------------------------------------------------------------------------------
-\subsection{Automatizar la descarga de repositorios}
-\label{subsec:3.1.3}  
-        	
-    En función del contexto dónde nos encontremos dentro de la herramienta, podremos:
-    \begin{itemize}
-    	\item Clonar el repositorio en el que nos encontremos.
-    	\item Clonar un repositorio determinado.
-	    \item Clonar todos los repositorios que coincidan con una determinada expresión regular.
-	    \item Clonar todos los repositorios de una asignación que coincidan con una determinada expresión
-    \end{itemize}
+\section{Comandos del núcleo de ghedsh}
+\label{3:sec:2}
     
-    El clonado se realiza de manera asíncrona, por lo que podemos seguir trabajando mientras se clona(n) el/los repositorio(s). Se puede observar el estado de la clonación revisando el fichero de log que se genera cuyo nombre sigue el formato: \verb|nombre-repositorio -clone.log|.
     
-    	\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell6-3}
-		\caption{Clonado del repositorio donde nos encontramos}
-		\label{fig:ghshell6-3}
-		\end{center}
-		\end{figure}	
 
-    Si clonamos repositorios que pertenecen a una organización, se creará una carpeta con el nombre de la organización y en su interior se guardarán los repositorios clonados.
-    		
-	Además, si clonamos repositorios que pertenecen a una asignación, también se creará una carpeta con el nombre de la asignación que los contendrá.
-	
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell6-1}
-		\caption{Clonado de asignaciones que coinciden con una expresión regular}
-		\label{fig:ghshell6-1}
-		\end{center}
-		\end{figure}	
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.7\textwidth]{images/ghshell6-2}
-		\caption{Resultado del clonado}
-		\label{fig:ghshell6-2}
-		\end{center}
-		\end{figure}
+%------------------------------------------------------------------------------------------------------------
+\section{Comandos incorporados en ghedsh}
+\label{3:sec:3}   
+    
+
+%------------------------------------------------------------------------------------------------------------
+\section{Comandos que facilitan el proceso de evaluación}
+\label{3:sec:4}  
+        	
 	
 %------------------------------------------------------------------------------------------------------------
 \subsection{Automatizar la ejecución de scripts en los repositorios}
 \label{subsec:3.1.3} 
 	    
-    En función del contexto donde nos encontremos dentro de la herramienta, podremos:
-    \begin{itemize}
-    	\item Ejecutar un script en el repositorio en el que nos encontremos.
-    	\item Ejecutar un script en un determinado repositorio.
-	    \item Ejecutar un script en todos los repositorios que coincidan con una determinada expresión regular.
-	    \item Ejecutar un script en todos los repositorios de una asignación coincidan con una determinada expresión regular.
-    \end{itemize}
     
-	La ruta del fichero del script puede ser absoluta o relativa. Estos scripts puede ser de cualquier tipo: TDD, creación de entorno, evaluación de código...
-\bigskip
-
-	La ejecución de cada script se ejecuta en un proceso hijo independiente pero, a diferencia del clonado, el script se ejecuta línea a línea de manera síncrona. Se puede observar el estado de la ejecución del script y los resultados revisando el fichero de log que se genera: \textless nombre-repositorio \textgreater - \textless nombre-script \textgreater .log
-    	
-    	\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell7-3}
-		\caption{Ejecución del script 'install.sh' en el repositorio actual}
-		\label{fig:ghshell7-3}
-		\end{center}
-		\end{figure}
-		
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell7-1}
-		\caption{Ejecución del script 'install.sh' en asignaciones que coinciden con una expresión regular}
-		\label{fig:ghshell7-1}
-		\end{center}
-		\end{figure}	
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.7\textwidth]{images/ghshell7-2}
-		\caption{Resultado de la ejecución del script 'install.sh'}
-		\label{fig:ghshell7-2}
-		\end{center}
-		\end{figure}
 		
 %------------------------------------------------------------------------------------------------------------
 \subsection{Recopilar la información obtenida de la automatización de tareas}
@@ -212,30 +76,6 @@ Las funcionalidades implementadas en \verb|ghshell|, se describen a continuació
 	    \item Crear un GitBook en todos los repositorios que coincidan con una determinada expresión regular.
 	    \item Crear un GitBook en todos los repositorios de una asignación coincidan con una determinada expresión regular.
     \end{itemize}
-        
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell8-3}
-		\caption{Creación del Gitbook en el repositorio actual}
-		\label{fig:ghshell8-3}
-		\end{center}
-		\end{figure}
-		
-        \begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=1\textwidth]{images/ghshell8-1}
-		\caption{Creación del Gitbook en asignaciones que coinciden con una expresión regular}
-		\label{fig:ghshell8-1}
-		\end{center}
-		\end{figure}	
-		
-		\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.7\textwidth]{images/ghshell8-2}
-		\caption{Resultado de la creación del Gitbook}
-		\label{fig:ghshell8-2}
-		\end{center}
-		\end{figure}
 		
 \newpage
 %---------------------------------------------------------------------------------
