@@ -170,9 +170,6 @@ En el apartado de refactorización se explicará cómo se ha procedido para solu
   {\it Large Class} se clasifica dentro de los {\it smells} a nivel de clases. Indica que una clase definida ha crecido excesivamente en tamaño ({\it God Object} \cite{B12}), es decir, realiza demasiadas cosas y que, seguramente, su funcionalidad puede descomponerse
   en clases más pequeñas y fáciles de manejar. Como suele ocurrir en los casos anteriormente nombrados, éste {\it smell} propicia también la duplicación de código.
 
-
-
-  
 %---------------------------------------------------------------------------------
 \section{Segunda fase: refactorización}
 \label{2:sec:2}
@@ -210,9 +207,9 @@ de definir familias de algoritmos, encapsulando cada uno como objeto para poder 
 permutarlo dinámicamente según sus necesidades.
 \bigskip
 
-En cuanto a cómo se ha aplicado este patrón, ha sido necesario modificar el diseño inicial propuesto en la primera versión de {\it ghedsh}.
-De manera que en el directorio \verb /lib \verb /actions , se han reescrito las clases que allí se encontraban y su propósito también ha cambiado, dado que ya no se agrupan métodos para repositorios, organizaciones, equipos, etcétera, sino que ahora
-contendrán las acciones permitidas en cada uno de estos contextos.
+En cuanto a cómo se ha aplicado este patrón, primero ha sido necesario modificar el diseño inicial propuesto en la primera versión de {\it ghedsh}.
+De manera que, en el directorio \verb /lib \verb /actions , se han reescrito las clases que allí se encontraban y su propósito también ha cambiado, dado que ya no se agrupan métodos para repositorios, organizaciones, equipos, etcétera, sino que
+contendrán las acciones permitidas en cada uno de estos contextos. De este modo, aunque las acciones sean permitidas en varios contextos, cada clase conocerá su propia implementación.
 \bigskip
 
 A partir de la segunda versión, en \verb /lib \verb /actions , se encuentran las siguientes clases:
@@ -222,3 +219,31 @@ A partir de la segunda versión, en \verb /lib \verb /actions , se encuentran la
   \item \verb teams.rb : se define la clase \verb Team , que incluye los métodos de las acciones permitidas para los equipos.
   \item \verb user.rb : incluye en la clase \verb User , los métodos correspondientes a las acciones que se permiten en el contexto de usuario.
 \end{itemize}
+\bigskip
+
+Por otro lado, en \verb /lib/interface.rb  (véase la figura \ref{fig:new-loop}) se tiene un claro ejemplo de patrón estrategia, que se aplica en el bucle Lectura-Evaluación-Impresión (REPL). Esto permite decidir en tiempo de ejecución el comando que el usuario quiere utilizar.
+Se parsea lo que ha introducido, de manera que el primer {\it token}, se refiere al nombre del comando deseado. Después, se busca dicho comando en la estructura de datos interna, en este caso, un {\it hash}, que consiste en una colección clave-valor en la que
+la clave es el nombre que identifica el comando y el valor es la función que exporta la clase \verb Commands ,   la cual decide si es posible ejecutarlo, verificando si contexto actual responde a la acción solicitada por el usuario.
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.80\textwidth]{images/new-loop}
+  \caption{Bucle Lectura-Evaluación-Impresión sin sentencia switch/case.}
+  \label{fig:new-loop}
+  \end{center}
+\end{figure}
+\bigskip
+
+Cabe destacar que, la figura \ref{fig:switch-smell} anteriormente indicada, representa una porción del código, puesto que ahí se encontraban {\it hard-coded} \cite{B15} todos los comandos.
+Sin embargo, en la figura \ref{fig:new-loop} se encuentra todo el código del REPL, tarea en la que se especializa la clase \verb Interface .
+\bigskip
+
+Aparte, con este nuevo esquema se logra eliminar las constantes que deciden el tipo de clase a utilizar en cada momento (véase \ref{fig:constantes}), ya que, en esta segunda versión,
+existe una variable que almacena el contexto y referencia directamente la clase con la que se realizan las acciones y ya no es necesario hacer la distinción entre, por ejemplo, repositorio de usuario, repositorio de organización y repositorio de equipo. Esto es así porque cada clase gestiona su contexto.
+\bigskip
+
+\subsection{Refactorización: Extract Class}
+\label{2.2.3}
+
+
+
+
