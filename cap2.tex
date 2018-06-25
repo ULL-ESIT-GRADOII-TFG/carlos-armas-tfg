@@ -174,22 +174,22 @@ En el apartado de refactorización se explicará cómo se ha procedido para solu
 \section{Segunda fase: refactorización}
 \label{2:sec:2}
 
-En este apartado, se explicará el proceso de refactorización efectuado en el código fuente de {\it ghedsh}. El principal objetivo es el cumplimiento del principio {\it Open/Closed} \cite{B13}, que pertenece a un grupo de cinco principios fundamentales (S.O.L.I.D \cite{B14}) de la programación orientada a objetos y cuya finalidad es
+En este apartado, se explicará el proceso de refactorización efectuado en el código fuente de {\it ghedsh}. El principal objetivo es el cumplimiento del principio {\it Open/Closed} \cite{B13}, que pertenece a un grupo de cinco principios fundamentales (S.O.L.I.D \cite{CBle:2010}) de la programación orientada a objetos y cuya finalidad es
 hacer los diseños de software más comprensibles, flexibles y mantenibles.
 %-----------------------------------------------------------------------------------
 \subsection{Principios de diseño S.O.L.I.D}
 \label{2.2.1}
 Se desarrollará ahora el significado de este acrónimo:
 \begin{itemize}
-  \item {\it \textbf{S}ingle responsibility}: establece que una clase debería de tener sólo una responsabilidad, es decir, si fuera necesario modificar dicha clase, debe ser por un único motivo.
+  \item {\it \textbf{S}ingle Responsibility}: establece que una clase debería de tener sólo una responsabilidad, es decir, si fuera necesario modificar dicha clase, debe ser por un único motivo.
   \item {\it \textbf{O}pen/Closed}: una entidad software debería estar abierta para extensión y cerrada para modificación. En el siguiente párrafo se explicará con más detalle este principio.
-  \item {\it \textbf{L}iskov substitution}: los objetos de un programa deberían ser sustituíbles por subtipos de ese objeto, sin afectar al correcto funcionamiento de ese programa.
-  \item {\it \textbf{I}nterface segregation}: indica que es preferible muchas interfaces cliente específicas, en lugar de una interfaz de propósito general.
-  \item {\it \textbf{D}ependency inversion}: sugiere que se debe depender de abstracciones, no de implementaciones. Esto da lugar a la técnica inyección de dependencias.
+  \item {\it \textbf{L}iskov Substitution}: los objetos de un programa deberían ser sustituíbles por subtipos de ese objeto, sin afectar al correcto funcionamiento de ese programa.
+  \item {\it \textbf{I}nterface Segregation}: indica que es preferible muchas interfaces cliente específicas, en lugar de una interfaz de propósito general.
+  \item {\it \textbf{D}ependency Inversion}: sugiere que se debe depender de abstracciones, no de implementaciones. Esto da lugar a la técnica inyección de dependencias.
 \end{itemize}
 \bigskip
 
-Como se ha indicado anteriormente, se procederá a detallar el principio {\it Open/Closed}, puesto que es bastante necesario desde el punto de vista del desarrollo de {\it ghedsh}. La principal razón es que, si otro desarrollador desea incluir nuevas funcionalidades, no necesitaría cambiar el código original de la gema.
+Como se ha indicado anteriormente, se procederá a detallar el principio {\it Open/Closed}, puesto que es bastante necesario desde el punto de vista del desarrollo de {\it ghedsh}. La principal razón es que, si otro desarrollador desea incluir nuevas funcionalidades, no necesitaría alterar el código original de la gema.
 \bigskip
 
 Este principio establece que, las entidades de software, ya sean módulos, funciones, clases, etcétera, deberían estar abiertas para la extensión de su comportamiento, pero cerradas para su modificación. Ésto se consigue, por ejemplo, mediante herencia, reescribiendo los métodos de la clase madre, pudiendo incluso ser abstracta dicha clase.
@@ -243,11 +243,12 @@ existe una variable que almacena el contexto y referencia directamente la clase 
 
 \subsection{Refactorización: Extract Method}
 \label{2.2.3}
+
 Como resultado de aplicar el patrón {\it Strategy} y la reescritura de las clases encargadas de las acciones, también se ha solucionado el {\it Long Method smell}. Ésto se ha logrado reduciendo el cuerpo de la función, a través de la extracción de partes del código que realizan tareas similares,
 dando lugar a nuevas funciones.
 \bigskip
 
-Para ilustrarlo mejor, en la siguiente porción de código vemos un ejemplo de {\it Extract Method} muy simple:
+Para ilustrarlo mejor, en la siguiente porción de código vemos un ejemplo de {\it Extract Method} \cite{Fowler:1999} muy simple:
 \bigskip 
 
 \begin{minipage}[t]{0.45\linewidth}
@@ -287,10 +288,16 @@ Si llevamos esto a un programa real, los beneficios son claros:
 \end{itemize}
 
 
-
-
 \subsection{Refactorización: Extract Class}
 \label{2.2.4}
+
+El método de refactorización {\it Extract Class}\cite{Fowler:1999} ayudará a mantener la adherencia al principio {\it Single Responsibility} (SRP), comentado en la sección \ref{2.2.1}.
+\bigskip
+
+A menudo, las clases comienzan siendo claras, fáciles de entender y sólo tienen una única responsabilidad. Sin embargo, en algún punto, la clase empieza a crecer: se realizan nuevas operaciones, se añaden más datos, además de nuevos métodos.
+Por lo tanto, tarde o temprano esta clase acabe teniendo más de una responsabilidad.
+\bigskip
+
 
 
 
