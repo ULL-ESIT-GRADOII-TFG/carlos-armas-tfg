@@ -240,7 +240,7 @@ Sin embargo, en la figura \ref{fig:new-loop} se encuentra todo el código del RE
 Aparte, con este nuevo esquema se logra eliminar las constantes que deciden el tipo de clase a utilizar en cada momento (véase \ref{fig:constantes}), ya que, en esta segunda versión,
 existe una variable que almacena el contexto y referencia directamente la clase con la que se realizan las acciones y ya no es necesario hacer la distinción entre, por ejemplo, repositorio de usuario, repositorio de organización y repositorio de equipo. Esto es así porque cada clase gestiona su contexto.
 \bigskip
-
+%----------------------------------------------------------------------------------------
 \subsection{Refactorización: Extract Method}
 \label{2.2.3}
 
@@ -287,7 +287,7 @@ Si llevamos esta idea a un programa real, los beneficios son claros:
   \item Mejor detección de errores. Al aislar partes de código, detectar dónde se ha producido un error es más fácil, hay son menos líneas que revisar.
 \end{itemize}
 
-
+%------------------------------------------------------------------------------------------------
 \subsection{Refactorización: Extract Class}
 \label{2.2.4}
 
