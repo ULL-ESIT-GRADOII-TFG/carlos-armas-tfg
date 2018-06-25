@@ -280,7 +280,7 @@ Para ilustrarlo mejor, en la siguiente porción de código vemos un ejemplo de {
 \end{minipage}
 \bigskip
 
-Si llevamos esto a un programa real, los beneficios son claros:
+Si llevamos esta idea a un programa real, los beneficios son claros:
 \begin{itemize}
   \item Código más legible. Hay que destacar que, el nuevo método creado, debe llevar un nombre representativo, es decir, un nombre que describa su propósito.
   \item Menos duplicación de código. Muchas veces, el código contenido en una función puede ser reutilizado en otras partes del programa. Por lo tanto, reemplazamos el código repetido por llamadas al nuevo método.
@@ -294,9 +294,26 @@ Si llevamos esto a un programa real, los beneficios son claros:
 El método de refactorización {\it Extract Class}\cite{Fowler:1999} ayudará a mantener la adherencia al principio {\it Single Responsibility} (SRP), comentado en la sección \ref{2.2.1}.
 \bigskip
 
-A menudo, las clases comienzan siendo claras, fáciles de entender y sólo tienen una única responsabilidad. Sin embargo, en algún punto, la clase empieza a crecer: se realizan nuevas operaciones, se añaden más datos, además de nuevos métodos.
+A menudo, las clases comienzan siendo claras, fáciles de entender y sólo tienen una única responsabilidad. Sin embargo, en algún punto, la clase empieza a crecer: se realizan nuevas operaciones, se añaden más datos y se incorporan nuevos métodos.
 Por lo tanto, tarde o temprano esta clase acabe teniendo más de una responsabilidad.
 \bigskip
+
+A continuación, se explicarán una serie de pasos genéricos que guían a la hora de aplicar esta técnica:
+\begin{itemize}
+  \item \textbf{Paso 1}. Determinar qué se va a extraer. Tratar de buscar unidades lógicas de datos que actúan sobre un subconjunto de los datos.
+  \item \textbf{Paso 2}. Crear una nueva clase. Las operaciones extraídas dan lugar a una nueva clase, que tiene que establecer un enlace (puede ser bidireccional) con la antigua clase.
+  \item \textbf{Paso 3}. Renombrar la antigua clase. Si, tras la extracción, el nombre de la antigua clase carece de sentido, debemos renombrarla.
+\end{itemize}
+
+{\it Extract Class} se aplica mejor si hay unidades de datos que se agrupan según el contenido que almacenan o si hay operaciones que sólo se realizan en un subconjunto de los datos. Esto último ocurría en el código de la primera versión de {\it ghedsh}, ya que
+la clase \verb Interface , se ocupaba de varias tareas, y una de ellas era gestionar el contexto del CLI.
+\bigskip
+
+Una vez que se determinó qué se iba a extraer, fue posible crear una clase nueva, \verb ShellContext , especializada únicamente en gestionar el entorno de {\it ghedsh}. Si éste se ha cargado correctamente,
+\verb ShellContext   lo comparte con \verb Interface . Entonces, le permite saber cuáles son los comandos que están definidos, ejecutarlos y disponer de la configuración del usuario en cada momento.
+\bigskip
+
+Finalmente, el resultado es que la clase \verb Interface , se encarga exclusivamente de realizar el REPL con los datos que le proporciona el entorno (\verb ShellContext ). Por lo tanto, si se eliminasen los comandos definidos, el REPL se llevaría a cabo correctamente, con la diferencia de que no se ejecutaría ninguna acción.
 
 
 
