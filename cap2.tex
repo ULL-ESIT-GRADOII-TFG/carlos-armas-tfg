@@ -241,8 +241,57 @@ Aparte, con este nuevo esquema se logra eliminar las constantes que deciden el t
 existe una variable que almacena el contexto y referencia directamente la clase con la que se realizan las acciones y ya no es necesario hacer la distinción entre, por ejemplo, repositorio de usuario, repositorio de organización y repositorio de equipo. Esto es así porque cada clase gestiona su contexto.
 \bigskip
 
-\subsection{Refactorización: Extract Class}
+\subsection{Refactorización: Extract Method}
 \label{2.2.3}
+Como resultado de aplicar el patrón {\it Strategy} y la reescritura de las clases encargadas de las acciones, también se ha solucionado el {\it Long Method smell}. Ésto se ha logrado reduciendo el cuerpo de la función, a través de la extracción de partes del código que realizan tareas similares,
+dando lugar a nuevas funciones.
+\bigskip
+
+Para ilustrarlo mejor, en la siguiente porción de código vemos un ejemplo de {\it Extract Method} muy simple:
+\bigskip 
+
+\begin{minipage}[t]{0.45\linewidth}
+  Problema:
+  \begin{lstlisting}[language=Ruby]
+    def print_owing(amount)
+      print_banner
+
+      # print details
+      puts "name: #{@name}"
+      puts "amount: #{amount}"
+    end
+  \end{lstlisting}
+\end{minipage}
+  %
+\begin{minipage}[t]{0.5\linewidth}
+    Solución (Extract Method):
+  \begin{lstlisting}[language=Ruby]
+    def print_owing(amount)
+      print_banner
+      print_details(amount)
+    end
+
+    def print_details(amount)
+      puts "name: #{@name}"
+      puts "amount: #{amount}"
+    end
+  \end{lstlisting}
+\end{minipage}
+\bigskip
+
+Si llevamos esto a un programa real, los beneficios son claros:
+\begin{itemize}
+  \item Código más legible. Hay que destacar que, el nuevo método creado, debe llevar un nombre representativo, es decir, un nombre que describa su propósito.
+  \item Menos duplicación de código. Muchas veces, el código contenido en una función puede ser reutilizado en otras partes del programa. Por lo tanto, reemplazamos el código repetido por llamadas al nuevo método.
+  \item Mejor detección de errores. Al aislar partes de código, detectar dónde se ha producido un error es más fácil, ya que son menos líneas que revisar.
+\end{itemize}
+
+
+
+
+\subsection{Refactorización: Extract Class}
+\label{2.2.4}
+
 
 
 

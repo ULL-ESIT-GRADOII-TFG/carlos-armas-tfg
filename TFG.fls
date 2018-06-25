@@ -196,6 +196,7 @@ INPUT ./images/switch-smell2.png
 INPUT images/new-loop.png
 INPUT ./images/new-loop.png
 INPUT ./images/new-loop.png
+INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT cap3.tex
 INPUT cap3.tex
 INPUT images/npm1.png
@@ -287,7 +288,6 @@ INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm
 INPUT apendice2.tex
 INPUT apendice2.tex
-INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT TFG.ind
 INPUT TFG.ind
 INPUT TFG.bbl
