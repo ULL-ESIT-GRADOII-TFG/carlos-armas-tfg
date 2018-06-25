@@ -43,8 +43,54 @@ generará de forma automática un {\it token} de acceso con los permisos necesar
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos del núcleo de ghedsh}
 \label{3:sec:2}
-    
-    
+
+Como se ha indicado en la introducción de este tercer capítulo, se han separado, por un lado, los comandos del núcleo de {\it ghedsh} y, por otro, los comandos característicos de {\it ghedsh}.
+\bigskip
+
+En esta sección, se explicará este primer grupo de comandos, encargado de tareas relacionadas con el sistema operativo y, lo más importante, hacer que la herramienta sea agradable de manejar para el usuario. Además, se revisarán aspectos importantes de su implementación.
+
+\subsection{Change directory: cd}
+\label{3.2.1}
+Análogamente al comando {\it cd} de la {\it Bash}\cite{B17}, que permite cambiar nuestro directorio actual de trabajo, en {\it ghedsh} también existe este comando. No obstante, aunque la idea es similar, existen diferencias a la hora de usarlo.
+\bigskip
+
+En nuestro sistema operativo (tipo Unix)\cite{B18}, cuando realizamos la operación {\it cd}, sólo podemos movernos entre directorios (dependiendo de los permisos). Dado que en {\it ghedsh} no existen directorios como tal, hablaremos de contextos.
+Los contextos en esta herramienta hacen referencia a nivel de usuario, nivel de organización, nivel de repositorio, etcétera.
+\bigskip
+
+Imaginemos por un momento que nuestro usuario se llama \verb ejemplo , disponemos de un repositorio que se llama \verb ejemplo  y una organización denominada \verb ejemplo . Ésto es totalmente válido, puesto que lo que no permite GitHub es que dos usuarios se llamen igual, que el usuario tenga dos repositorios con el mismo nombre o dos organizaciones bajo el mismo nombre.
+Entonces, debemos proporcionar alguna manera de desambiguar a qué contexto nos queremos cambiar.
+\bigskip
+
+En {\it ghedsh} se ha optado por el siguiente planteamiento: para realizar la operación de
+{\it cd}, es necesario especificar el tipo de contexto (nivel) al que queremos cambiarnos, así, aunque el usuario se encuentre en el caso anteriormente comentado, {\it ghedsh} es capaz de saber a qué contexto debe cambiar.
+La sintaxis del comando sería \verb cd  \verb <tipo>  \verb <nombre|Regexp> , donde nombre es la cadena de texto que identifica al tipo, o bien, una expresión regular que mostraría las cadenas que han casado.
+\bigskip
+
+Los tipos de contexto que actualmente se soportan en {\it ghedsh} son:
+\begin{itemize}
+	\item \textbf{Nivel de usuario}: estando a nivel de usuario, éste se puede cambiar a cualquiera de sus repositorios o a cualquier organización a la que pertenezca, como vemos a continuación:
+		\begin{itemize}
+			\item Repositorio del usuario: \verb cd   \verb repo  \verb <nombre|/Regexp/> .
+			\item Organización del usuario: \verb cd   \verb org  \verb <nombre|/Regexp/> .
+		\end{itemize}
+	\item \textbf{Nivel de organización}: estando a nivel de una organización de la que es miembro el usuario autenticado, ({\it ghedsh} sabrá que se refiere al entorno de la organización a la que se ha cambiado) se puede mover a:
+		\begin{itemize}
+			\item Repositorio de la organización: \verb cd   \verb repo  \verb <nombre|/Regexp/> .
+			\item Equipo de la organización: \verb cd   \verb team  \verb <nombre|/Regexp/> .
+		\end{itemize}
+\end{itemize}
+
+Además, si deseamos volver al contexto anterior, haremos de la misma manera que en sistemas operativos tipo Unix: \verb cd  \verb ..  . Hay que tener en cuenta que, actualmete, no se puede realizar la operación de volver al contexto anterior y cambiar a otro de manera simultánea (como en Unix \verb cd  \verb ../another/dir  ), es necesario hacerlo por separado.
+
+
+\subsubsection{Detalles de implementación}
+Puesto que se trata de uno de los comandos más importantes de {\it ghedsh}, se comentarán los aspectos destacados de la implementación del mismo, incluyendo las dificultades encontradas.
+\bigskip
+
+
+
+
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos incorporados en ghedsh}
