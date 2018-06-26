@@ -1,17 +1,17 @@
 # Fdb version 3
-["bibtex TFG"] 1530029952 "TFG.aux" "TFG.bbl" "TFG" 1530029955
+["bibtex TFG"] 1530030504 "TFG.aux" "TFG.bbl" "TFG" 1530030512
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/base/plain.bst" 1480098433 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "TFG.aux" 1530029955 22747 1826ecc55879b2489e02902626a50ed1 ""
+  "TFG.aux" 1530030511 22747 1826ecc55879b2489e02902626a50ed1 ""
   "TFG.bib" 1530014538 3341 8c0d321ed6c795dac9a063c98018342b ""
   (generated)
   "TFG.bbl"
   "TFG.blg"
-["makeindex TFG.idx"] 1530029486 "TFG.idx" "TFG.ind" "TFG" 1530029955
-  "TFG.idx" 1530029953 0 d41d8cd98f00b204e9800998ecf8427e ""
+["makeindex TFG.idx"] 1530030501 "TFG.idx" "TFG.ind" "TFG" 1530030512
+  "TFG.idx" 1530030509 0 d41d8cd98f00b204e9800998ecf8427e ""
   (generated)
   "TFG.ilg"
   "TFG.ind"
-["pdflatex"] 1530029953 "/Users/carlos/Desktop/carlos-armas-tfg/TFG.tex" "TFG.pdf" "TFG" 1530029955
+["pdflatex"] 1530030509 "/Users/carlos/Desktop/carlos-armas-tfg/TFG.tex" "TFG.pdf" "TFG" 1530030512
   "/Users/carlos/Desktop/carlos-armas-tfg/TFG.tex" 1530025219 12530 50e7b044ad0bd64c30c5070cb4248a07 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -111,20 +111,20 @@
   "/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1495593472 2350277 a699055bee05bf8a40b0504752487295 ""
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1523552048 4129592 0dcb49004c88a38d478555ce001f1fe9 ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
-  "TFG.aux" 1530029955 22747 1826ecc55879b2489e02902626a50ed1 ""
-  "TFG.bbl" 1530029953 2606 5316a7225e9e733e45d00fb0c4222d07 "bibtex TFG"
-  "TFG.ind" 1530029486 0 d41d8cd98f00b204e9800998ecf8427e "makeindex TFG.idx"
-  "TFG.lof" 1530029955 2626 242d9a7257ab0d94b9339d7de9c1452c ""
-  "TFG.lot" 1530029955 700 7867ea33f116de38dc439d3274921c1a ""
-  "TFG.out" 1530029955 3394 6d7edb83b6c72788085fd50b4e566475 ""
+  "TFG.aux" 1530030511 22747 1826ecc55879b2489e02902626a50ed1 ""
+  "TFG.bbl" 1530030505 2606 5316a7225e9e733e45d00fb0c4222d07 "bibtex TFG"
+  "TFG.ind" 1530030501 0 d41d8cd98f00b204e9800998ecf8427e "makeindex TFG.idx"
+  "TFG.lof" 1530030511 2626 242d9a7257ab0d94b9339d7de9c1452c ""
+  "TFG.lot" 1530030511 700 7867ea33f116de38dc439d3274921c1a ""
+  "TFG.out" 1530030511 3394 6d7edb83b6c72788085fd50b4e566475 ""
   "TFG.tex" 1530025219 12530 50e7b044ad0bd64c30c5070cb4248a07 ""
-  "TFG.toc" 1530029955 4576 6d50743dfa19e5442a26d27340437bde ""
+  "TFG.toc" 1530030511 4576 6d50743dfa19e5442a26d27340437bde ""
   "algorithm.sty" 1529075616 2952 2543bdffe7db00795dd5ce1fddacd76c ""
   "algorithmic.sty" 1529075616 7423 3cc23b0ca6c68b452327f98cbd473269 ""
   "apendice1.tex" 1530013991 6845 cb146bf20053cdb4a5424d24f5b24a0f ""
   "apendice2.tex" 1529075616 1157 38d41abf5d8aac377116d81107603b79 ""
   "cap1.tex" 1529503105 7644 bce12f6395953a315b8607dcce1a155e ""
-  "cap2.tex" 1529928751 21844 138e05be04c1afb0f2c746f5530233c6 ""
+  "cap2.tex" 1530030509 21846 d95b49024a3eee0127459c2dead51d06 ""
   "cap3.tex" 1530029949 16906 bea1e422c898d738fe863976a70be69c ""
   "cap4.tex" 1529075616 2580 a7da009a9f0a5688d24cbb6cfb9d0ce3 ""
   "cap5.tex" 1529075616 504 14cbc022546a64b9db883fce135c329c ""
@@ -157,11 +157,11 @@
   "tables/presupuesto2.tex" 1529075616 777 f171f3d6d7a1e99028f101b34002cb8c ""
   "tables/presupuesto_total.tex" 1529075616 533 bfc054a10632f931f1654ea5ac54c94b ""
   (generated)
+  "TFG.lot"
+  "TFG.idx"
   "TFG.lof"
   "TFG.toc"
   "TFG.aux"
   "TFG.pdf"
   "TFG.log"
-  "TFG.lot"
   "TFG.out"
-  "TFG.idx"
