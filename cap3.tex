@@ -406,7 +406,7 @@ Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 	\begin{center}
 	\includegraphics[width=0.59\textwidth]{images/org-teams}
 	\caption{Listar los equipos de una organización.}
-	\label{fig:user-commits}
+	\label{fig:org-teams}
 	\end{center}
 \end{figure}
 
@@ -414,7 +414,57 @@ Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 	\begin{center}
 	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams}
 	\caption{Listar mediante expresión regular los equipos de una organización.}
-	\label{fig:user-commits}
+	\label{fig:org-regexp-teams}
+	\end{center}
+\end{figure}
+
+\subsection{new\_team}
+\label{3.3.12}
+
+Crea un nuevo equipo dentro de la organización en la que esté posicionado el usuario. Si el comando no recibe ningún parámetro, se abrirá la URL del formulario para crear el equipo en la web de GitHub. En caso de especificarle un parámetro,
+éste tiene que ser un fichero (ver plantilla \cite{B25}) que se encuentre en algún lugar de \verb $HOME  en la máquina local.
+
+Una vez más, este comando sólo se puede ejecutar cuando el usuario está posicionado dentro de una organización en {\it ghedsh}.
+
+\textbf{Sintaxis}: \verb new_team  \verb [ruta_home_fichero]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/create-team-form}
+	\caption{Formulario de creación de un equipo en GitHub.}
+	\label{fig:create-team-form}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{images/create-team-file}
+	\caption{Creación de un equipo mediante fichero.}
+	\label{fig:create-team-file}
+	\end{center}
+\end{figure}
+
+\subsection{rm\_team}
+\label{3.3.13}
+
+Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defecto y el usuario borrará el o los equipos que desee de la lista proporcionada. Se ejecuta sólo en contexto de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb rm_team  .
+
+\subsection{invite\_outside\_collaborators}
+\label{3.3.14}
+
+Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb $HOME  de la máquina local.
+
+Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en el contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_outside_collaborators  \verb [ruta_home_fichero]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/invite-collabs}
+	\caption{Invitación a ser miembros desde fichero.}
+	\label{fig:invite-collabs}
 	\end{center}
 \end{figure}
 
