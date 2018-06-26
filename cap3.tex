@@ -333,6 +333,91 @@ Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del
 \subsection{commits}
 \label{3.3.8}
 
+Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb master , en caso de que no se le pase como parámetro una rama en concreto.
+Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: \textbf{organización} o \textbf{usuario}.
+
+\textbf{Sintaxis}: \verb commits  \verb [rama_repositorio]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/user-commits}
+	\caption{Mostrar commits en un repositorio de usuario.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/orgs-commits}
+	\caption{Mostrar commits de la rama de un repositorio de organización.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
+\subsection{open}
+\label{3.3.9}
+
+Abre el navegador por defecto y muestra información de GitHub según el contexto:
+\begin{itemize}
+	\item Contexto de \textbf{usuario}: si se ejecuta \verb open  a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en {\it ghedsh}. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.
+	\item Contexto de \textbf{organización}: a nivel de organización abre el perfil de la organización en GitHub. Si el usuario se encuentra posicionado en un repositorio de la organización, abre la URL del repositorio.
+	Para este contexto en concreto, es posible pasarle un parámetro que consista en una expresión regular o el nombre de algún miembro y abrir su perfil.
+	En este caso, la \textbf{sintaxis} sería: \verb open  \verb "nombre"  (para el nombre del miembro) o bien \verb open  \verb /Regexp/  .
+	\item Contexto de \textbf{equipo}: abre la URL del equipo en GitHub.
+\end{itemize}
+
+\textbf{Sintaxis} general: \verb open  .
+
+\subsection{people}
+\label{3.3.10}
+
+Muestra los nombres de los usuarios que componen una organización. Esto incluye miembros y colaboradores externos (si el usuario autenticado en {\it ghedsh} tiene permisos de administrador en la organización).
+Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una expresión regular, se mostrarán los resultados que hayan casado con ella.
+
+Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro del contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb people  \verb [/Regexp/]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-people}
+	\caption{Mostrar los miembros de una organización.}
+	\label{fig:org-people}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-people-regexp}
+	\caption{Mostrar mediante expresión regular los miembros de una organización.}
+	\label{fig:org-people-regexp}
+	\end{center}
+\end{figure}
+
+\subsection{teams}
+\label{3.3.11}
+
+Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella.
+Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb teams  \verb [/Regexp/]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-teams}
+	\caption{Listar los equipos de una organización.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams}
+	\caption{Listar mediante expresión regular los equipos de una organización.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos que facilitan el proceso de evaluación}
 \label{3:sec:4}
