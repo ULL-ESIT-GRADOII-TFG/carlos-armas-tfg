@@ -140,7 +140,7 @@ el contenido del mismo referenciará al de la entidad original.
 
 Para solucionarlo, se utilizó el módulo {\it Marshal}\cite{B23} de Ruby, que sí realiza una copia profunda del objeto.
 
-\subsection{Bash (comando ghedsh)}
+\subsection{bash (comando ghedsh)}
 \label{3.2.1}
 
 Permite interpretar un comando en la terminal del sistema operativo, sin salir de {\it ghedsh}.
@@ -208,6 +208,130 @@ Muestra los repositorios según el contexto. Si no se le especifica nungún par�
 		\end{center}
 	\end{figure}
 \end{itemize}
+
+\subsection{new\_repo}
+\label{3.3.4}
+
+Crea un nuevo repositorio. La herramienta muestra al usuario dos opciones para crearlo (menú):
+\begin{itemize}
+	\item {\it Default}: crea un repositorio público.
+	\item {\it Custom}: crea un repositorio público o privado, al que es posible añadirle opciones específicas mediante una guía que se le mostrará.
+	Si no se quiere especificar alguna de las opciones que se muestran, puede pulsar la tecla retorno y omitir el paso.
+\end{itemize}
+\textbf{Sintaxis}: \verb new_repo  \verb <nombre_repositorio> .
+Disponible para:
+\begin{itemize}
+	\item Contexto \textbf{usuario}: crea un repositorio para el usuario autenticado.
+	\item Contexto \textbf{organización}: crea un repositorio dentro de la organización en la que se encuentre posicionado el usuario.
+\end{itemize}
+En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.70\textwidth]{images/create-repo}
+	\caption{Menú para la creación de un repositorio.}
+	\label{fig:create-repo}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/custom-repo}
+	\caption{Creación de un repositorio de usuario con opciones específicas.}
+	\label{fig:custom-repo}
+	\end{center}
+\end{figure}
+
+
+\subsection{rm\_repo}
+\label{3.3.4}
+
+Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{usuario} como a nivel de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb rm_repo  \verb <nombre_repositorio>  .
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/delete-repo}
+	\caption{Eliminación de un repositorio.}
+	\label{fig:custom-repo}
+	\end{center}
+\end{figure}
+
+\subsection{new\_issue}
+\label{3.3.5}
+
+Abre el navegador por defecto, situando al usuario en el formulario de creación de un issue. Para ejecutarlo, es necesario estar posicionado sobre un repositorio.
+
+\textbf{Sintaxis}: \verb new_issue  .
+
+Está disponible para:
+\begin{itemize}
+	\item Contexto \textbf{usuario}: abre la página de {\it issues} del repositorio de usuario en el que está posicionado.
+	\item Contexto \textbf{organización}: abre la página de {\it issues} del repositorio de la organización sobre la que está posicionado.
+\end{itemize}
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/new-issue}
+	\caption{Nuevo issue en repositorio de organización.}
+	\label{fig:new-issue}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.7\textwidth]{images/issue-form}
+	\caption{Formulario de creación de incidencias (issues).}
+	\label{fig:new-issue}
+	\end{center}
+\end{figure}
+
+\subsection{issues}
+\label{3.3.6}
+Abre el navegador por defecto, situando al usuario en la lista de incidencias ({\it issues}). Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb issues  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.65\textwidth]{images/list-issues}
+	\caption{Ver incidencias de un repositorio.}
+	\label{fig:list-issues}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.65\textwidth]{images/issues-list}
+	\caption{Listado de incidencias del repositorio en GitHub.}
+	\label{fig:issues-list}
+	\end{center}
+\end{figure}
+
+\subsection{files}
+\label{3.3.7}
+
+Muestra el contenido y el tipo de contenido  (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
+Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.
+
+\textbf{Sintaxis}: \verb files  \verb [subdirectorio]  . 
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/dir-content}
+	\caption{Listar contenido del repositorio.}
+	\label{fig:dir-content}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/subdir-content}
+	\caption{Listar contenido de un subdirectorio.}
+	\label{fig:subdir-content}
+	\end{center}
+\end{figure}
+
+\subsection{commits}
+\label{3.3.8}
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos que facilitan el proceso de evaluación}
