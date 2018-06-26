@@ -7,10 +7,10 @@ Este capítulo se centrará en explicar las características que incorpora {\it 
 \bigskip
 
 Se hará una distinción entre comandos del núcleo y comandos incorporados ({\it built-in commands}). Los comandos del núcleo, son aquellos que no trabajan con los datos de GitHub del usuario pero que, sin embargo, son
-esenciales desde el punto de vista la usabilidad y experiencia de usuario con el CLI.
+esenciales desde el punto de vista de la usabilidad y experiencia de usuario con el CLI.
 \bigskip
 
-Por otro lado, los comandos incorporados sí trabajan con los datos de GitHub del usuario identificado. Permiten realizar diversas tareas, priorizando la rapidez en la ejecución de las mismas y la facilidad de uso de la herramienta.
+Además, los comandos incorporados sí trabajan con los datos de GitHub del usuario identificado. Permiten realizar diversas tareas, priorizando la rapidez en la ejecución de las mismas y la facilidad de uso de la herramienta.
 
 %---------------------------------------------------------------------------------
 \section{Autenticación con credenciales de GitHub}
@@ -158,8 +158,56 @@ En la figura \ref{fig:bash-example}, se muestra un ejemplo de uso.
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos incorporados en ghedsh}
-\label{3:sec:3}   
-    
+\label{3:sec:3}
+
+A lo largo de esta sección, se explicarán individualmente los comandos característicos de {\it ghedsh}. Los comandos característicos o incorporados por {\it ghedsh}
+son aquellos que trabajan con los datos de GitHub del usuario de la herramienta. Colaboran estrechamente con la GitHub API REST v3 (véase, para más detalle, la documentación oficial de {\it Octokit}\cite{B24}).
+Se explicará la sintaxis para cada uno de ellos y se proporcionará ejemplos de uso.
+\bigskip
+
+Como convenio, los parámetros con el formato \verb <parameter> , son obligatorios. Los que tengan el formato \verb [parameter] , son opcionales.
+\bigskip
+
+Por otro lado, las expresiones regulares admiten las opciones establecidas por Ruby.
+
+\subsection{clear}
+\label{3.3.1}
+
+Realiza la misma tarea que el comando \verb clear  en Bash. Borra la pantalla si es posible y sitúa el cursor en la parte superior izquierda de la pantalla (ignora cualquier parámetro adicional).
+
+\textbf{Sintaxis}: \verb clear  .
+
+\subsection{exit}
+\label{3.3.2}
+
+Temina la ejecución de {\it ghedsh}, guardando el contexto actual. Es decir, si el usuario se encontraba dentro de una organización, la próxima vez que entre en {\it ghedsh} estará dentro de la organización.
+
+\textbf{Sintaxis}: \verb exit  .
+
+\subsection{repos}
+\label{3.3.3}
+
+Muestra los repositorios según el contexto. Si no se le especifica nungún parámetro, mostrará todos los repositorios. Si se le proporciona una expresión regular, mostrará los nombres de los repositorios que hayan casado.
+
+\textbf{Sintaxis}: \verb repos \verb [/Regexp/] .
+\begin{itemize}
+	\item Contexto \textbf{organización}: muestra los repositorios de la organización en la que se encuentra el usuario de {\it ghedsh}.
+	\begin{figure}[H]
+		\begin{center}
+		\includegraphics[width=0.60\textwidth]{images/user-repos}
+		\caption{Comando repos a nivel de usuario.}
+		\label{fig:user-repos}
+		\end{center}
+	\end{figure}
+	\item Contexto \textbf{usuario}: muestra los repositorios del usuario autenticado en {\it ghedsh}.
+	\begin{figure}[H]
+		\begin{center}
+		\includegraphics[width=0.70\textwidth]{images/org-repos}
+		\caption{Comando repos a nivel de organización.}
+		\label{fig:org-repos}
+		\end{center}
+	\end{figure}
+\end{itemize}
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos que facilitan el proceso de evaluación}

@@ -205,6 +205,12 @@ INPUT ./images/login-example.png
 INPUT images/bash-example.png
 INPUT ./images/bash-example.png
 INPUT ./images/bash-example.png
+INPUT images/user-repos.png
+INPUT ./images/user-repos.png
+INPUT ./images/user-repos.png
+INPUT images/org-repos.png
+INPUT ./images/org-repos.png
+INPUT ./images/org-repos.png
 INPUT cap4.tex
 INPUT cap4.tex
 INPUT cap5.tex
