@@ -67,7 +67,7 @@ En {\it ghedsh} se ha optado por el siguiente planteamiento: para realizar la op
 La sintaxis del comando sería \verb cd  \verb <tipo>  \verb <nombre|Regexp> , donde nombre es la cadena de texto que identifica al tipo, o bien, una expresión regular que mostraría las cadenas que han casado.
 \bigskip
 
-Los tipos de contexto que actualmente se soportan en {\it ghedsh} son:
+Los tipos de contexto (pueden ser ampliables) que actualmente se soportan en {\it ghedsh} son:
 \begin{itemize}
 	\item \textbf{Nivel de usuario}: estando a nivel de usuario, éste se puede cambiar a cualquiera de sus repositorios o a cualquier organización a la que pertenezca, como vemos a continuación:
 		\begin{itemize}
@@ -88,9 +88,73 @@ Además, si deseamos volver al contexto anterior, haremos de la misma manera que
 Puesto que se trata de uno de los comandos más importantes de {\it ghedsh}, se comentarán los aspectos destacados de la implementación del mismo, incluyendo las dificultades encontradas.
 \bigskip
 
+Internamente, el comando {\it cd} contiene una pila (stack\cite{B19}) en la que se almacenan todos los contextos previos. La estructura de un contexto se muestra en el siguiente fragmento de código:
 
+\begin{lstlisting}[language=Ruby]
+  config = {
+    'User' => client.login.to_s,
+  	'user_url' => client.web_endpoint.to_s << client.login.to_s,
+    'Org' => nil,
+    'org_url' => nil,
+    'Repo' => nil,
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+\end{lstlisting}
 
+\begin{itemize}
+	\item \verb User : permite saber el nombre del usuario autenticado en {\it ghedsh}.
+	\item \verb user_url : contiene la URL ({\it Uniform Resource Locator}\cite{B20}) del perfil del usuairo en GitHub.
+	\item \verb Org : indica el nombre de la organización actual, si el usuario no está posicionado sobre alguna, el valor es nulo.
+	\item \verb org_url : URL de la organización en GitHub.
+	\item \verb Repo : nombre del repositorio actual, en caso de estar dentro de alguno.
+	\item \verb repo_url : URL del repositorio en GitHub.
+	\item \verb Team : nombre del equipo actual si el usuario está posicionado dentro de alguno.
+	\item \verb team_url : URL del equipo en GitHub.
+\end{itemize}
 
+En esencia, {\it change directory} irá variando estos parámetros para conocer a qué nivel se encuentra el usuario (\verb User  siempre tendrá un valor asignado porque representa el usuario autenticado).
+Por ejemplo, para referirnos a un repositorio de una organización en la que el usuario es miembro, tendríamos:
+\begin{lstlisting}[language=Ruby]
+	config = {
+    'User' => client.login.to_s,
+  	'user_url' => client.web_endpoint.to_s << client.login.to_s,
+    'Org' => "EXAMPLE-ORG",
+    'org_url' => nil,
+    'Repo' => "repository-within-example-org",
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+\end{lstlisting}
+En el caso de un repositorio de usuario, \verb User  tendría valor asignado y \verb Repo  también tendría valor asignado. A diferencia con el caso anterior, \verb Org  sería nulo ya que nos referimos a un repositorio a nivel de usuario.
+\bigskip
+
+Una de las dificultades en la implementación de este comando, fue que, antes de reasignar la estructura de datos que respresenta los contextos, era necesario almacenar el contexto actual para poder volver a éste más tarde.
+\bigskip
+
+Ruby proporciona dos métodos para copiar/clonar objetos: \verb dup \cite{B21} y \verb clone \cite{B22}. No obstante, realizan una copia superficial del objeto, es decir, crearán un nuevo identificador de objeto pero
+el contenido del mismo referenciará al de la entidad original.
+\bigskip
+
+Para solucionarlo, se utilizó el módulo {\it Marshal}\cite{B23} de Ruby, que sí realiza una copia profunda del objeto.
+
+\subsection{Bash (comando ghedsh)}
+\label{3.2.1}
+
+Permite interpretar un comando en la terminal del sistema operativo, sin salir de {\it ghedsh}.
+\bigskip
+
+\textbf{Sintaxis:} \verb bash  \verb <comando_terminal>  .
+En la figura \ref{fig:bash-example}, se muestra un ejemplo de uso.
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.30\textwidth]{images/bash-example}
+	\caption{Ejemplo de uso del comando bash.}
+	\label{fig:bash-example}
+	\end{center}
+\end{figure}
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos incorporados en ghedsh}
@@ -99,90 +163,6 @@ Puesto que se trata de uno de los comandos más importantes de {\it ghedsh}, se 
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos que facilitan el proceso de evaluación}
-\label{3:sec:4}  
-        	
-	
-%------------------------------------------------------------------------------------------------------------
-\subsection{Automatizar la ejecución de scripts en los repositorios}
-\label{subsec:3.1.3} 
-	    
-    
-		
-%------------------------------------------------------------------------------------------------------------
-\subsection{Recopilar la información obtenida de la automatización de tareas}
-\label{subsec:3.1.4}
-
-    Una vez ejecutados los scripts necesarios para evaluar un determinado repositorio, es posible generar un GitBook con el resultado de la ejecución de los mismos. Este libro se genera en formato PDF y en HTML.
-\bigskip
-    
-    En función del contexto dónde nos encontremos dentro de la herramienta, podremos:
-    \begin{itemize}
-    	\item Crear un GitBook en el repositorio en el que nos encontremos.
-    	\item Crear un GitBook en un determinado repositorio.
-	    \item Crear un GitBook en todos los repositorios que coincidan con una determinada expresión regular.
-	    \item Crear un GitBook en todos los repositorios de una asignación coincidan con una determinada expresión regular.
-    \end{itemize}
-		
-\newpage
-%---------------------------------------------------------------------------------
-\section{Funcionalidades extra}
-\label{3:sec:2}
-
-Además de las funcionales solicitadas en este Trabajo de Fin de Máster, se han añadido una serie de funcionalidades extra que, a pesar de no ser requeridas, brindan al usuario de una mejor experiencia de uso del programa:
-
-\begin{itemize}
-  \item Autocompletado de los comandos disponibles en función del contexto donde nos encontremos (nivel principal, organización o repositorio).
-	\item Opción de ayuda que muestra la descripción de los comandos y cómo se utilizan. Esta ayuda varía dependiendo del contexto donde nos encontremos.
-	\item Opción de visualizar el directorio de trabajo donde se ha ejecutado el programa. Útil para determinar rutas relativas de los scripts que se desean ejecutar.
-	\item Opción para conocer el propietario de cada repositorio. En el caso de que el repositorio pertenezca a una organización, mostrará los contribuyentes de ese repositorio.
-\end{itemize}
-
-NOTA: se puede consultar toda la información referente a los comandos del programa en el Apéndice 2.
-
-%---------------------------------------------------------------------------------
-\section{Problemas encontrados y soluciones}
-\label{3:sec:3}
-
-A continuación se detallan los problemas encontrados durante la implementación de la herramienta y las soluciones encontradas para los mismos:
-
-%---------------------------------------------------------------------------------
-\subsection{Asincronía}
-\label{subsec:3.3.1}
-
-Una de las características más importantes del lenguaje JavaScript es la asincronía. Usa un modelo de operaciones de entrada/salida sin bloqueo y orientado a eventos, que lo hace ligero y eficiente. Sin embargo, algunas acciones que debía realizar esta herramienta debían de ser síncronas. Ejemplos son el login del usuario y ejecución de scripts.
-\bigskip
-
-{\normalsize {\bfseries Solución}}
-\bigskip
-
-La solución a este comportamiento pasó por realizar un amplio estudio de la documentación para usar mecanismos que permitieran bloquear la ejecución de la herramienta en las partes que deseábamos. Los mecanismos usados han sido:
-
-\begin{itemize}
-	\item Funciones síncronas del propio lenguaje.
-	\item Promesas
-	\item Métodos async/await
-	\item Librerías con métodos implementados de manera síncrona.
-\end{itemize}
-
-%---------------------------------------------------------------------------------
-\subsection{Autocompletado de comandos}
-\label{subsec:3.3.2}
-
-Para el manejo de los flujos de lectura y escritura de la herramienta, se ha utilizado la interfaz nativa de Node.js (Readline). Esta interfaz provee de una función de autocompletado para el texto que escribe el usuario.
-
-Sin embargo, sólo funciona con la primera palabra (comando) que escribe. Tras investigar al respecto y buscar posibles librerías alternativas, no existía ninguna solución que corrigiera este comportamiento.
-\bigskip
-
-{\normalsize {\bfseries Solución}}
-\bigskip
-
-Realizando numerosas pruebas, se halló una manera propia de conseguir completar más de un comando en la misma línea. Cuando realice los test de aceptación pertinentes requeridos por la comunidad de Node, solicitaré un Pull Request a su repositorio con esta mejora.
-
-
-%---------------------------------------------------------------------------------
-\section{Perfil del usuario de ghshell}
 \label{3:sec:4}
 
-El uso de \verb|ghshell| está especialmente dirigido a un determinado grupo de profesores: nos referimos al perfil de un profesor, principalmente docente en alguna rama de Ingeniería, con conocimientos avanzados en programación y en herramientas de control de versiones.
 
-No obstante, ya que la curva de aprendizaje de \verb|ghshell| no es excesiva y dado que el uso de las herramientas de control de versiones no se limita exclusivamente a repositorios de código fuente, se puede extender su uso para el resto de profesorado y usuarios con otros roles. Basta con tener claras unas nociones básicas de informática, junto con la lectura y asimilación previa de la documentación de la herramienta.

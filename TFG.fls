@@ -202,6 +202,9 @@ INPUT cap3.tex
 INPUT images/login-example.png
 INPUT ./images/login-example.png
 INPUT ./images/login-example.png
+INPUT images/bash-example.png
+INPUT ./images/bash-example.png
+INPUT ./images/bash-example.png
 INPUT cap4.tex
 INPUT cap4.tex
 INPUT cap5.tex
