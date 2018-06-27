@@ -284,6 +284,12 @@ INPUT ./images/invite-member.png
 INPUT images/add-members-file.png
 INPUT ./images/add-members-file.png
 INPUT ./images/add-members-file.png
+INPUT images/eval-example.png
+INPUT ./images/eval-example.png
+INPUT ./images/eval-example.png
+INPUT images/eval-preview.png
+INPUT ./images/eval-preview.png
+INPUT ./images/eval-preview.png
 INPUT cap4.tex
 INPUT cap4.tex
 INPUT cap5.tex

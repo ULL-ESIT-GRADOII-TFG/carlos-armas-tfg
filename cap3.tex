@@ -260,7 +260,7 @@ Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{
 \subsection{clone}
 \label{3.3.6}
 
-Clona repositorios y, si ya existe en el directorio local, realizará \verb git  \verb pull  \verb --all . Recibe, como parámetro obligatorio, el nombre del repositorio que se desea clonar o una expresión regular que permitirá clonar todos los repositorios que casen con ella.
+Clona repositorios y, si ya existe en el directorio local, realizará \verb git  \verb pull  \verb --all . Recibe como parámetro obligatorio el nombre del repositorio que se desea clonar o una expresión regular, que permitirá clonar todos los repositorios que casen con ella.
 Opcionalmente, es posible especificar un directorio dentro de \verb $HOME   de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.
 
 \textbf{Sintaxis}: \verb clone  \verb <nombre_repo|/Regexp/>  \verb [ruta_en_home]  .
@@ -563,6 +563,70 @@ El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organi
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos que dan soporte al proceso de evaluación}
 \label{3:sec:4}
+
+Los comandos que se explicarán en esta sección reflejan uno de los principales objetivos de {\it ghedsh}: aportar funcionalidades específicas
+que usen las metodologías de {\it GitHub Education}, facilitando al profesorado la gestión de repositorios del alumnado así como la ejecución de {\it scripts} sobre los mismos.
+\bigskip
+
+En este conjunto de comandos tenemos: \verb new_eval , \verb foreach  y \verb foreach_try .
+
+\subsection{new\_eval}
+\label{3.4.1}
+
+Permite crear un repositorio de evaluación. Recibe como parámetros el nombre del repositorio de evaluación y una expresión regular que añade como subdirectorios los repositorios que lo conforman. En {\it ghedsh}, un repositorio de evaluación consiste en hacer uso de los submódulos de {\it git}, de manera que se crea un repositorio raíz que contiene como submódulos
+todos los proyectos que se van a evaluar. Los pasos que realiza son:
+\begin{itemize}
+	\item En el directorio actual de la máquina local del usuario, crea un directorio con el mismo nombre del repositorio de evaluación.
+	\item Añade como submódulos los repositorios de la organización que casen con la expresión regular.
+	\item Ejecuta \verb git  \verb push   y sube el contenido a la plataforma GitHub.
+\end{itemize}
+\bigskip
+
+Dado que, para comprender todas las ventajas que ofrece este comando, es necesario conocer los submódulos de git ({\it gitsubmodules\cite{B28}}), se explicará en qué consisten a continuación.
+\bigskip
+
+Esencialmente, un submódulo es un repositorio que se encuentra contenido dentro de otro repositorio. El submódulo tiene su propio histórico de {\it commits} y, el repositorio raíz que lo contiene, se denomina súper-proyecto o súper-repositorio.
+\bigskip
+
+Es probable que, mientras trabajamos en un proyecto, necesitemos usar otro proyecto dentro de él. Quizás se trate de una librería de terceros o una que desarrollamos nosotros mismos de forma separada dentro de un proyecto principal. En estos casos, surge un problema común:
+precisamos de ser capaces de tratar los dos proyectos por separado y, aún así, usar uno dentro del otro.
+\bigskip
+
+El control de versiones {\it Git} aborda ese problema usando submódulos. Los submódulos permiten mantener un repositorio como un subdirectorio de otro repositorio {\it Git}. Por lo tanto, permite clonar otro repositorio en nuestro proyecto, separando los {\it commits} de cada uno.
+\bigskip
+
+En {\it ghedsh}, el comando \verb new_eval  se encuentra disponible únicamente en el contexto de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb new_eval  \verb <nombre_repo_evaluacion>  \verb </Regexp/>  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{images/eval-example}
+	\caption{Ejemplo de creación de un repositorio de evaluación.}
+	\label{fig:eval-example}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/eval-preview}
+	\caption{Estructura de un repositorio de evaluación en GitHub.}
+	\label{fig:eval-example}
+	\end{center}
+\end{figure}
+
+\subsection{foreach}
+\label{3.4.2}
+
+Ejecuta sobre cada submódulo el comando especificado como parámetro. Para que el comando lleve a cabo su cometido, se necesita lo siguiente:
+\begin{itemize}
+	\item Estar en contexto de \textbf{organización} dentro de {\it ghedsh} (único contexto en el que está disponible \verb foreach  ).
+	\item Estar posicionado dentro de un repositorio que contenga submódulos, dentro de {\it ghedsh}.
+	\item En la máquina local, el directorio actual (donde hemos ejecutado {\it ghedsh}) debe ser el repositorio de evaluación en cuestión.
+\end{itemize}
+
+\subsection{foreach\_try}
+\label{3.4.3}
 
 \section{Caso de uso}
 \label{3:sec:5}
