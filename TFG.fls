@@ -290,6 +290,9 @@ INPUT ./images/eval-example.png
 INPUT images/eval-preview.png
 INPUT ./images/eval-preview.png
 INPUT ./images/eval-preview.png
+INPUT images/foreach-example.png
+INPUT ./images/foreach-example.png
+INPUT ./images/foreach-example.png
 INPUT cap4.tex
 INPUT cap4.tex
 INPUT cap5.tex

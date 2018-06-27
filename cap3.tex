@@ -618,16 +618,54 @@ En {\it ghedsh}, el comando \verb new_eval  se encuentra disponible únicamente 
 \subsection{foreach}
 \label{3.4.2}
 
-Ejecuta sobre cada submódulo el comando especificado como parámetro. Para que el comando lleve a cabo su cometido, se necesita lo siguiente:
+Ejecuta sobre cada submódulo el comando {\it Bash} especificado como parámetro. No se detiene ante posibles errores en el proceso. Internamente, ejecuta \verb git  \verb submodule  \verb foreach  .
+
+\textbf{Sintaxis}: \verb foreach  \verb <comando_bash>  .
+
+Para que el comando lleve a cabo su cometido, se necesita lo siguiente:
 \begin{itemize}
 	\item Estar en contexto de \textbf{organización} dentro de {\it ghedsh} (único contexto en el que está disponible \verb foreach  ).
 	\item Estar posicionado dentro de un repositorio que contenga submódulos, dentro de {\it ghedsh}.
 	\item En la máquina local, el directorio actual (donde hemos ejecutado {\it ghedsh}) debe ser el repositorio de evaluación en cuestión.
 \end{itemize}
 
+Como se indica en la documentación oficial de  {\it git submodule foreach \cite{B29}}, el comando que se le proporciona tiene acceso a las siguientes variables:
+\begin{itemize}
+	\item \verb $name : nombre del submódulo.
+	\item \verb $path : nombre del submódulo relativo al súper-proyecto.
+	\item \verb $sha1 : SHA-1\cite{B30} del último {\it commit}.
+	\item \verb $toplevel : ruta absoluta al súper-proyecto.
+\end{itemize}
+
+Por otro lado, como también indica la documentación, cuando existe un error en algún submódulo durante la ejecución del comando, se detiene y devuelve un código distinto de cero.
+No obstante, este comportamiento puede evitarse añadiendo \verb ||  \verb :  al final del comando especificado como parámetro.
+\bigskip
+
+Hay que tener en cuenta que {\it foreach} en  \textbf{\it ghedsh}, \textbf{ya incorpora este comportamiento} y no se detendrá ante errores.
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{images/foreach-example}
+	\caption{Ejemplo de ghedsh foreach.}
+	\label{fig:foreach-example}
+	\end{center}
+\end{figure}
+
 \subsection{foreach\_try}
 \label{3.4.3}
 
+Realiza la misma tarea que {\it foreach}(\ref{3.4.2}) y requiere las mismas condiciones para su uso. A diferencia de éste, {\it foreach\_try} \textbf{detendrá su ejecución cuando se produzca un error en el proceso}.
+
 \section{Caso de uso}
 \label{3:sec:5}
+
+Cabe destacar que el director de este Trabajo de Fin de Grado, Casiano Rodríguez León, ha hecho uso de la herramienta {\it ghedsh} en un entorno educativo real.
+\bigskip
+
+En concreto, se ha utilizado para facilitar tareas de gestión de repositorios y evaluación de prácticas en el curso de Procesadores de Lenguajes (año académico 2017-2018) a lo largo del mes de junio. Además, esto ha contribuido a mejorar aspectos de la herramienta,
+puesto que, en un entorno real, suelen aparecer nuevos casos de uso que han sido cubiertos satisfactoriamente.
+\bigskip
+
+Por otro lado, Casiano ha realizado diversos vídeo tutoriales en los que se profundiza en el manejo de comandos que dan soporte al proceso de evaluación.
+
 
