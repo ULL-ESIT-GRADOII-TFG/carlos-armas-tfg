@@ -243,11 +243,12 @@ En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
 
 
 \subsection{rm\_repo}
-\label{3.3.4}
+\label{3.3.5}
 
 Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{usuario} como a nivel de \textbf{organización}.
 
 \textbf{Sintaxis}: \verb rm_repo  \verb <nombre_repositorio>  .
+
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.5\textwidth]{images/delete-repo}
@@ -256,8 +257,40 @@ Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{
 	\end{center}
 \end{figure}
 
+\subsection{clone}
+\label{3.3.6}
+
+Clona repositorios y, si ya existe en el directorio local, realizará \verb git  \verb pull  \verb --all . Recibe, como parámetro obligatorio, el nombre del repositorio que se desea clonar o una expresión regular que permitirá clonar todos los repositorios que casen con ella.
+Opcionalmente, es posible especificar un directorio dentro de \verb $HOME   de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.
+
+\textbf{Sintaxis}: \verb clone  \verb <nombre_repo|/Regexp/>  \verb [ruta_en_home]  .
+
+Se puede ejecutar en:
+\begin{itemize}
+	\item Contexto de \textbf{usuario}: clonará los repositorios del usuario autenticado en {\it ghedsh}.
+	\item Contexto de \textbf{organización}: clonará los repositorios de la organización en la que se encuentre posicionado.
+\end{itemize}
+
+En la figura \ref{fig:clone-example} y \ref{fig:clone-example-org} se muestran ejemplos de uso.
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.60\textwidth]{images/clone-example}
+	\caption{Ejemplo de clonar un repositorio de usuario.}
+	\label{fig:clone-example}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.60\textwidth]{images/clone-example-org}
+	\caption{Ejemplo de clonar un repositorio de organización.}
+	\label{fig:clone-example-org}
+	\end{center}
+\end{figure}
+
 \subsection{new\_issue}
-\label{3.3.5}
+\label{3.3.7}
 
 Abre el navegador por defecto, situando al usuario en el formulario de creación de un issue. Para ejecutarlo, es necesario estar posicionado sobre un repositorio.
 
@@ -285,7 +318,7 @@ Está disponible para:
 \end{figure}
 
 \subsection{issues}
-\label{3.3.6}
+\label{3.3.8}
 Abre el navegador por defecto, situando al usuario en la lista de incidencias ({\it issues}). Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
 
 \textbf{Sintaxis}: \verb issues  .
@@ -307,7 +340,7 @@ Abre el navegador por defecto, situando al usuario en la lista de incidencias ({
 \end{figure}
 
 \subsection{files}
-\label{3.3.7}
+\label{3.3.9}
 
 Muestra el contenido y el tipo de contenido  (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
 Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.
@@ -331,7 +364,7 @@ Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del
 \end{figure}
 
 \subsection{commits}
-\label{3.3.8}
+\label{3.3.10}
 
 Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb master , en caso de que no se le pase como parámetro una rama en concreto.
 Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: \textbf{organización} o \textbf{usuario}.
@@ -355,7 +388,7 @@ Es necesario estar posicionado sobre un repositorio de cualquiera de los siguien
 \end{figure}
 
 \subsection{open}
-\label{3.3.9}
+\label{3.3.11}
 
 Abre el navegador por defecto y muestra información de GitHub según el contexto:
 \begin{itemize}
@@ -368,8 +401,33 @@ Abre el navegador por defecto y muestra información de GitHub según el context
 
 \textbf{Sintaxis} general: \verb open  .
 
+\subsection{orgs}
+\label{3.3.12}
+
+Muestra las organizaciones a las que pertenece el usuario autenticado en {\it ghedsh}. Si el comando no recibe ningún parámetro, se mostrarán todas las organizaciones. En caso de proporcionarle un parámetro, debe ser una expresión regular y mostrará los resultados que casen.
+
+Sólo está disponible en contexto de \textbf{usuario}.
+
+\textbf{Sintaxis}: \verb orgs  \verb [/Regexp/]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/show-all-orgs}
+	\caption{Mostrar todas las organizaciones del usuario autenticado en ghedsh.}
+	\label{fig:show-orgs-regexp}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/show-orgs-regexp}
+	\caption{Filtrar organizaciones mediante expresión regular.}
+	\label{fig:show-orgs-regexp}
+	\end{center}
+\end{figure}
+
 \subsection{people}
-\label{3.3.10}
+\label{3.3.13}
 
 Muestra los nombres de los usuarios que componen una organización. Esto incluye miembros y colaboradores externos (si el usuario autenticado en {\it ghedsh} tiene permisos de administrador en la organización).
 Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una expresión regular, se mostrarán los resultados que hayan casado con ella.
@@ -395,7 +453,7 @@ Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro 
 \end{figure}
 
 \subsection{teams}
-\label{3.3.11}
+\label{3.3.14}
 
 Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella.
 Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
@@ -419,7 +477,7 @@ Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 \end{figure}
 
 \subsection{new\_team}
-\label{3.3.12}
+\label{3.3.15}
 
 Crea un nuevo equipo dentro de la organización en la que esté posicionado el usuario. Si el comando no recibe ningún parámetro, se abrirá la URL del formulario para crear el equipo en la web de GitHub. En caso de especificarle un parámetro,
 éste tiene que ser un fichero (ver plantilla \cite{B25}) que se encuentre en algún lugar de \verb $HOME  en la máquina local.
@@ -445,14 +503,14 @@ Una vez más, este comando sólo se puede ejecutar cuando el usuario está posic
 \end{figure}
 
 \subsection{rm\_team}
-\label{3.3.13}
+\label{3.3.16}
 
 Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defecto y el usuario borrará el o los equipos que desee de la lista proporcionada. Se ejecuta sólo en contexto de \textbf{organización}.
 
 \textbf{Sintaxis}: \verb rm_team  .
 
 \subsection{invite\_outside\_collaborators}
-\label{3.3.14}
+\label{3.3.17}
 
 Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb $HOME  de la máquina local.
 
@@ -468,8 +526,42 @@ Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en e
 	\end{center}
 \end{figure}
 
+\subsection{invite\_member}
+\label{3.3.18}
+
+Añade nuevos miembros a una organización. Recibe como parámetros el/los nombres de usuario de GitHub, separados por comas o por espacios.
+
+Sólo puede ejecutarse en el contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_member  \verb <user1,  \verb user2,  \verb user3,  \verb ...,  \verb n>  .
+ 
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/invite-member}
+	\caption{Añadir miembros específicos.}
+	\label{fig:invite-member}
+	\end{center}
+\end{figure}
+
+\subsection{invite\_member\_from\_file}
+\label{3.3.19}
+
+Añade  nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla \cite{B27}) existente en \verb $HOME  de la máquina local. 
+
+El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_member_from_file  \verb <ruta_home_fichero>  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/add-members-file}
+	\caption{Añadir miembros mediante fichero.}
+	\label{fig:add-members-fil}
+	\end{center}
+\end{figure}
+
 %------------------------------------------------------------------------------------------------------------
-\section{Comandos que facilitan el proceso de evaluación}
+\section{Comandos que dan soporte al proceso de evaluación}
 \label{3:sec:4}
 
 \section{Caso de uso}
