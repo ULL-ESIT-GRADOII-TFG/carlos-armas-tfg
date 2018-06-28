@@ -49,8 +49,24 @@ Como se ha indicado en la introducción de este tercer capítulo, se han separad
 
 En esta sección, se explicará este primer grupo de comandos, encargado de tareas relacionadas con el sistema operativo y, lo más importante, hacer que la herramienta sea agradable de manejar para el usuario. Además, se revisarán aspectos importantes de su implementación.
 
-\subsection{Change directory: cd}
+\subsection{bash (comando ghedsh)}
 \label{3.2.1}
+
+Permite interpretar un comando en la terminal del sistema operativo, sin salir de {\it ghedsh}.
+\bigskip
+
+\textbf{Sintaxis:} \verb bash  \verb <comando_terminal>  .
+En la figura \ref{fig:bash-example}, se muestra un ejemplo de uso.
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.30\textwidth]{images/bash-example}
+	\caption{Ejemplo de uso del comando bash.}
+	\label{fig:bash-example}
+	\end{center}
+\end{figure}
+
+\subsection{Change directory: cd}
+\label{3.2.2}
 Análogamente al comando {\it cd} de la {\it Bash}\cite{B17}, que permite cambiar nuestro directorio actual de trabajo, en {\it ghedsh} también existe este comando. No obstante, aunque la idea es similar, existen diferencias a la hora de usarlo.
 \bigskip
 
@@ -82,7 +98,6 @@ Los tipos de contexto (pueden ser ampliables) que actualmente se soportan en {\i
 \end{itemize}
 
 Además, si deseamos volver al contexto anterior, haremos de la misma manera que en sistemas operativos tipo Unix: \verb cd  \verb ..  . Hay que tener en cuenta que, actualmete, no se puede realizar la operación de volver al contexto anterior y cambiar a otro de manera simultánea (como en Unix \verb cd  \verb ../another/dir  ), es necesario hacerlo por separado.
-
 
 \subsubsection{Detalles de implementación}
 Puesto que se trata de uno de los comandos más importantes de {\it ghedsh}, se comentarán los aspectos destacados de la implementación del mismo, incluyendo las dificultades encontradas.
@@ -140,21 +155,7 @@ el contenido del mismo referenciará al de la entidad original.
 
 Para solucionarlo, se utilizó el módulo {\it Marshal}\cite{B23} de Ruby, que sí realiza una copia profunda del objeto.
 
-\subsection{bash (comando ghedsh)}
-\label{3.2.1}
 
-Permite interpretar un comando en la terminal del sistema operativo, sin salir de {\it ghedsh}.
-\bigskip
-
-\textbf{Sintaxis:} \verb bash  \verb <comando_terminal>  .
-En la figura \ref{fig:bash-example}, se muestra un ejemplo de uso.
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.30\textwidth]{images/bash-example}
-	\caption{Ejemplo de uso del comando bash.}
-	\label{fig:bash-example}
-	\end{center}
-\end{figure}
 
 %------------------------------------------------------------------------------------------------------------
 \section{Comandos incorporados en ghedsh}
@@ -177,88 +178,8 @@ Realiza la misma tarea que el comando \verb clear  en Bash. Borra la pantalla si
 
 \textbf{Sintaxis}: \verb clear  .
 
-\subsection{exit}
-\label{3.3.2}
-
-Temina la ejecución de {\it ghedsh}, guardando el contexto actual. Es decir, si el usuario se encontraba dentro de una organización, la próxima vez que entre en {\it ghedsh} estará dentro de la organización.
-
-\textbf{Sintaxis}: \verb exit  .
-
-\subsection{repos}
-\label{3.3.3}
-
-Muestra los repositorios según el contexto. Si no se le especifica nungún parámetro, mostrará todos los repositorios. Si se le proporciona una expresión regular, mostrará los nombres de los repositorios que hayan casado.
-
-\textbf{Sintaxis}: \verb repos \verb [/Regexp/] .
-\begin{itemize}
-	\item Contexto \textbf{organización}: muestra los repositorios de la organización en la que se encuentra el usuario de {\it ghedsh}.
-	\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.60\textwidth]{images/user-repos}
-		\caption{Comando repos a nivel de usuario.}
-		\label{fig:user-repos}
-		\end{center}
-	\end{figure}
-	\item Contexto \textbf{usuario}: muestra los repositorios del usuario autenticado en {\it ghedsh}.
-	\begin{figure}[H]
-		\begin{center}
-		\includegraphics[width=0.70\textwidth]{images/org-repos}
-		\caption{Comando repos a nivel de organización.}
-		\label{fig:org-repos}
-		\end{center}
-	\end{figure}
-\end{itemize}
-
-\subsection{new\_repo}
-\label{3.3.4}
-
-Crea un nuevo repositorio. La herramienta muestra al usuario dos opciones para crearlo (menú):
-\begin{itemize}
-	\item {\it Default}: crea un repositorio público.
-	\item {\it Custom}: crea un repositorio público o privado, al que es posible añadirle opciones específicas mediante una guía que se le mostrará.
-	Si no se quiere especificar alguna de las opciones que se muestran, puede pulsar la tecla retorno y omitir el paso.
-\end{itemize}
-\textbf{Sintaxis}: \verb new_repo  \verb <nombre_repositorio> .
-Disponible para:
-\begin{itemize}
-	\item Contexto \textbf{usuario}: crea un repositorio para el usuario autenticado.
-	\item Contexto \textbf{organización}: crea un repositorio dentro de la organización en la que se encuentre posicionado el usuario.
-\end{itemize}
-En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.70\textwidth]{images/create-repo}
-	\caption{Menú para la creación de un repositorio.}
-	\label{fig:create-repo}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=1\textwidth]{images/custom-repo}
-	\caption{Creación de un repositorio de usuario con opciones específicas.}
-	\label{fig:custom-repo}
-	\end{center}
-\end{figure}
-
-
-\subsection{rm\_repo}
-\label{3.3.5}
-
-Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{usuario} como a nivel de \textbf{organización}.
-
-\textbf{Sintaxis}: \verb rm_repo  \verb <nombre_repositorio>  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/delete-repo}
-	\caption{Eliminación de un repositorio.}
-	\label{fig:custom-repo}
-	\end{center}
-\end{figure}
-
 \subsection{clone}
-\label{3.3.6}
+\label{3.3.2}
 
 Clona repositorios y, si ya existe en el directorio local, realizará \verb git  \verb pull  \verb --all . Recibe como parámetro obligatorio el nombre del repositorio que se desea clonar o una expresión regular, que permitirá clonar todos los repositorios que casen con ella.
 Opcionalmente, es posible especificar un directorio dentro de \verb $HOME   de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.
@@ -289,8 +210,136 @@ En la figura \ref{fig:clone-example} y \ref{fig:clone-example-org} se muestran e
 	\end{center}
 \end{figure}
 
-\subsection{new\_issue}
+\subsection{commits}
+\label{3.3.3}
+
+Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb master , en caso de que no se le pase como parámetro una rama en concreto.
+Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: \textbf{organización} o \textbf{usuario}.
+
+\textbf{Sintaxis}: \verb commits  \verb [rama_repositorio]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/user-commits}
+	\caption{Mostrar commits en un repositorio de usuario.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/orgs-commits}
+	\caption{Mostrar commits de la rama de un repositorio de organización.}
+	\label{fig:user-commits}
+	\end{center}
+\end{figure}
+
+\subsection{exit}
+\label{3.3.4}
+
+Temina la ejecución de {\it ghedsh}, guardando el contexto actual. Es decir, si el usuario se encontraba dentro de una organización, la próxima vez que entre en {\it ghedsh} estará dentro de la organización.
+
+\textbf{Sintaxis}: \verb exit  .
+
+\subsection{files}
+\label{3.3.5}
+
+Muestra el contenido y el tipo de contenido  (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
+Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.
+
+\textbf{Sintaxis}: \verb files  \verb [subdirectorio]  . 
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/dir-content}
+	\caption{Listar contenido del repositorio.}
+	\label{fig:dir-content}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/subdir-content}
+	\caption{Listar contenido de un subdirectorio.}
+	\label{fig:subdir-content}
+	\end{center}
+\end{figure}
+
+\subsection{invite\_member}
+\label{3.3.6}
+
+Añade nuevos miembros a una organización. Recibe como parámetros el/los nombres de usuario de GitHub, separados por comas o por espacios.
+
+Sólo puede ejecutarse en el contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_member  \verb <user1,  \verb user2,  \verb user3,  \verb ...,  \verb n>  .
+ 
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/invite-member}
+	\caption{Añadir miembros específicos.}
+	\label{fig:invite-member}
+	\end{center}
+\end{figure}
+
+\subsection{invite\_member\_from\_file}
 \label{3.3.7}
+
+Añade  nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla \cite{B27}) existente en \verb $HOME  de la máquina local. 
+
+El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_member_from_file  \verb <ruta_home_fichero>  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/add-members-file}
+	\caption{Añadir miembros mediante fichero.}
+	\label{fig:add-members-fil}
+	\end{center}
+\end{figure}
+
+\subsection{invite\_outside\_collaborators}
+\label{3.3.8}
+
+Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb $HOME  de la máquina local.
+
+Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en el contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb invite_outside_collaborators  \verb [ruta_home_fichero]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1\textwidth]{images/invite-collabs}
+	\caption{Invitación a ser miembros desde fichero.}
+	\label{fig:invite-collabs}
+	\end{center}
+\end{figure}
+
+\subsection{issues}
+\label{3.3.9}
+Abre el navegador por defecto, situando al usuario en la lista de incidencias ({\it issues}). Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb issues  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.65\textwidth]{images/list-issues}
+	\caption{Ver incidencias de un repositorio.}
+	\label{fig:list-issues}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.65\textwidth]{images/issues-list}
+	\caption{Listado de incidencias del repositorio en GitHub.}
+	\label{fig:issues-list}
+	\end{center}
+\end{figure}
+
+\subsection{new\_issue}
+\label{3.3.10}
 
 Abre el navegador por defecto, situando al usuario en el formulario de creación de un issue. Para ejecutarlo, es necesario estar posicionado sobre un repositorio.
 
@@ -317,167 +366,40 @@ Está disponible para:
 	\end{center}
 \end{figure}
 
-\subsection{issues}
-\label{3.3.8}
-Abre el navegador por defecto, situando al usuario en la lista de incidencias ({\it issues}). Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
-
-\textbf{Sintaxis}: \verb issues  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.65\textwidth]{images/list-issues}
-	\caption{Ver incidencias de un repositorio.}
-	\label{fig:list-issues}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.65\textwidth]{images/issues-list}
-	\caption{Listado de incidencias del repositorio en GitHub.}
-	\label{fig:issues-list}
-	\end{center}
-\end{figure}
-
-\subsection{files}
-\label{3.3.9}
-
-Muestra el contenido y el tipo de contenido  (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
-Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.
-
-\textbf{Sintaxis}: \verb files  \verb [subdirectorio]  . 
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/dir-content}
-	\caption{Listar contenido del repositorio.}
-	\label{fig:dir-content}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/subdir-content}
-	\caption{Listar contenido de un subdirectorio.}
-	\label{fig:subdir-content}
-	\end{center}
-\end{figure}
-
-\subsection{commits}
-\label{3.3.10}
-
-Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb master , en caso de que no se le pase como parámetro una rama en concreto.
-Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: \textbf{organización} o \textbf{usuario}.
-
-\textbf{Sintaxis}: \verb commits  \verb [rama_repositorio]  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/user-commits}
-	\caption{Mostrar commits en un repositorio de usuario.}
-	\label{fig:user-commits}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/orgs-commits}
-	\caption{Mostrar commits de la rama de un repositorio de organización.}
-	\label{fig:user-commits}
-	\end{center}
-\end{figure}
-
-\subsection{open}
+\subsection{new\_repo}
 \label{3.3.11}
 
-Abre el navegador por defecto y muestra información de GitHub según el contexto:
+Crea un nuevo repositorio. La herramienta muestra al usuario dos opciones para crearlo (menú):
 \begin{itemize}
-	\item Contexto de \textbf{usuario}: si se ejecuta \verb open  a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en {\it ghedsh}. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.
-	\item Contexto de \textbf{organización}: a nivel de organización abre el perfil de la organización en GitHub. Si el usuario se encuentra posicionado en un repositorio de la organización, abre la URL del repositorio.
-	Para este contexto en concreto, es posible pasarle un parámetro que consista en una expresión regular o el nombre de algún miembro y abrir su perfil.
-	En este caso, la \textbf{sintaxis} sería: \verb open  \verb "nombre"  (para el nombre del miembro) o bien \verb open  \verb /Regexp/  .
-	\item Contexto de \textbf{equipo}: abre la URL del equipo en GitHub.
+	\item {\it Default}: crea un repositorio público.
+	\item {\it Custom}: crea un repositorio público o privado, al que es posible añadirle opciones específicas mediante una guía que se le mostrará.
+	Si no se quiere especificar alguna de las opciones que se muestran, puede pulsar la tecla retorno y omitir el paso.
 \end{itemize}
-
-\textbf{Sintaxis} general: \verb open  .
-
-\subsection{orgs}
-\label{3.3.12}
-
-Muestra las organizaciones a las que pertenece el usuario autenticado en {\it ghedsh}. Si el comando no recibe ningún parámetro, se mostrarán todas las organizaciones. En caso de proporcionarle un parámetro, debe ser una expresión regular y mostrará los resultados que casen.
-
-Sólo está disponible en contexto de \textbf{usuario}.
-
-\textbf{Sintaxis}: \verb orgs  \verb [/Regexp/]  .
-
+\textbf{Sintaxis}: \verb new_repo  \verb <nombre_repositorio> .
+Disponible para:
+\begin{itemize}
+	\item Contexto \textbf{usuario}: crea un repositorio para el usuario autenticado.
+	\item Contexto \textbf{organización}: crea un repositorio dentro de la organización en la que se encuentre posicionado el usuario.
+\end{itemize}
+En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/show-all-orgs}
-	\caption{Mostrar todas las organizaciones del usuario autenticado en ghedsh.}
-	\label{fig:show-orgs-regexp}
+	\includegraphics[width=0.70\textwidth]{images/create-repo}
+	\caption{Menú para la creación de un repositorio.}
+	\label{fig:create-repo}
 	\end{center}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/show-orgs-regexp}
-	\caption{Filtrar organizaciones mediante expresión regular.}
-	\label{fig:show-orgs-regexp}
-	\end{center}
-\end{figure}
-
-\subsection{people}
-\label{3.3.13}
-
-Muestra los nombres de los usuarios que componen una organización. Esto incluye miembros y colaboradores externos (si el usuario autenticado en {\it ghedsh} tiene permisos de administrador en la organización).
-Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una expresión regular, se mostrarán los resultados que hayan casado con ella.
-
-Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro del contexto de una \textbf{organización}.
-
-\textbf{Sintaxis}: \verb people  \verb [/Regexp/]  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-people}
-	\caption{Mostrar los miembros de una organización.}
-	\label{fig:org-people}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-people-regexp}
-	\caption{Mostrar mediante expresión regular los miembros de una organización.}
-	\label{fig:org-people-regexp}
-	\end{center}
-\end{figure}
-
-\subsection{teams}
-\label{3.3.14}
-
-Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella.
-Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
-
-\textbf{Sintaxis}: \verb teams  \verb [/Regexp/]  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-teams}
-	\caption{Listar los equipos de una organización.}
-	\label{fig:org-teams}
-	\end{center}
-\end{figure}
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams}
-	\caption{Listar mediante expresión regular los equipos de una organización.}
-	\label{fig:org-regexp-teams}
+	\includegraphics[width=1\textwidth]{images/custom-repo}
+	\caption{Creación de un repositorio de usuario con opciones específicas.}
+	\label{fig:custom-repo}
 	\end{center}
 \end{figure}
 
 \subsection{new\_team}
-\label{3.3.15}
+\label{3.3.12}
 
 Crea un nuevo equipo dentro de la organización en la que esté posicionado el usuario. Si el comando no recibe ningún parámetro, se abrirá la URL del formulario para crear el equipo en la web de GitHub. En caso de especificarle un parámetro,
 éste tiene que ser un fichero (ver plantilla \cite{B25}) que se encuentre en algún lugar de \verb $HOME  en la máquina local.
@@ -502,61 +424,139 @@ Una vez más, este comando sólo se puede ejecutar cuando el usuario está posic
 	\end{center}
 \end{figure}
 
-\subsection{rm\_team}
+\subsection{open}
+\label{3.3.13}
+
+Abre el navegador por defecto y muestra información de GitHub según el contexto:
+\begin{itemize}
+	\item Contexto de \textbf{usuario}: si se ejecuta \verb open  a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en {\it ghedsh}. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.
+	\item Contexto de \textbf{organización}: a nivel de organización abre el perfil de la organización en GitHub. Si el usuario se encuentra posicionado en un repositorio de la organización, abre la URL del repositorio.
+	Para este contexto en concreto, es posible pasarle un parámetro que consista en una expresión regular o el nombre de algún miembro y abrir su perfil.
+	En este caso, la \textbf{sintaxis} sería: \verb open  \verb "nombre"  (para el nombre del miembro) o bien \verb open  \verb /Regexp/  .
+	\item Contexto de \textbf{equipo}: abre la URL del equipo en GitHub.
+\end{itemize}
+
+\textbf{Sintaxis} general: \verb open  .
+
+\subsection{orgs}
+\label{3.3.14}
+
+Muestra las organizaciones a las que pertenece el usuario autenticado en {\it ghedsh}. Si el comando no recibe ningún parámetro, se mostrarán todas las organizaciones. En caso de proporcionarle un parámetro, debe ser una expresión regular y mostrará los resultados que casen.
+
+Sólo está disponible en contexto de \textbf{usuario}.
+
+\textbf{Sintaxis}: \verb orgs  \verb [/Regexp/]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/show-all-orgs}
+	\caption{Mostrar todas las organizaciones del usuario autenticado en ghedsh.}
+	\label{fig:show-orgs-regexp}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/show-orgs-regexp}
+	\caption{Filtrar organizaciones mediante expresión regular.}
+	\label{fig:show-orgs-regexp}
+	\end{center}
+\end{figure}
+
+\subsection{people}
+\label{3.3.15}
+
+Muestra los nombres de los usuarios que componen una organización. Esto incluye miembros y colaboradores externos (si el usuario autenticado en {\it ghedsh} tiene permisos de administrador en la organización).
+Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una expresión regular, se mostrarán los resultados que hayan casado con ella.
+
+Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro del contexto de una \textbf{organización}.
+
+\textbf{Sintaxis}: \verb people  \verb [/Regexp/]  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-people}
+	\caption{Mostrar los miembros de una organización.}
+	\label{fig:org-people}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-people-regexp}
+	\caption{Mostrar mediante expresión regular los miembros de una organización.}
+	\label{fig:org-people-regexp}
+	\end{center}
+\end{figure}
+
+\subsection{repos}
 \label{3.3.16}
+
+Muestra los repositorios según el contexto. Si no se le especifica nungún parámetro, mostrará todos los repositorios. Si se le proporciona una expresión regular, mostrará los nombres de los repositorios que hayan casado.
+
+\textbf{Sintaxis}: \verb repos \verb [/Regexp/] .
+\begin{itemize}
+	\item Contexto \textbf{organización}: muestra los repositorios de la organización en la que se encuentra el usuario de {\it ghedsh}.
+	\begin{figure}[H]
+		\begin{center}
+		\includegraphics[width=0.60\textwidth]{images/user-repos}
+		\caption{Comando repos a nivel de usuario.}
+		\label{fig:user-repos}
+		\end{center}
+	\end{figure}
+	\item Contexto \textbf{usuario}: muestra los repositorios del usuario autenticado en {\it ghedsh}.
+	\begin{figure}[H]
+		\begin{center}
+		\includegraphics[width=0.70\textwidth]{images/org-repos}
+		\caption{Comando repos a nivel de organización.}
+		\label{fig:org-repos}
+		\end{center}
+	\end{figure}
+\end{itemize}
+
+\subsection{rm\_repo}
+\label{3.3.17}
+
+Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{usuario} como a nivel de \textbf{organización}.
+
+\textbf{Sintaxis}: \verb rm_repo  \verb <nombre_repositorio>  .
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{images/delete-repo}
+	\caption{Eliminación de un repositorio.}
+	\label{fig:custom-repo}
+	\end{center}
+\end{figure}
+
+\subsection{rm\_team}
+\label{3.3.18}
 
 Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defecto y el usuario borrará el o los equipos que desee de la lista proporcionada. Se ejecuta sólo en contexto de \textbf{organización}.
 
 \textbf{Sintaxis}: \verb rm_team  .
 
-\subsection{invite\_outside\_collaborators}
-\label{3.3.17}
-
-Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb $HOME  de la máquina local.
-
-Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en el contexto de una \textbf{organización}.
-
-\textbf{Sintaxis}: \verb invite_outside_collaborators  \verb [ruta_home_fichero]  .
-
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=1\textwidth]{images/invite-collabs}
-	\caption{Invitación a ser miembros desde fichero.}
-	\label{fig:invite-collabs}
-	\end{center}
-\end{figure}
-
-\subsection{invite\_member}
-\label{3.3.18}
-
-Añade nuevos miembros a una organización. Recibe como parámetros el/los nombres de usuario de GitHub, separados por comas o por espacios.
-
-Sólo puede ejecutarse en el contexto de una \textbf{organización}.
-
-\textbf{Sintaxis}: \verb invite_member  \verb <user1,  \verb user2,  \verb user3,  \verb ...,  \verb n>  .
- 
-\begin{figure}[H]
-	\begin{center}
-	\includegraphics[width=1\textwidth]{images/invite-member}
-	\caption{Añadir miembros específicos.}
-	\label{fig:invite-member}
-	\end{center}
-\end{figure}
-
-\subsection{invite\_member\_from\_file}
+\subsection{teams}
 \label{3.3.19}
 
-Añade  nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla \cite{B27}) existente en \verb $HOME  de la máquina local. 
+Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella.
+Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 
-El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organización}.
-
-\textbf{Sintaxis}: \verb invite_member_from_file  \verb <ruta_home_fichero>  .
+\textbf{Sintaxis}: \verb teams  \verb [/Regexp/]  .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=1\textwidth]{images/add-members-file}
-	\caption{Añadir miembros mediante fichero.}
-	\label{fig:add-members-fil}
+	\includegraphics[width=0.59\textwidth]{images/org-teams}
+	\caption{Listar los equipos de una organización.}
+	\label{fig:org-teams}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams}
+	\caption{Listar mediante expresión regular los equipos de una organización.}
+	\label{fig:org-regexp-teams}
 	\end{center}
 \end{figure}
 
