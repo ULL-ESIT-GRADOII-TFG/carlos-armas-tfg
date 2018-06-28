@@ -64,20 +64,20 @@ Entonces, debemos proporcionar alguna manera de desambiguar a qué contexto nos 
 
 En {\it ghedsh} se ha optado por el siguiente planteamiento: para realizar la operación de
 {\it cd}, es necesario especificar el tipo de contexto (nivel) al que queremos cambiarnos, así, aunque el usuario se encuentre en el caso anteriormente comentado, {\it ghedsh} es capaz de saber a qué contexto debe cambiar.
-La sintaxis del comando sería \verb cd  \verb <tipo>  \verb <nombre|Regexp> , donde nombre es la cadena de texto que identifica al tipo, o bien, una expresión regular que mostraría las cadenas que han casado.
+La sintaxis del comando sería \verb cd  \verb <tipo>  \verb <nombre> , donde \verb nombre  es la cadena de texto que identifica al tipo.
 \bigskip
 
 Los tipos de contexto (pueden ser ampliables) que actualmente se soportan en {\it ghedsh} son:
 \begin{itemize}
 	\item \textbf{Nivel de usuario}: estando a nivel de usuario, éste se puede cambiar a cualquiera de sus repositorios o a cualquier organización a la que pertenezca, como vemos a continuación:
 		\begin{itemize}
-			\item Repositorio del usuario: \verb cd   \verb repo  \verb <nombre|/Regexp/> .
-			\item Organización del usuario: \verb cd   \verb org  \verb <nombre|/Regexp/> .
+			\item Repositorio del usuario: \verb cd   \verb repo  \verb <nombre> .
+			\item Organización del usuario: \verb cd   \verb org  \verb <nombre> . {\it ghedsh} soporta el autocompletado de organizaciones, es decir, se puede pulsar el tabulador para completar automáticamente el nombre de la organización.
 		\end{itemize}
 	\item \textbf{Nivel de organización}: estando a nivel de una organización de la que es miembro el usuario autenticado, ({\it ghedsh} sabrá que se refiere al entorno de la organización a la que se ha cambiado) se puede mover a:
 		\begin{itemize}
-			\item Repositorio de la organización: \verb cd   \verb repo  \verb <nombre|/Regexp/> .
-			\item Equipo de la organización: \verb cd   \verb team  \verb <nombre|/Regexp/> .
+			\item Repositorio de la organización: \verb cd   \verb repo  \verb <nombre> .
+			\item Equipo de la organización: \verb cd   \verb team  \verb <nombre> .
 		\end{itemize}
 \end{itemize}
 
