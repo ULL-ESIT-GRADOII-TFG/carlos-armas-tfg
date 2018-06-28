@@ -305,6 +305,8 @@ INPUT tables/presupuesto1.tex
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/eurosym/feybr10.tfm
 INPUT tables/presupuesto2.tex
 INPUT tables/presupuesto2.tex
+INPUT tables/presupuesto3.tex
+INPUT tables/presupuesto3.tex
 INPUT tables/presupuesto_total.tex
 INPUT tables/presupuesto_total.tex
 INPUT apendice1.tex
