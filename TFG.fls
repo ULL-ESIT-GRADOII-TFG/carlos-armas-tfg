@@ -327,8 +327,6 @@ INPUT apendice2.tex
 INPUT apendice2.tex
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omlcmr.fd
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omlcmr.fd
-INPUT TFG.ind
-INPUT TFG.ind
 INPUT TFG.bbl
 INPUT TFG.bbl
 INPUT TFG.aux
