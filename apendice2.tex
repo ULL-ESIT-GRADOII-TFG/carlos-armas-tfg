@@ -4,48 +4,247 @@ Esta guía está especialmente dirigida a los desarrolladores que deseen ampliar
 Antes de empezar con el contenido, cabe comentar que se anima a que cada desarrollador incorpore nuevas ideas propias. Por lo tanto, cualquier
 aspecto del diseño que sea mejorable, no dude en implementar su idea.
 \bigskip
+
+%---------------------------------------------------------------------------------
+
+\section{Requisitos}
+\label{sec:1}
+
+Versión mínima requerida para el desarrollo y uso: \verb 2.4.0  . 
+
+\section{Estructura de la gema}
+\label{sec:2}
+En esta sección se explicará con un poco más de detalle (respecto a lo ya explicado en las secciones \ref{2.1.1} y \ref{2.1.2}) los ficheros más destacables de la gema.
 \bigskip
 
------------------------------(old content)-----------------------------------
-%---------------------------------------------------------------------------------
-\section{Instalación}
-\label{Apendice2:instalacion}
+En cuanto a la raíz:
+\begin{itemize}
+  \item \verb Rakefile : Automatiza ejecución de tareas. Actualmente, están definidas \textbf{test} (RSpec) y \textbf{publish}. \textbf{Test} ejecuta los tests definidos y \textbf{publish} automatiza el proceso de publicar la gema en Rubygems.
+  \item \verb ghedsh.gemspec : contiene información de la gema {\it ghedsh}. Aquí debemos añadir las dependencias, especificando una versión o rango de versiones permitidas. También comentar que, si en {\it ghedsh} se hace uso de alguna funcionalidad específica de una versión de Ruby, debemos especificar la versión de Ruby requerida al usuario.
+  Ésto es importante, puesto que evitará quebraderos de cabeza pensando que el error se encuentra en nuestro código. En {\it ghedsh} tenemos \verb s.required_ruby_version  \verb =  \verb ">= 2.4.0"  .
+\end{itemize}
+\bigskip
 
-\subsection{Requisitos}
-\label{subsec:b.1.1}
+Directorio \verb /spec :
+\begin{itemize}
+  \item \verb spec_helper.rb : contiene la configuración de RSpec.
+  \item \verb cli_spec.rb : contiene la estructura básica de los tests.
+\end{itemize}
+\bigskip
 
-Node.js \textgreater = 8
+Directorio \verb /file_templates :
+\begin{itemize}
+  \item \verb add_members_template.json : estructura del fichero para añadir miembros a una organización.
+  \item \verb create_teams_template.json : estructura del fichero para la creación masiva de equipos y sus miembros.
+  \item \verb invite_outside_collabs.json : estructura del fichero para invitar a ser miembros de la organización los que son colaboradores externos.
+  \item \verb remove_members_template.json : estructura del fichero para eliminar masivamente miembros de la organización.
 
-\subsection{Dependencias}
-\label{subsec:b.1.2}
+\end{itemize}
+\bigskip
 
-Gitbook
-Calibre
+Puesto que el contenido de \verb /lib  es el código fuente de la gema y es el más importante, lo comentaremos aparte en la siguiente sección (\ref{sec:2.1}).
 
-\subsection{Instalación}
-\label{subsec:b.1.3}
+\subsection{Directorio lib}
+\label{sec:2.1}
+\bigskip
 
-Para instalar el paquete, basta con ejecutar el siguiente comando:
-\begin{verbatim}
-[~]$ npm install ghshell -g
-\end{verbatim}
+\subsubsection{version.rb}
+Indica la versión actual de la gema usando {\it Semantic Versioning}. Conviene ir actualizándola según vayamos añadiendo funcionalidades o arreglando errores. Sería buena idea incluso realizar una pequeña descripción
+de los nuevos cambios en cada versión.
 
-%---------------------------------------------------------------------------------
-%---------------------------------------------------------------------------------
+\subsubsection{interface.rb}
 
-\section{Ejecución}
-\label{Apendice2:ejecucion}
+Como ya se ha explicado en anteriores secciones (\ref{2.1.2}), la clase \verb Interface  se encarga del REPL.
+\bigskip
 
-\begin{lstlisting}[language=JavaScript]
-var foo = function(){
-console.log('foo');
+Veamos desglosado en pasos el flujo de ejecución de {\it ghedsh}:
+\begin{itemize}
+  \item Desde \verb /bin  se instancia \verb Interface , y se llama al método \verb start .
+  \item \verb start  primero comprueba si se ha especificado algún parámetro al iniciar {\it ghedsh} (por ejemplo, \verb ghedsh  \verb --version ). A continuación, se inicializa el contexto (clase \verb ShellContext ) y de esta manera conocer la configuración de la última sesión del usuario en {\it ghedsh} y los comandos que soporta esta herramienta.
+  \item Inicio del REPL.
+\end{itemize}
+
+\subsubsection{helpers.rb}
+
+En este fichero se encuentran funciones que son utilizadas frecuentemente por las acciones (\verb /actions ). Entre ellas se encuentran, por ejemplo, el menú para la creación de repositorios, construir una expresión regular a partir de una cadena ({\it String}), etcétera.
+
+\subsubsection{context.rb}
+
+Contiene la clase que representa el contexto. Más adelante se explicará en detalle el significado de este concepto, fundamental en {\it ghedsh}.
+Accede al directorio de configuración y restaura el estado de la última sesión del usuario.
+\bigskip
+
+Las variables más importantes de esta clase son:
+\begin{itemize}
+  \item \verb @deep : referencia a la clase (\verb User , \verb Organization , \verb Team ) en la que se encuentra el usuario y permite realizar las acciones de cada una de ellas.
+  \item \verb @config : es el {\it Hash} que, dependiendo de su contenido, \verb @deep  referenciará a una clase u otra. (Véase su estructura interna en \ref{3.2.2}).
+\end{itemize}
+
+\subsubsection{commands.rb}
+
+Clase que contiene los comandos. Los comandos son funciones que se exportan bajo un nombre (\verb orgs , \verb repos , \verb files  ...). Internamente, comprueba si la clase a la que referencia \verb @deep , implementa la acción solicitada.
+En caso afirmativo, se ejecuta la acción. En caso negativo, se informa al usuario que el comando no se puede llevar a cabo en el contexto actual.
+
+\section{Concepto de contexto}
+\label{apen:3}
+
+
+Es uno de los términos fundamentales en {\it ghedsh} (ver también \ref{3.2.2}). En esencia, el contexto es una estructura de datos (en este caso, {\it hash} de Ruby). Veamos varios ejemplos para saber interpretarlo:
+\bigskip
+\bigskip
+\bigskip 
+
+\begin{minipage}[t]{0.5\linewidth}
+  1.a) :
+  \begin{lstlisting}[language=Ruby]
+    config = {
+    'User' => client.login.to_s,
+  	'user_url' => "https://github.com/your-profile",
+    'Org' => nil,
+    'org_url' => nil,
+    'Repo' => nil,
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+  \end{lstlisting}
+\end{minipage}
+  %
+\begin{minipage}[t]{0.5\linewidth}
+    1.b) :
+  \begin{lstlisting}[language=Ruby]
+    config = {
+    'User' => client.login.to_s,
+  	'user_url' => "https://github.com/your-profile",
+    'Org' => nil,
+    'org_url' => nil,
+    'Repo' => "my-user-repo",
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+  \end{lstlisting}
+\end{minipage}
+
+\begin{itemize}
+  \item 1.a: Contexto de usuario, entonces \verb @deep  \verb =  \verb User  .
+  \item 1.b: Contexto repositorio de usuario ({\it my-user-repo}), se mantiene \verb @deep  \verb =  \verb User  .
+\end{itemize}
+\bigskip
+
+\begin{minipage}[t]{0.5\linewidth}
+  2.a) :
+  \begin{lstlisting}[language=Ruby]
+    config = {
+    'User' => client.login.to_s,
+  	'user_url' => "https://github.com/your-profile",
+    'Org' => "MY-ORG",
+    'org_url' => nil,
+    'Repo' => nil,
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+  \end{lstlisting}
+\end{minipage}
+  %
+\begin{minipage}[t]{0.5\linewidth}
+    2.b) :
+  \begin{lstlisting}[language=Ruby]
+    config = {
+    'User' => client.login.to_s,
+  	'user_url' => "https://github.com/your-profile",
+    'Org' => "MY-ORG",
+    'org_url' => nil,
+    'Repo' => "MY-ORG-repo",
+    'repo_url' => nil,
+    'Team' => nil,
+    'team_url' => nil
+  }
+  \end{lstlisting}
+\end{minipage}
+
+\begin{itemize}
+  \item 2.a: Contexto de organización ({\it MY-ORG}), por lo tanto \verb @deep  \verb =  \verb Organization . 
+  \item 2.b: Contexto repositorio de organización ({\it MY-ORG-repo}), se mantiene \verb @deep  \verb =  \verb Organization  .
+\end{itemize}
+\bigskip
+
+\begin{minipage}[t]{0.8\linewidth}
+  3) :
+  \begin{lstlisting}[language=Ruby]
+    config = {
+    'User' => client.login.to_s,
+  	'user_url' => "https://github.com/your-profile",
+    'Org' => "MY-ORG",
+    'org_url' => nil,
+    'Repo' => nil,
+    'repo_url' => nil,
+    'Team' => "MY-ORG-team",
+    'team_url' => nil
+  }
+  \end{lstlisting}
+\end{minipage}
+
+\begin{itemize}
+  \item 3 : Contexto de equipo ({\it MY-ORG-team}) dentro de la organización {\it MY-ORG}, ahora \verb @deep  \verb =  \verb Team .
+\end{itemize}
+
+
+\section{Cómo añadir nuevos comandos}
+\label{apen:4}
+
+En esta última sección veremos cómo añadir comandos. Hay que tener en cuenta que uno de los objetivos deseables para desarrollos futuros es cumplir totalmente el principio {\it Open/Closed}. Por lo tanto,
+habría que cambiar la forma de añadirlos. No obstante, conviene conocer cómo se realiza esta tarea en la segunda versión de {\it ghedsh} para ayudar a generar nuevas ideas.
+\bigskip
+
+Veámoslo con un ejemplo. Supongamos que queremos añadir un nuevo comando, cuyo objetivo es mostrar los nombres de las plantillas \verb .gitignore  disponibles en {\it GitHub}.
+\bigskip
+
+Primero, vamos a decidir cómo llamaremos el comando, por ejemplo, \verb templates  y vamos a pensar para qué contexto estaría disponible (consideramos en este caso sólo contexto usuario). Lo siguiente que tenemos que hacer es ir al fichero \verb commands.rb  y definir una función y exportarla con \verb add_command , suponemos que la llamamos \verb show_templates .
+Quedaría lo siguiente:
+\bigskip
+
+\verb lib/commmands.rb :
+\begin{lstlisting}[language=Ruby]
+  # params seria algun parametro proporcionado por el usuario
+  # por ejemplo, dada una inicial, se mostraran las plantillas que empiecen por ella
+  def show_templates(params)
+    if @enviroment.deep.method_defined? :create_issue
+      @enviroment.deep.new.templates(@enviroment.client, params)
+    else
+      puts Rainbow("Command not available in context \"#{@enviroment.deep.name}\"").color(WARNING_CODE)
+    end
+  end
 }
-foo();
 \end{lstlisting}
 \bigskip
 
-%---------------------------------------------------------------------------------
-\subsection{Otras consideraciones}
-\label{subsec:Apendice2.1}
+Ahora definimos la acción en la clase \verb User . Si la queremos en más contextos, definimos la acción en particular en la correspondiente clase.
+\bigskip
 
-Para que
+\verb lib/actions/user.rb :
+\begin{lstlisting}[language=Ruby]
+  # client es el objeto Octokit de la GitHub API
+  # Documentacion en http://octokit.github.io/octokit.rb/Octokit/Client.html
+  def templates(client, params)
+    letter = params[0]
+    client.gitignore_templates.each do |name|
+      puts name if name.start_with?(letter)
+    end
+  end
+}
+\end{lstlisting}
+\bigskip
+
+El usuario emplearía el comando de la siguiente manera: \verb templates  \verb N  .
+
+El resultado sería:
+\begin{verbatim}
+  Nim
+\end{verbatim}
+
+\begin{verbatim}
+  Node
+\end{verbatim}
+
