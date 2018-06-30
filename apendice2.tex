@@ -210,7 +210,7 @@ Quedaría lo siguiente:
   # params seria algun parametro proporcionado por el usuario
   # por ejemplo, dada una inicial, se mostraran las plantillas que empiecen por ella
   def show_templates(params)
-    if @enviroment.deep.method_defined? :create_issue
+    if @enviroment.deep.method_defined? :templates
       @enviroment.deep.new.templates(@enviroment.client, params)
     else
       puts Rainbow("Command not available in context \"#{@enviroment.deep.name}\"").color(WARNING_CODE)
