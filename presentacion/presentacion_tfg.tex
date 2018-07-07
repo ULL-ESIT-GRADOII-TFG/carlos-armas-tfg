@@ -1,0 +1,294 @@
+\documentclass{beamer}
+%\documentclass[xcolor=dvipsnames]{beamer}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{latexsym}
+
+\newcommand{\beamer}{\textsc{beamer}}
+\newtheorem{definicion}{Definición}
+\newtheorem{ejemplo}{Ejemplo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[Trabajo de Fin de Grado]{ghedsh: Un intérprete de
+comandos para GitHub Education\\
+GitHub Education Shell: ghedsh.}
+
+\author[Carlos de Armas Hernández] {
+Autor: Carlos de Armas Hernández \\
+Director: Casiano Rodríguez León
+}
+
+\institute[ULL]{Escuela Superior de Ingeniería y Tecnología \\
+                Departamento de Ingeniería Informática y de Sistemas \\
+                Universidad de La Laguna}
+\date[12-07-2018]{12 de julio de 2018}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usetheme{Berlin}
+\usetheme{Madrid}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{pantone254}{RGB}{92,6,140}
+\definecolor{pantone3015}{RGB}{92,6,140}
+\definecolor{pantone432}{RGB}{92,6,140}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=pantone254}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=pantone3015}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=pantone432}
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=pantone254}
+\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=pantone3015}
+\setbeamercolor*{block title}{bg=pantone3015,fg=white}
+\setbeamercolor*{alerted text}{fg=pantone432}
+\setbeamercolor*{item projected}{fg=pantone254}
+\setbeamercolor*{section in toc shaded}{use=structure,fg=structure.fg}
+\setbeamercolor*{section in toc}{fg=pantone3015}
+\setbeamercolor*{subsection in toc shaded}{fg=pantone3015}
+\setbeamercolor*{subsection in toc}{fg=pantone432}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+  
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+\begin{frame}
+
+  \includegraphics[width=0.3\textwidth]{img/ull.eps}
+  \hspace*{7.5cm}
+  \titlepage
+
+\end{frame}
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+\begin{frame}
+  \frametitle{Índice}  
+  \tableofcontents
+\end{frame}
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+
+\section{Introducción}
+\begin{frame}[allowframebreaks,fragile]
+  \frametitle{Introducción}
+  \textbf{¿Qué es ``ghedsh''?}
+  \bigskip
+
+  Es una gema Ruby que consiste en un intérprete de comandos desarrollado para integrar las metodologías
+  de GitHub Education, viendo las organizaciones como aulas y los repositorios como las asignaciones de los alumnos.
+  
+  \begin{center}
+    \begin{figure}[!htb]  
+      \minipage{0.5\textwidth}%
+        \includegraphics[width=\linewidth]{img/ghedsh-logo.png}
+      \endminipage
+    \end{figure}
+  \end{center}
+
+  \framebreak
+  %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  En cuanto a herramientas similares, existen las siguientes:
+  \begin{itemize}
+    \item {\it Teachers Pet}.
+    \item {\it GitHub Classroom}.
+    \item {\it ghi} (GitHub Issues).
+    \item {\it ghs} (GitHub Search).
+  \end{itemize}
+
+  \framebreak
+  Desarolladas por {\it GitHub}:
+  \begin{itemize}
+    \item \textbf{Teachers Pet}. {\it CLI} desarrollado previamente a {\it Classroom}.
+    \begin{itemize}
+      \item Inconveniente: los comandos se hacían excesivamente largos en determinados casos. 
+      Cayó en desuso y se dejó de desarrollar.
+    \end{itemize}
+    \item \textbf{GitHub Classroom}. Una plataforma web que simplifica la configuración de las aulas y las asignaciones.
+    Sin embargo, existen algunas limitaciones:
+    \begin{itemize}
+      \item Actualmente no dispone de alguna funcionalidad que permita al profesor crear un repositorio de evaluación.
+      %para calificar las tareas.
+      \item No da soporte a herramientas de integración continua ({\it Travis CI, CircleCI, Jenkins ...}).
+      \item El sistema para añadir información adicional del alumno es incómodo de usar.
+    \end{itemize}
+  \end{itemize}
+
+  \framebreak
+  Desarrolladas por la comunidad:
+  \begin{itemize}
+    \item \textbf{ghi} (GitHub Issues). Permite gestionar las incidencias (issues) de los repositorios desde la terminal del usuario.
+    \item \textbf{ghs} (GitHub Search). Permite realizar búsquedas de repositorios alojados en GitHub.
+  \end{itemize}
+\end{frame}
+  %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\section{Objetivos}
+\begin{frame}[fragile]
+  \frametitle{Objetivos}
+  
+  Esta segunda versión de {\it ghedsh} busca mejorar el código fuente de la primera versión,
+  teniendo en cuenta aspectos como la mantenibilidad del código y facilitar la incorporación de nuevas funcionalidades.
+  \bigskip
+
+  Por otro lado, una de las prioridades de esta herramienta es dar soporte al proceso de evaluación.
+\end{frame}
+
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+
+\section{Tecnologías empleadas}
+\begin{frame}[fragile]
+  \frametitle{Tecnologías empleadas}
+  \begin{columns}
+    \column{0.3\linewidth}
+       \centering
+       \includegraphics[height=1.2cm, width=1.2cm]{img/ruby-logo.png}
+     \column{0.6\linewidth}
+        Lenguaje de programación: \textbf{Ruby}
+  \end{columns}
+  \bigskip
+
+  \begin{columns}
+    \column{0.3\linewidth}
+       \centering
+       \includegraphics[height=1cm, width=3.5cm]{img/bundler-logo.png}
+     \column{0.6\linewidth}
+        Gestión de dependencias: \textbf{Bundler}
+  \end{columns}
+  \bigskip
+
+  \begin{columns}
+    \column{0.3\linewidth}
+       \centering
+       \includegraphics[height=1.2cm, width=1.2cm]{img/rspec-logo.png}
+     \column{0.6\linewidth}
+        Testing: \textbf{RSpec}
+  \end{columns}
+\end{frame}
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\section{Desarrollo del proyecto}
+\begin{frame}
+\frametitle{Desarrollo del proyecto}
+  Dividimos el desarrollo del proyecto en dos fases bien diferenciadas:
+
+\end{frame}
+
+\subsection{Primera fase. Análisis}
+\begin{frame}[allowframebreaks,fragile]
+\frametitle{Primera fase. Análisis}
+\framesubtitle{Code Smell}
+  
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  
+\end{frame}
+  %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\subsection{Segunda fase. Refactorización}
+\begin{frame}
+\frametitle{Refactorización}
+
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\end{frame}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\section{Resultados obtenidos}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Resultados obtenidos}
+
+
+  \framebreak
+  
+  Las funcionalidades básicas son comunes a todos los roles que participan en la plataforma, 
+  tanto alumnos como profesores, todos pueden hacer Log in, Log out y consultar un perfil.
+  
+  \bigskip
+  
+  Como alumno el usuario puede visitar el perfil, donde encontrará información básica de Github y dos pestañas, 
+  en las que el alumno tiene un historial de las tareas que ha realizado de forma grupal e individual.
+  
+  \bigskip
+
+  Los profesores tendrán el grupo de funcionalidades más completo, ya que ellos son los protagonistas 
+  de la app.
+
+  \framebreak
+
+  Los profesores podrán desempeñar las siguientes tareas:
+
+  \begin{itemize}
+    \item Añadir una organización como aula.
+    \item Invitar alumnos al aula.
+    \item Crear una tarea.
+    \item Añadir un fichero de alumnos asociado al aula.
+    \item Editar las opciones del aula.
+    \item Invitar alumnos a la tarea.
+    \item Editar las opciones de la tarea.
+    \item Crear un repositorio de evaluación de cada tarea.
+  \end{itemize}
+
+\end{frame}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+\section{Caso de uso}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Caso de uso}
+
+  Con vistas a probar y testear que todo funcionaba de forma correcta, Casiano me sugirió probar 
+  la plataforma para la realización de algunas prácticas individuales y grupales. Por ello, decidimos 
+  realizar algunas tareas para la asignatura de Procesadores de Lenguajes en CodeLab.
+
+  \framebreak
+
+  XXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\end{frame}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\section{Conclusions and future work lines}
+\begin{frame}[allowframebreaks]
+  \frametitle{Conclusions and future work lines}
+
+  \begin{itemize}
+    \item CodeLab was born as a tool that aims to extend the functionality of other tools such as Github 
+          Classroom, adding specific functions for the teachers to support the management of courses and 
+          the correction of programming labs.
+    \item The platform has been designed with ease of use in mind for those who are not familiar with GitHub.
+    \item Version control offers many advantages to developers. Most development companies use the git 
+          version control system, and consequently it is essential that students learn to handle git correctly.
+  \end{itemize}
+  \framebreak
+  %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  {\bf Future Work:}
+  \begin{itemize}
+    \item I would like to continue developing CodeLab, improving it and adding new functionalities. 
+    \item One of the first improvements that is proposed is the use of a front-end library such as Vue 
+          or React to improve the visual quality of the web platform.
+    \item A new functionality that I would like to add is the possibility of more than one teacher per classroom.
+  \end{itemize}
+\end{frame}
+
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+\section{Bibliografía}
+\begin{frame}[allowframebreaks]
+  \frametitle{Bibliografía}
+  \bibliographystyle{ieeetr}
+  \bibliography{presentacion_tfg}
+  \nocite{*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fin de la presentación}
+  \begin{center}
+    \Huge{Gracias por su atención}
+  \end{center}
+\end{frame}
+
+\end{document}
