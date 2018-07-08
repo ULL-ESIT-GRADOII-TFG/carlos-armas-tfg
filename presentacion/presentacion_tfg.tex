@@ -168,23 +168,58 @@ Director: Casiano Rodríguez León
 \begin{frame}
 \frametitle{Desarrollo del proyecto}
   Dividimos el desarrollo del proyecto en dos fases bien diferenciadas:
-
+  \begin{itemize}
+    \item Análisis. Identificar aquellas partes mejorables del diseño e implementación iniciales.
+    \item Refactorización. Proceso llevado a cabo para solucionar las debilidades anteriores.
+  \end{itemize}
 \end{frame}
 
 \subsection{Primera fase. Análisis}
-\begin{frame}[allowframebreaks,fragile]
+\begin{frame}[fragile]
 \frametitle{Primera fase. Análisis}
-\framesubtitle{Code Smell}
-  
-  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  
+  Tras estudiar el código de la primera versión de la gema se han detectado diversos {\it code smell}.
+  \bigskip
+
+  \textbf{¿Qué es un code smell?}
+  \bigskip
+
+  Se define como cualquier característica del código fuente que, posiblemente, 
+  indica un problema más profundo. No son considerados como bugs.
 \end{frame}
+
+\begin{frame}
+\frametitle{Primera fase. Análisis}
+\framesubtitle{Switch Smell}
+
+  \begin{columns}
+    \column{0.2\linewidth}
+      \includegraphics[height=2.5cm, width=2cm]{img/constantes.png}
+    \column{0.6\linewidth}
+    \includegraphics[height=7cm, width=7cm]{img/switch-smell.png}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Primera fase. Análisis}
+  \framesubtitle{Long Method}
+  {\it Long Method} se clasifica a nivel de método. Como su propio nombre indica,
+  consiste en un método que ha crecido demasiado y dificulta saber qué es lo que realmente hace.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Primera fase. Análisis}
+  \framesubtitle{Large Class}
+    Large Class se clasifica dentro de los smells a nivel de clases. Indica que una clase ha crecido excesivamente en tamaño
+    (God Object). Su funcionalidad puede descomponerse en clases más pequeñas.
+\end{frame}
+
+
   %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsection{Segunda fase. Refactorización}
 \begin{frame}
 \frametitle{Refactorización}
 
-  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 \end{frame}
 
@@ -199,36 +234,6 @@ Director: Casiano Rodríguez León
 \frametitle{Resultados obtenidos}
 
 
-  \framebreak
-  
-  Las funcionalidades básicas son comunes a todos los roles que participan en la plataforma, 
-  tanto alumnos como profesores, todos pueden hacer Log in, Log out y consultar un perfil.
-  
-  \bigskip
-  
-  Como alumno el usuario puede visitar el perfil, donde encontrará información básica de Github y dos pestañas, 
-  en las que el alumno tiene un historial de las tareas que ha realizado de forma grupal e individual.
-  
-  \bigskip
-
-  Los profesores tendrán el grupo de funcionalidades más completo, ya que ellos son los protagonistas 
-  de la app.
-
-  \framebreak
-
-  Los profesores podrán desempeñar las siguientes tareas:
-
-  \begin{itemize}
-    \item Añadir una organización como aula.
-    \item Invitar alumnos al aula.
-    \item Crear una tarea.
-    \item Añadir un fichero de alumnos asociado al aula.
-    \item Editar las opciones del aula.
-    \item Invitar alumnos a la tarea.
-    \item Editar las opciones de la tarea.
-    \item Crear un repositorio de evaluación de cada tarea.
-  \end{itemize}
-
 \end{frame}
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -238,14 +243,6 @@ Director: Casiano Rodríguez León
 \begin{frame}[allowframebreaks]
 \frametitle{Caso de uso}
 
-  Con vistas a probar y testear que todo funcionaba de forma correcta, Casiano me sugirió probar 
-  la plataforma para la realización de algunas prácticas individuales y grupales. Por ello, decidimos 
-  realizar algunas tareas para la asignatura de Procesadores de Lenguajes en CodeLab.
-
-  \framebreak
-
-  XXXXXXXXXXXXXXXXXXXXXXXXXXX
-
 \end{frame}
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -254,24 +251,6 @@ Director: Casiano Rodríguez León
 \begin{frame}[allowframebreaks]
   \frametitle{Conclusions and future work lines}
 
-  \begin{itemize}
-    \item CodeLab was born as a tool that aims to extend the functionality of other tools such as Github 
-          Classroom, adding specific functions for the teachers to support the management of courses and 
-          the correction of programming labs.
-    \item The platform has been designed with ease of use in mind for those who are not familiar with GitHub.
-    \item Version control offers many advantages to developers. Most development companies use the git 
-          version control system, and consequently it is essential that students learn to handle git correctly.
-  \end{itemize}
-  \framebreak
-  %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  
-  {\bf Future Work:}
-  \begin{itemize}
-    \item I would like to continue developing CodeLab, improving it and adding new functionalities. 
-    \item One of the first improvements that is proposed is the use of a front-end library such as Vue 
-          or React to improve the visual quality of the web platform.
-    \item A new functionality that I would like to add is the possibility of more than one teacher per classroom.
-  \end{itemize}
 \end{frame}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
