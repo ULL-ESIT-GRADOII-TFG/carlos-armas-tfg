@@ -88,7 +88,6 @@ Director: Casiano Rodríguez León
   En cuanto a herramientas similares, existen las siguientes:
   \begin{itemize}
     \item {\it Teachers Pet}.
-    \item {\it GitHub Classroom}.
     \item {\it ghi} (GitHub Issues).
     \item {\it ghs} (GitHub Search).
   \end{itemize}
@@ -101,21 +100,12 @@ Director: Casiano Rodríguez León
       \item Inconveniente: los comandos se hacían excesivamente largos en determinados casos. 
       Cayó en desuso y se dejó de desarrollar.
     \end{itemize}
-    \item \textbf{GitHub Classroom}. Una plataforma web que simplifica la configuración de las aulas y las asignaciones.
-    Sin embargo, existen algunas limitaciones:
-    \begin{itemize}
-      \item Actualmente no dispone de alguna funcionalidad que permita al profesor crear un repositorio de evaluación.
-      %para calificar las tareas.
-      \item No da soporte a herramientas de integración continua ({\it Travis CI, CircleCI, Jenkins ...}).
-      \item El sistema para añadir información adicional del alumno es incómodo de usar.
-    \end{itemize}
   \end{itemize}
 
-  \framebreak
   Desarrolladas por la comunidad:
   \begin{itemize}
-    \item \textbf{ghi} (GitHub Issues). Permite gestionar las incidencias (issues) de los repositorios desde la terminal del usuario.
-    \item \textbf{ghs} (GitHub Search). Permite realizar búsquedas de repositorios alojados en GitHub.
+    \item \textbf{ghi} (GitHub Issues). Permite gestionar SOLO las incidencias (issues) de los repositorios desde la terminal del usuario.
+    \item \textbf{ghs} (GitHub Search). Permite realizar búsquedas de repositorios alojados en GitHub. Es poco ágil.
   \end{itemize}
 \end{frame}
   %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -124,11 +114,15 @@ Director: Casiano Rodríguez León
 \begin{frame}[fragile]
   \frametitle{Objetivos}
   
-  Esta segunda versión de {\it ghedsh} busca mejorar el código fuente de la primera versión,
-  teniendo en cuenta aspectos como la mantenibilidad del código y facilitar la incorporación de nuevas funcionalidades.
-  \bigskip
-
-  Por otro lado, una de las prioridades de esta herramienta es dar soporte al proceso de evaluación.
+  \begin{itemize}
+    \item Esta segunda versión de {\it ghedsh} busca mejorar el código fuente de la primera versión,
+  teniendo en cuenta aspectos como:
+  \begin{itemize}
+    \item La mantenibilidad del código 
+    \item Facilitar la incorporación de nuevas funcionalidades por parte de terceros.
+  \end{itemize}
+    \item Por otro lado, se han añadido funcionalidades que dan soporte al proceso de evaluación.
+  \end{itemize}
 \end{frame}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
@@ -151,6 +145,15 @@ Director: Casiano Rodríguez León
        \includegraphics[height=1cm, width=3.5cm]{img/bundler-logo.png}
      \column{0.6\linewidth}
         Gestión de dependencias: \textbf{Bundler}
+  \end{columns}
+  \bigskip
+
+  \begin{columns}
+    \column{0.3\linewidth}
+       \centering
+       \includegraphics[height=1.5cm, width=2cm]{img/octokit-logo.png}
+     \column{0.6\linewidth}
+        API de GitHub: \textbf{octokit}
   \end{columns}
   \bigskip
 
