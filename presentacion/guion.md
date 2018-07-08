@@ -2,7 +2,7 @@
 
 ## INTRODUCCIÓN
 
-## Qué es ghedsh
+### Qué es ghedsh
 
 Es una gema Ruby que consiste en un intérprete de comandos desarrollado para integrar las metodologíasde GitHub Education, viendo las organizaciones como aulas y los repositorios como las asignaciones de los alumnos.
 
