@@ -21,8 +21,9 @@ Estas dos herramientas han sido desarrolladas por GitHub.
 
 En cuanto a estas dos herramientas, han sido desarrolladas por la comunidad.
 
-* *ghi* GitHub Issues. Permite gestionar las incidencias (issues).
-* *ghs* GitHub Search. Permite realizar búsquedas en repositorios alojados en GitHub. Admite opciones para limitar las búsquedas dentro de organizaciones o usuarios, por ejemplo.
+* *ghi* GitHub Issues. Permite gestionar SOLO las incidencias (issues) de los repositorios desde la terminal del usuario.
+
+* *ghs* GitHub Search. Permite realizar búsquedas en repositorios alojados en GitHub. Admite opciones para limitar las búsquedas dentro de organizaciones o usuarios, por ejemplo. Es poco ágil.
 
 ## Objetivos
 
@@ -98,3 +99,48 @@ Una clase debería tener una única responsabilidad.
 * Paso 1. Determinar qué se va a extraer.
 * Paso 2. Crear una nueva clase.
 * Paso 3. Renombrar la antigua clase. Si tras la extracción el nombre de la antigua clase carece de sentido, debemos renombrarla.
+
+## Resultados obtenidos
+
+Tras la etapa de desarrollo, {\it GitHub Education Shell} incorpora las siguientes características:
+
+* Autenticación con credenciales de GitHub (OAuth).
+* Conjunto de comandos
+  * Comandos del núcleo de (ghedsh).
+  * Comandos incorporados (built-in commands).
+  * Comandos que dan soporte al proceso de evaluación.
+
+Nos detendremos un poco más en los comandos que dan soporte al proceso de evaluación, ya que eran unos de los objetivos principales de *ghedsh*.
+
+### Comandos del núcleo de ghedsh
+
+Están más relacionados con el funcionamiento de *ghedsh* o con el sistema operativo.
+
+cd: permite movernos entre repositorios, organizaciones, equipos, etc.
+! ó bash: interpreta la entrada del usuario como un comando tipo Unix.
+
+### Comandos incorporados
+
+VER IMAGEN
+
+**Total de 19 comandos. Detalles de uso en la memoria.**
+
+### Comandos que dan soporte al proceso de evaluación
+
+Tenemos tres: new_eval, foreach, foreach_try.
+
+#### new_eval
+
+Permite crear un repositorio de evaluación. El usuario especifica en nombre de este repositorio y una expresión regular que añade como subdirectorios los repositorios de los alumnos.
+
+En ghedsh, un repositorio de evaluación consiste en hacer uso de los submódulos de git, de manera que se crea un súper repositorio que contiene como submódulos todos los proyectos que se van a evaluar.
+
+En la imagen podemos ver cómo sería ejemplo de repositorio de evaluación, donde los submódulos son las asignaciones.
+
+#### foreach y foreach_try
+
+Ejecuta para cada submódulo el comando especificado, por ejemplo, git pull y se actualizan los submódulos. Internamente realiza \verb git  \verb submodule  \verb foreach .
+
+Si ocurre algún error en un submódulo durante la ejecución del comando, pasa al siguiente submódulo.
+
+Realiza lo mismo que foreach, pero `foreach_try`  dentendrá su ejecución si ocurre algún error mientras se ejecuta en un submódulo.

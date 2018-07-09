@@ -270,13 +270,111 @@ Director: Casiano Rodríguez León
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Resultados obtenidos}
-
-\begin{frame}[allowframebreaks]
+\begin{frame}
 \frametitle{Resultados obtenidos}
+  Tras la etapa de desarrollo, {\it GitHub Education Shell} incorpora las siguientes características:
+  \begin{itemize}
+    \item Autenticación con credenciales de GitHub (OAuth).
+    \item Conjunto de comandos
+    \begin{itemize}
+      \item Comandos del núcleo de {\it ghedsh}.
+      \item Comandos incorporados ({\it built-in commands}).
+      \item Comandos que dan soporte al proceso de evaluación.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
 
+\begin{frame}
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{Comandos del núcleo de {\it ghedsh}}
+
+  \begin{itemize}
+    \item \textbf{cd}: permite movernos entre repositorios, organizaciones, equipos, etc.
+    \item \textbf{! ó bash}: interpreta la entrada del usuario como un comando tipo Unix.
+  \end{itemize}
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{Comandos incorporados}
+
+  \begin{minipage}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[height=4cm, width=4cm]{img/commands2.png}
+  \end{minipage}%
+  \begin{minipage}[t]{0.48\linewidth}
+    \includegraphics[height=4cm, width=1.5cm]{img/commands1.png}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{Comandos que dan soporte al proceso de evaluación}
+
+  Tenemos los siguientes:
+    \begin{itemize}
+      \item \textbf{new\_eval}
+      \item \textbf{foreach}
+      \item \textbf{foreach\_try}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{new\_eval}
+  \textbf{new\_eval}
+  \bigskip
+
+  Permite crear un repositorio de evaluación. Consiste en hacer uso de los submódulos de {\it git},
+  de manera que se crea un ``súper repositorio'' que contiene como submódulos los proyectos que se van a evaluar.
+  \bigskip
+
+  \centering
+  \includegraphics[height=3cm, width=4.5cm]{img/eval-preview.png}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{foreach y foreach\_try}
+  \textbf{foreach}
+  \bigskip
+
+  Ejecuta para cada submódulo el comando especificado (por ejemplo, \verb git  \verb pull ). Internamente realiza \verb git  \verb submodule  \verb foreach .
+  Si ocurre algún error en un submódulo durante la ejecución del comando, pasa al siguiente submódulo.
+  \bigskip
+
+  \textbf{foreach\_try}
+  \bigskip
+
+  Realiza lo mismo que \verb foreach . Sin embargo, \verb foreach_try  dentendrá su ejecución si ocurre
+  algún error en un submódulo.
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{foreach y foreach\_try}
+  
+  Hagámonos una pregunta:
+  \bigskip
+
+  \textbf{¿Y si en lugar de ejecutar un comando simple, hacemos uso de una librería o paquete que realiza tareas más complejas?}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Resultados obtenidos}
+  \framesubtitle{ghedsh-grade-node}
+  
+  Explico el paquete de ejemplo [....]
+
+  \centering
+  \includegraphics[height=2.5cm, width=2.5cm]{img/ghedsh-grade-node.png}
+
+\end{frame}
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
 \section{Caso de uso}
