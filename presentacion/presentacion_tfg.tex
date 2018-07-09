@@ -134,7 +134,7 @@ Director: Casiano Rodríguez León
     \column{0.3\linewidth}
        \centering
        \includegraphics[height=1.2cm, width=1.2cm]{img/ruby-logo.png}
-     \column{0.6\linewidth}
+    \column{0.6\linewidth}
         Lenguaje de programación: \textbf{Ruby}
   \end{columns}
   \bigskip
@@ -143,7 +143,7 @@ Director: Casiano Rodríguez León
     \column{0.3\linewidth}
        \centering
        \includegraphics[height=1cm, width=3.5cm]{img/bundler-logo.png}
-     \column{0.6\linewidth}
+    \column{0.6\linewidth}
         Gestión de dependencias: \textbf{Bundler}
   \end{columns}
   \bigskip
@@ -151,8 +151,8 @@ Director: Casiano Rodríguez León
   \begin{columns}
     \column{0.3\linewidth}
        \centering
-       \includegraphics[height=1.5cm, width=2cm]{img/octokit-logo.png}
-     \column{0.6\linewidth}
+       \includegraphics[height=2cm, width=2cm]{img/octokit-logo.png}
+    \column{0.6\linewidth}
         API de GitHub: \textbf{octokit}
   \end{columns}
   \bigskip
@@ -161,7 +161,7 @@ Director: Casiano Rodríguez León
     \column{0.3\linewidth}
        \centering
        \includegraphics[height=1.2cm, width=1.2cm]{img/rspec-logo.png}
-     \column{0.6\linewidth}
+    \column{0.6\linewidth}
         Testing: \textbf{RSpec}
   \end{columns}
 \end{frame}
@@ -221,16 +221,54 @@ Director: Casiano Rodríguez León
   %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsection{Segunda fase. Refactorización}
 \begin{frame}
-\frametitle{Refactorización}
-
+\frametitle{Segunda fase. Refactorización}
+  Esta fase se centra en eliminar las debilidades anteriormente comentadas. Gran parte de este proceso
+  consistió en eliminar el {\it Switch Smell}, ya que era el más repetido a lo largo del código fuente.
 
 \end{frame}
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\begin{frame}
+  \frametitle{Segunda fase. Refactorización}
+  \framesubtitle{Strategy Pattern}
+  Para eliminar el {\it Switch Smell} hemos aplicado el Patrón Estrategia ({\it Strategy Pattern}).
+  \bigskip
 
+  El propósito de este patrón es proporcionar una manera clara de definir familias de algoritmos y poder intercambiarlos fácilmente.
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Segunda fase. Refactorización}
+  \framesubtitle{Strategy Pattern}
+
+  \centering
+  \includegraphics[height=7cm, width=7cm]{img/new-loop.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Segunda fase. Refactorización}
+  \framesubtitle{Extract Method}
+
+  \centering
+  \includegraphics[height=3cm, width=10cm]{img/extract-method-example.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Segunda fase. Refactorización}
+  \framesubtitle{Extract Class}
+
+  Una clase debería tener una única responsabilidad.
+  \bigskip
+
+  \begin{itemize}
+    \item Paso 1. Determinar qué se va a extraer.
+    \item Paso 2. Crear una nueva clase.
+    \item Paso 3. Renombrar la clase antigua.
+  \end{itemize}
+\end{frame}
 
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 \section{Resultados obtenidos}
 
 \begin{frame}[allowframebreaks]

@@ -15,10 +15,7 @@ Este Trabajo de Fin de Grado es la segunda versión de la gema `ghedsh` que se i
 Estas dos herramientas han sido desarrolladas por GitHub.
 
 * Teachers pet: CLI desarrollado previamente a Classroom. Facilita a los profesores la distrubución de código de inicio para las tareas y comprobar el progreso en las mismas.
-  * Inconveniente: los comandos se hacían excesivamente largos en determinados casos. Cayó en desuso y se dejó de desarrollar.
-* GitHub Classroom: Una plataforma web que simplifica la configuración de las aulas y las asignaciones. Sin embargo, existen algunas limitaciones:
-  * Actualmente no dispone de alguna funcionalidad que permita al profesor crear un repositorio de evaluación para calificar las tareas.
-  * En muchos casos, el nombre de usuario que ha escogido el alumno al registrarse en GitHub no permite identificarlo. El sistema para añadir información adicional del alumno es incómodo de usar ya que la información adicional hay que insertarla individualmente.
+  * Inconveniente: los comandos se hacían excesivamente largos en determinados casos. Entonces, cayó en desuso y se dejó de desarrollar.
 
 #### Desarrolladas por la comunidad
 
@@ -72,3 +69,32 @@ Long Method} se clasifica a nivel de método. Como su propio nombre indica, cons
 #### Large Class
 
 Large Class se clasifica dentro de los smells a nivel de clases. Indica que una clase ha crecido excesivamente en tamaño (God Object) y seguramente su funcionalidad puede descomponerse en clases más pequeñas y fáciles de manejar.
+
+### Segunda fase. Refactorización
+
+Esta fase se centra en eliminar las debilidades anteriormente comentadas. Gran parte de este proceso
+consistió en eliminar el **Switch Smell**, ya que era el más repetido a lo largo del código fuente.
+
+#### Strategy Pattern
+
+Para eliminar el Switch Smell hemos aplicado el Patrón Estrategia: Strategy Pattern.
+
+El propósito de este patrón es proporcionar una manera clara de definir familias de algoritmos y poder intercambiarlos fácilmente.
+
+Como vemos en la imagen, lo que hemos hecho ha sido exportar los comandos a una estructura de datos (Hash en este caso), de manera que el ahora los comandos se buscan en dicha estructura y se ejecutan con los parámetros del usuario. De esta manera ya no necesitamos las constantes que vimos anteriormente.
+
+#### Extract Method
+
+VER IMAGEN (Ejemplo muy simple)
+
+Como su propio nombre indica, la idea es simplificar un método, descomponiéndolo en varios más sencillos.
+
+Explicación de imagen: al extraer el código y definir *print_details* evitamos también duplicación de código, ya que llamaríamos a `print_details` en lugar de escribir `puts aaaaa` `puts bbbb` todas las veces que lo necesitemos.
+
+#### Extract Class
+
+Una clase debería tener una única responsabilidad.
+
+* Paso 1. Determinar qué se va a extraer.
+* Paso 2. Crear una nueva clase.
+* Paso 3. Renombrar la antigua clase. Si tras la extracción el nombre de la antigua clase carece de sentido, debemos renombrarla.
