@@ -144,3 +144,11 @@ Ejecuta para cada submódulo el comando especificado, por ejemplo, git pull y se
 Si ocurre algún error en un submódulo durante la ejecución del comando, pasa al siguiente submódulo.
 
 Realiza lo mismo que foreach, pero `foreach_try`  dentendrá su ejecución si ocurre algún error mientras se ejecuta en un submódulo.
+
+#### ghedsh-grade-node
+
+Recibe como argumento el directorio donde se encuentran las pruebas privadas que ha escrito el profesor el nombre del fichero con la salida de los tests.
+
+* Copia en el subdirectorio `/test` del alumno las pruebas definidas por el profesor.
+* Realiza `npm install`  en cada repositorio.
+* Realiza `npm test`, redirigiendo la salida (tanto `stdout`  como `stderr`) a un fichero.

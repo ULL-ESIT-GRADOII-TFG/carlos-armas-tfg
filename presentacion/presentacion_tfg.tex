@@ -93,7 +93,7 @@ Director: Casiano Rodríguez León
   \end{itemize}
 
   \framebreak
-  Desarolladas por {\it GitHub}:
+  Desarrolladas por {\it GitHub}:
   \begin{itemize}
     \item \textbf{Teachers Pet}. {\it CLI} desarrollado previamente a {\it Classroom}.
     \begin{itemize}
@@ -369,17 +369,24 @@ Director: Casiano Rodríguez León
   \frametitle{Resultados obtenidos}
   \framesubtitle{ghedsh-grade-node}
   
-  Explico el paquete de ejemplo [....]
+  Aparte de {\it ghedsh}, hemos desarrollado un paquete {\it npm} llamado {\it ghedsh-grade-node}
+  que realiza lo siguiente:
+  \begin{itemize}
+    \item Recibe como argumento el directorio donde se encuentran las pruebas privadas que ha escrito el profesor.
+    \item Copia en el subdirectorio \verb /test  del alumno las pruebas del profesor.
+    \item Realiza \verb npm  \verb install .
+    \item Realiza \verb npm  \verb test , redirigiendo la salida (tanto \verb stdout  como \verb stderr ) a un fichero.
+  \end{itemize}
 
   \centering
-  \includegraphics[height=2.5cm, width=2.5cm]{img/ghedsh-grade-node.png}
+  \includegraphics[height=3cm, width=3cm]{img/ghedsh-grade-node.png}
 
 \end{frame}
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
 \section{Caso de uso}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}[fragile]
 \frametitle{Caso de uso}
 
 \end{frame}
@@ -389,7 +396,24 @@ Director: Casiano Rodríguez León
 \section{Conclusions and future work lines}
 \begin{frame}[allowframebreaks]
   \frametitle{Conclusions and future work lines}
+  The second version of {\it GitHub Education Shell} has successfully achieved the objectives outlined before:
+  \begin{itemize}
+    \item  improve its initial architecture and enable incorporating future functionalities.
+    \item  also, provide support to the evaluation process through GitHub Education’s methodologies. This feature will most certainly be difficult to find in other shell prompts nowadays.
+  \end{itemize}
+  This has significant implications and contributes to the educational community.
 
+  \framebreak
+
+  For future work lines, some aspects may be considered:
+  \begin{itemize}
+    \item Guide the design towards Open/Close (OCP) principle.
+    \item Provide fully structured usage help within the tool.
+    \item Allow including extra information about students.
+    \item Improve tool's current test structure.
+    \item Add extra functionality to the commands that support the evaluation process, by including a set of libraries
+    that perform specific tasks for this process.
+  \end{itemize}
 \end{frame}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
