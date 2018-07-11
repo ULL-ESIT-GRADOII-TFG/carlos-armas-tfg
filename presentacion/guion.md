@@ -179,9 +179,7 @@ Recibe como argumento:
 
 ## Caso de uso
 
-Ahora veremos un ejemplo en vídeo donde se utilizan estos comandos para evaluar prácticas.
-
-* En este caso, se trata del curso *Procesadores de Lenguajes (17-18)*
+Ahora veremos un ejemplo en vídeo donde se utilizan estos comandos para evaluar prácticas. Casiano ya ha realizado varias durante el desarrollo de la herramienta en el curso de *Procesadores de Lenguajes (17-18)*
 
 ## Conclusions and future work lines
 
