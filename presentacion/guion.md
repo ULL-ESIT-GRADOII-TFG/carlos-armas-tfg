@@ -2,6 +2,17 @@
 
 ## INTRODUCCIÓN
 
+Primero veremos la estructura de la presentación:
+
+* INTRODUCCIÓN: veremos qué es `ghedsh` y algunas herramientas similares.
+* OBJETIVOS
+* TECNOLOGÍAS EMPLEADAS
+* DESARROLLO DEL PROYECTO: con sus dos fases principales.
+* RESULTADOS OBTENIDOS
+* CASO DE USO
+* CONCLUSIONES Y LÍNEAS DE TRABAJO FUTURAS
+* BIBLIOGRAFÍA
+
 ### Qué es ghedsh
 
 Es una gema Ruby que consiste en un intérprete de comandos desarrollado para integrar las metodologíasde GitHub Education, viendo las organizaciones como aulas y los repositorios como las asignaciones de los alumnos.
@@ -27,7 +38,11 @@ En cuanto a estas dos herramientas, han sido desarrolladas por la comunidad.
 
 ## Objetivos
 
-Esta segunda versión de `ghedsh` busca mejorar el código fuente de la primera versión, teniendo en cuenta aspectos como la mantenibilidad del código para facilitar la incorporación de nuevas funcionalidades. También aportar una solución a algunas de las limitaciones que poseen herramientas anteriormente comentadas y concentrar funcionalidad en una única herramienta.
+Esta segunda versión de `ghedsh` busca mejorar el código fuente de la primera versión, teniendo en cuenta aspectos como:
+
+* la mantenibilidad del código para facilitar la incorporación de nuevas funcionalidades.
+
+* También aportar una solución a algunas de las limitaciones que poseen herramientas anteriormente comentadas y concentrar funcionalidad en una única herramienta.
 
 Por otro lado, una de las prioridades de esta herramienta es dar soporte al proceso de evaluación.
 
@@ -49,23 +64,24 @@ Dividimos el desarrollo del proyecto en dos fases bien diferenciadas:
 
 ### Primera fase. Análisis
 
+Tras estudiar el código de la primera versión de la gema se han detectado diversos *code smell*.
+
 #### Code Smell
 
-Tras estudiar el código de la primera versión de la gema se han detectado diversos *code smell*.
-Un Code Smell se define como cualquier característica del código fuente que, posiblemente, indica un problema más profundo.
+Un *Code Smell* se define como cualquier característica del código fuente que, posiblemente, indica un problema más profundo.
 No son considerados como *bugs*, puesto que no impiden que un programa funcione correctamente.
 
 Sin embargo, estos defectos en el diseño pueden afectar al rendimiento del programa y aumentan la probabilidad de *bugs* en el futuro.
 
 #### Switch Smell
 
-En la imagen se ve un mal uso de las sentencias switch-case, que en Ruby son case-when. El principal problema es que al añadir un nuevo caso, debemos localizar todas estas sentencias y modificarlas.
+En la imagen se ve un mal uso de las sentencias switch-case, que en Ruby son *case-when*. El principal problema es que al añadir un nuevo caso, debemos localizar todas estas sentencias y modificarlas.
 
 Este era el más repetido a lo largo del código fuente, por lo que la refactorización se ha centrado sobretodo en este aspecto.
 
 #### Long Method
 
-Long Method} se clasifica a nivel de método. Como su propio nombre indica, consiste en un método que ha crecido demasiado y dificulta saber qué es lo que realmente hace.
+*Long Method* se clasifica a nivel de método. Como su propio nombre indica, consiste en un método que ha crecido demasiado y dificulta saber qué es lo que realmente hace.
 
 #### Large Class
 
@@ -78,7 +94,7 @@ consistió en eliminar el **Switch Smell**, ya que era el más repetido a lo lar
 
 #### Strategy Pattern
 
-Para eliminar el Switch Smell hemos aplicado el Patrón Estrategia: Strategy Pattern.
+Para eliminar el **Switch Smell** hemos aplicado el **Patrón Estrategia**: **Strategy Pattern**.
 
 El propósito de este patrón es proporcionar una manera clara de definir familias de algoritmos y poder intercambiarlos fácilmente.
 
@@ -90,7 +106,7 @@ VER IMAGEN (Ejemplo muy simple)
 
 Como su propio nombre indica, la idea es simplificar un método, descomponiéndolo en varios más sencillos.
 
-Explicación de imagen: al extraer el código y definir *print_details* evitamos también duplicación de código, ya que llamaríamos a `print_details` en lugar de escribir `puts aaaaa` `puts bbbb` todas las veces que lo necesitemos.
+Explicación de imagen: al **extraer el código** y definir *print_details* evitamos también duplicación de código, ya que llamaríamos a `print_details` en lugar de escribir `puts aaaaa` `puts bbbb` todas las veces que lo necesitemos.
 
 #### Extract Class
 
@@ -106,8 +122,8 @@ Tras la etapa de desarrollo, {\it GitHub Education Shell} incorpora las siguient
 
 * Autenticación con credenciales de GitHub (OAuth).
 * Conjunto de comandos
-  * Comandos del núcleo de (ghedsh).
-  * Comandos incorporados (built-in commands).
+  * Comandos del núcleo de `ghedsh`.
+  * Comandos incorporados *built-in commands*.
   * Comandos que dan soporte al proceso de evaluación.
 
 Nos detendremos un poco más en los comandos que dan soporte al proceso de evaluación, ya que eran unos de los objetivos principales de *ghedsh*.
@@ -116,39 +132,77 @@ Nos detendremos un poco más en los comandos que dan soporte al proceso de evalu
 
 Están más relacionados con el funcionamiento de *ghedsh* o con el sistema operativo.
 
-cd: permite movernos entre repositorios, organizaciones, equipos, etc.
-! ó bash: interpreta la entrada del usuario como un comando tipo Unix.
+`cd`: permite movernos entre repositorios, organizaciones, equipos, etc.
+`!` ó `bash`: interpreta la entrada del usuario como un comando tipo Unix.
 
 ### Comandos incorporados
 
-VER IMAGEN
+------- VER IMAGEN -------
 
 **Total de 19 comandos. Detalles de uso en la memoria.**
 
 ### Comandos que dan soporte al proceso de evaluación
 
-Tenemos tres: new_eval, foreach, foreach_try.
+Tenemos tres: `new_eval`, `foreach`, `foreach_try`.
 
 #### new_eval
 
-Permite crear un repositorio de evaluación. El usuario especifica en nombre de este repositorio y una expresión regular que añade como subdirectorios los repositorios de los alumnos.
+Permite crear un repositorio de evaluación.
 
-En ghedsh, un repositorio de evaluación consiste en hacer uso de los submódulos de git, de manera que se crea un súper repositorio que contiene como submódulos todos los proyectos que se van a evaluar.
+* El usuario especifica en nombre de este repositorio y una expresión regular que añade como subdirectorios los repositorios de los alumnos.
+
+* En ghedsh, un repositorio de evaluación consiste en hacer uso de los submódulos de git, de manera que se crea un súper repositorio que contiene como submódulos todos los proyectos que se van a evaluar.
 
 En la imagen podemos ver cómo sería ejemplo de repositorio de evaluación, donde los submódulos son las asignaciones.
 
 #### foreach y foreach_try
 
-Ejecuta para cada submódulo el comando especificado, por ejemplo, git pull y se actualizan los submódulos. Internamente realiza \verb git  \verb submodule  \verb foreach .
+Ejecuta para cada submódulo el comando especificado, por ejemplo, `git pull` para actualizar los submódulos.
 
-Si ocurre algún error en un submódulo durante la ejecución del comando, pasa al siguiente submódulo.
+* Internamente realiza `git submodule foreach`.
 
-Realiza lo mismo que foreach, pero `foreach_try`  dentendrá su ejecución si ocurre algún error mientras se ejecuta en un submódulo.
+* Si ocurre algún error en un submódulo durante la ejecución del comando, pasa al siguiente submódulo.
+
+Realiza lo mismo que foreach, pero `foreach_try` **dentendrá** su ejecución si ocurre algún error mientras se ejecuta en un submódulo.
 
 #### ghedsh-grade-node
 
-Recibe como argumento el directorio donde se encuentran las pruebas privadas que ha escrito el profesor el nombre del fichero con la salida de los tests.
+Recibe como argumento:
+
+* (**Opcional**) el directorio donde se encuentran las pruebas privadas que ha escrito el profesor
+
+* Y el nombre del fichero con la salida de los tests.
 
 * Copia en el subdirectorio `/test` del alumno las pruebas definidas por el profesor.
 * Realiza `npm install`  en cada repositorio.
 * Realiza `npm test`, redirigiendo la salida (tanto `stdout`  como `stderr`) a un fichero.
+
+## Caso de uso
+
+Ahora veremos un ejemplo en vídeo donde se utilizan estos comandos para evaluar prácticas.
+
+* En este caso, se trata del curso *Procesadores de Lenguajes (17-18)*
+
+## Conclusions and future work lines
+
+The second version of *GitHub Education Shell* has successfully achieved the objectives outlined before:
+
+* Improve its initial architecture and prepare it for new functionalities developed by others.
+
+* Also, provide support to the evaluation process through GitHub Education’s methodologies. This feature will most certainly be difficult to find in other shell prompts nowadays.
+
+Hence, this has significant implications and contributes to the educational community.
+
+### Future work lines
+
+For future work lines, some aspects may be considered:
+
+* Guide the design towards Open/Close (OCP) principle.
+
+* Provide fully structured usage help within the tool.
+
+* Allow including extra information about students.
+
+* Improve tool's current test structure.
+
+* Add extra functionality to the commands that support the evaluation process, by including a set of libraries that perform specific tasks for this process.
