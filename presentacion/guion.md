@@ -15,7 +15,7 @@ Primero veremos la estructura de la presentación:
 
 ### Qué es ghedsh
 
-Es una gema Ruby que consiste en un intérprete de comandos desarrollado para integrar las metodologíasde GitHub Education, viendo las organizaciones como aulas y los repositorios como las asignaciones de los alumnos.
+Es una gema Ruby que consiste en un intérprete de comandos desarrollado para integrar las metodologías de GitHub Education, viendo las organizaciones como aulas y los repositorios como las asignaciones de los alumnos.
 
 Este Trabajo de Fin de Grado es la segunda versión de la gema `ghedsh` que se inició en otro TFG anterior.
 
@@ -23,7 +23,7 @@ Este Trabajo de Fin de Grado es la segunda versión de la gema `ghedsh` que se i
 
 #### Desarrolladas por GitHub
 
-Estas dos herramientas han sido desarrolladas por GitHub.
+Tenemos:
 
 * Teachers pet: CLI desarrollado previamente a Classroom. Facilita a los profesores la distrubución de código de inicio para las tareas y comprobar el progreso en las mismas.
   * Inconveniente: los comandos se hacían excesivamente largos en determinados casos. Entonces, cayó en desuso y se dejó de desarrollar.
@@ -52,6 +52,7 @@ En cuanto a las tecnologías empleadas tenemos:
 
 * Lenguaje de programación: **Ruby**
 * Gestión de dependencias: **Bundler**
+* API REST Github: **octokit**
 * Testing: **RSpec**
 
 ## Desarrollo del proyecto
@@ -60,7 +61,7 @@ Dividimos el desarrollo del proyecto en dos fases bien diferenciadas:
 
 * Análisis, que consistió en estudiar el código de la primera versión para identificar aquellas partes mejorables del diseño e implementación iniciales.
 
-* Refactorización, describe el proceso llevado a cabo para solucionar las debilidades anteriores.
+* Refactorización, donde se solucionan las debilidades anteriores.
 
 ### Primera fase. Análisis
 
