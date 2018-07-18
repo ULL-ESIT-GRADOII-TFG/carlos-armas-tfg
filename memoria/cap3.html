@@ -1,0 +1,320 @@
+<p>Este capítulo se centrará en explicar las características que incorpora <span><em>ghedsh</em></span> tras la etapa de desarrollo tratada en el capítulo anterior.</p>
+<p>Se hará una distinción entre comandos del núcleo y comandos incorporados (<span><em>built-in commands</em></span>). Los comandos del núcleo, son aquellos que no trabajan con los datos de GitHub del usuario pero que, sin embargo, son esenciales desde el punto de vista de la usabilidad y experiencia de usuario con el CLI.</p>
+<p>Además, los comandos incorporados sí trabajan con los datos de GitHub del usuario identificado. Permiten realizar diversas tareas, priorizando la rapidez en la ejecución de las mismas y la facilidad de uso de la herramienta.</p>
+<h1 id="3:sec:1">Autenticación con credenciales de GitHub</h1>
+<p>El contenido de esta sección pretende explicar el proceso de autenticación que debe seguir el usuario al usar <span><em>ghedsh</em></span> por primera vez.</p>
+<p>Dicho proceso es necesario, puesto que se trabajan con los datos que dispone el usuario en GitHub. Además, la API REST v3 requiere, para ciertas consultas (en especial, modificaciones como crear repositorios, equipos y administrar la configuración), verificar la identidad del usuario. Si no fuera así, se podrían llevar a cabo comportamientos indeseados.</p>
+<p>En <span><em>ghedsh</em></span>, se realiza la autenticación con <span><em>OAuth access token</em></span><span class="citation" data-cites="B16"></span>, que consiste, en una definición muy simplificada, en una cadena de caracteres alfanuméricos que actúa como una contraseña. No obstante, en este caso de uso es mucho más potente y segura. Las principales ventajas son:</p>
+<ul>
+<li><p>Es revocable, es decir, el <span><em>token</em></span> puede dejar de ser válido, eliminando el acceso para ese <span><em>token</em></span> en particular, sin que el usuario tenga que cambiar su contraseña en todos sus accesos.</p></li>
+<li><p>Sus permisos son configurables, esto es, un <span><em>token</em></span> puede ser válido sólo para ciertos recursos de una API. De esta manera, se conceden permisos de forma más controlada.</p></li>
+</ul>
+<p>Para sintetizar este apartado, el usuario que utilice por primera vez <span><em>ghedsh</em></span>, debe verificar su identidad mediante sus credenciales (nombre de usuario y contraseña) de GitHub y se generará de forma automática un <span><em>token</em></span> de acceso con los permisos necesarios para usar la herramienta.</p>
+<figure>
+<img src="images/login-example.png" alt="Ejemplo de autenticación al usar ghedsh por primera vez." style="width:68.0%" /><figcaption>Ejemplo de autenticación al usar ghedsh por primera vez.<span label="fig:masterv1"></span></figcaption>
+</figure>
+<h1 id="3:sec:2">Comandos del núcleo de ghedsh</h1>
+<p>Como se ha indicado en la introducción de este tercer capítulo, se han separado, por un lado, los comandos del núcleo de <span><em>ghedsh</em></span> y, por otro, los comandos característicos de <span><em>ghedsh</em></span>.</p>
+<p>En esta sección, se explicará este primer grupo de comandos, encargado de tareas relacionadas con el sistema operativo y, lo más importante, hacer que la herramienta sea agradable de manejar para el usuario. Además, se revisarán aspectos importantes de su implementación.</p>
+<h2 id="3.2.1">bash (comando ghedsh)</h2>
+<p>Permite interpretar un comando en la terminal del sistema operativo, sin salir de <span><em>ghedsh</em></span>.</p>
+<p><strong>Sintaxis:</strong> <code>bash</code> <code>&lt;comando_terminal&gt;</code> . En la figura <a href="#fig:bash-example" data-reference-type="ref" data-reference="fig:bash-example">[fig:bash-example]</a>, se muestra un ejemplo de uso.</p>
+<figure>
+<img src="images/bash-example.png" alt="Ejemplo de uso del comando bash." style="width:30.0%" /><figcaption>Ejemplo de uso del comando bash.<span label="fig:bash-example"></span></figcaption>
+</figure>
+<h2 id="3.2.2">Change directory: cd</h2>
+<p>Análogamente al comando <span><em>cd</em></span> de la <span><em>Bash</em></span><span class="citation" data-cites="B17"></span>, que permite cambiar nuestro directorio actual de trabajo, en <span><em>ghedsh</em></span> también existe este comando. No obstante, aunque la idea es similar, existen diferencias a la hora de usarlo.</p>
+<p>En nuestro sistema operativo (tipo Unix)<span class="citation" data-cites="B18"></span>, cuando realizamos la operación <span><em>cd</em></span>, sólo podemos movernos entre directorios (dependiendo de los permisos). Dado que en <span><em>ghedsh</em></span> no existen directorios como tal, hablaremos de contextos. Los contextos en esta herramienta hacen referencia a nivel de usuario, nivel de organización, nivel de repositorio, etcétera.</p>
+<p>Imaginemos por un momento que nuestro usuario se llama <code>ejemplo</code>, disponemos de un repositorio que se llama <code>ejemplo</code> y una organización denominada <code>ejemplo</code>. Ésto es totalmente válido, puesto que lo que no permite GitHub es que dos usuarios se llamen igual, que el usuario tenga dos repositorios con el mismo nombre o dos organizaciones bajo el mismo nombre. Entonces, debemos proporcionar alguna manera de desambiguar a qué contexto nos queremos cambiar.</p>
+<p>En <span><em>ghedsh</em></span> se ha optado por el siguiente planteamiento: para realizar la operación de <span><em>cd</em></span>, es necesario especificar el tipo de contexto (nivel) al que queremos cambiarnos, así, aunque el usuario se encuentre en el caso anteriormente comentado, <span><em>ghedsh</em></span> es capaz de saber a qué contexto debe cambiar. La sintaxis del comando sería <code>cd</code> <code>&lt;tipo&gt;</code> <code>&lt;nombre&gt;</code>, donde <code>nombre</code> es la cadena de texto que identifica al tipo.</p>
+<p>Los tipos de contexto (pueden ser ampliables) que actualmente se soportan en <span><em>ghedsh</em></span> son:</p>
+<ul>
+<li><p><strong>Nivel de usuario</strong>: estando a nivel de usuario, éste se puede cambiar a cualquiera de sus repositorios o a cualquier organización a la que pertenezca, como vemos a continuación:</p>
+<ul>
+<li><p>Repositorio del usuario: <code>cd</code> <code>repo</code> <code>&lt;nombre&gt;</code>.</p></li>
+<li><p>Organización del usuario: <code>cd</code> <code>org</code> <code>&lt;nombre&gt;</code>. <span><em>ghedsh</em></span> soporta el autocompletado de organizaciones, es decir, se puede pulsar el tabulador para completar automáticamente el nombre de la organización.</p></li>
+</ul></li>
+<li><p><strong>Nivel de organización</strong>: estando a nivel de una organización de la que es miembro el usuario autenticado, (<span><em>ghedsh</em></span> sabrá que se refiere al entorno de la organización a la que se ha cambiado) se puede mover a:</p>
+<ul>
+<li><p>Repositorio de la organización: <code>cd</code> <code>repo</code> <code>&lt;nombre&gt;</code>.</p></li>
+<li><p>Equipo de la organización: <code>cd</code> <code>team</code> <code>&lt;nombre&gt;</code>.</p></li>
+</ul></li>
+</ul>
+<p>Además, si deseamos volver al contexto anterior, haremos de la misma manera que en sistemas operativos tipo Unix: <code>cd</code> <code>..</code> . Hay que tener en cuenta que, actualmete, no se puede realizar la operación de volver al contexto anterior y cambiar a otro de manera simultánea (como en Unix <code>cd</code> <code>../another/dir</code> ), es necesario hacerlo por separado.</p>
+<h3 id="detalles-de-implementación">Detalles de implementación</h3>
+<p>Puesto que se trata de uno de los comandos más importantes de <span><em>ghedsh</em></span>, se comentarán los aspectos destacados de la implementación del mismo, incluyendo las dificultades encontradas.</p>
+<p>Internamente, el comando <span><em>cd</em></span> contiene una pila (stack<span class="citation" data-cites="B19"></span>) en la que se almacenan todos los contextos previos. La estructura de un contexto se muestra en el siguiente fragmento de código:</p>
+<div class="sourceCode" id="cb1" data-language="Ruby"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" data-line-number="1">  config = {</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="st">&#39;User&#39;</span> =&gt; client.login.to_s,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="st">&#39;user_url&#39;</span> =&gt; client.web_endpoint.to_s &lt;&lt; client.login.to_s,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    <span class="st">&#39;Org&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="st">&#39;org_url&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="st">&#39;Repo&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="st">&#39;repo_url&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">    <span class="st">&#39;Team&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="st">&#39;team_url&#39;</span> =&gt; <span class="dv">nil</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  }</a></code></pre></div>
+<ul>
+<li><p><code>User</code>: permite saber el nombre del usuario autenticado en <span><em>ghedsh</em></span>.</p></li>
+<li><p><code>user_url</code>: contiene la URL (<span><em>Uniform Resource Locator</em></span><span class="citation" data-cites="B20"></span>) del perfil del usuairo en GitHub.</p></li>
+<li><p><code>Org</code>: indica el nombre de la organización actual, si el usuario no está posicionado sobre alguna, el valor es nulo.</p></li>
+<li><p><code>org_url</code>: URL de la organización en GitHub.</p></li>
+<li><p><code>Repo</code>: nombre del repositorio actual, en caso de estar dentro de alguno.</p></li>
+<li><p><code>repo_url</code>: URL del repositorio en GitHub.</p></li>
+<li><p><code>Team</code>: nombre del equipo actual si el usuario está posicionado dentro de alguno.</p></li>
+<li><p><code>team_url</code>: URL del equipo en GitHub.</p></li>
+</ul>
+<p>En esencia, <span><em>change directory</em></span> irá variando estos parámetros para conocer a qué nivel se encuentra el usuario (<code>User</code> siempre tendrá un valor asignado porque representa el usuario autenticado). Por ejemplo, para referirnos a un repositorio de una organización en la que el usuario es miembro, tendríamos:</p>
+<div class="sourceCode" id="cb2" data-language="Ruby"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" data-line-number="1">    config = {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="st">&#39;User&#39;</span> =&gt; client.login.to_s,</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="st">&#39;user_url&#39;</span> =&gt; client.web_endpoint.to_s &lt;&lt; client.login.to_s,</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="st">&#39;Org&#39;</span> =&gt; <span class="st">&quot;EXAMPLE-ORG&quot;</span>,</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="st">&#39;org_url&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="st">&#39;Repo&#39;</span> =&gt; <span class="st">&quot;repository-within-example-org&quot;</span>,</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="st">&#39;repo_url&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="st">&#39;Team&#39;</span> =&gt; <span class="dv">nil</span>,</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">    <span class="st">&#39;team_url&#39;</span> =&gt; <span class="dv">nil</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">  }</a></code></pre></div>
+<p>En el caso de un repositorio de usuario, <code>User</code> tendría valor asignado y <code>Repo</code> también tendría valor asignado. A diferencia con el caso anterior, <code>Org</code> sería nulo ya que nos referimos a un repositorio a nivel de usuario.</p>
+<p>Una de las dificultades en la implementación de este comando, fue que, antes de reasignar la estructura de datos que respresenta los contextos, era necesario almacenar el contexto actual para poder volver a éste más tarde.</p>
+<p>Ruby proporciona dos métodos para copiar/clonar objetos: <code>dup</code><span class="citation" data-cites="B21"></span> y <code>clone</code><span class="citation" data-cites="B22"></span>. No obstante, realizan una copia superficial del objeto, es decir, crearán un nuevo identificador de objeto pero el contenido del mismo referenciará al de la entidad original.</p>
+<p>Para solucionarlo, se utilizó el módulo <span><em>Marshal</em></span><span class="citation" data-cites="B23"></span> de Ruby, que sí realiza una copia profunda del objeto.</p>
+<h1 id="3:sec:3">Comandos incorporados en ghedsh</h1>
+<p>A lo largo de esta sección, se explicarán individualmente los comandos característicos de <span><em>ghedsh</em></span>. Los comandos característicos o incorporados por <span><em>ghedsh</em></span> son aquellos que trabajan con los datos de GitHub del usuario de la herramienta. Colaboran estrechamente con la GitHub API REST v3 (véase, para más detalle, la documentación oficial de <span><em>Octokit</em></span><span class="citation" data-cites="B24"></span>). Se explicará la sintaxis para cada uno de ellos y se proporcionará ejemplos de uso.</p>
+<p>Como convenio, los parámetros con el formato <code>&lt;parameter&gt;</code>, son obligatorios. Los que tengan el formato <code>[parameter]</code>, son opcionales.</p>
+<p>Por otro lado, las expresiones regulares admiten las opciones establecidas por Ruby.</p>
+<h2 id="3.3.1">clear</h2>
+<p>Realiza la misma tarea que el comando <code>clear</code> en Bash. Borra la pantalla si es posible y sitúa el cursor en la parte superior izquierda de la pantalla (ignora cualquier parámetro adicional).</p>
+<p><strong>Sintaxis</strong>: <code>clear</code> .</p>
+<h2 id="3.3.2">clone</h2>
+<p>Clona repositorios y, si ya existe en el directorio local, realizará <code>git</code> <code>pull</code> <code>--all</code>. Recibe como parámetro obligatorio el nombre del repositorio que se desea clonar o una expresión regular, que permitirá clonar todos los repositorios que casen con ella. Opcionalmente, es posible especificar un directorio dentro de <code>$HOME</code> de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.</p>
+<p><strong>Sintaxis</strong>: <code>clone</code> <code>&lt;nombre_repo</code>/Regexp/&gt;| <code>[ruta_en_home]</code> .</p>
+<p>Se puede ejecutar en:</p>
+<ul>
+<li><p>Contexto de <strong>usuario</strong>: clonará los repositorios del usuario autenticado en <span><em>ghedsh</em></span>.</p></li>
+<li><p>Contexto de <strong>organización</strong>: clonará los repositorios de la organización en la que se encuentre posicionado.</p></li>
+</ul>
+<p>En la figura <a href="#fig:clone-example" data-reference-type="ref" data-reference="fig:clone-example">[fig:clone-example]</a> y <a href="#fig:clone-example-org" data-reference-type="ref" data-reference="fig:clone-example-org">[fig:clone-example-org]</a> se muestran ejemplos de uso.</p>
+<figure>
+<img src="images/clone-example.png" alt="Ejemplo de clonar un repositorio de usuario." style="width:60.0%" /><figcaption>Ejemplo de clonar un repositorio de usuario.<span label="fig:clone-example"></span></figcaption>
+</figure>
+<figure>
+<img src="images/clone-example-org.png" alt="Ejemplo de clonar un repositorio de organización." style="width:60.0%" /><figcaption>Ejemplo de clonar un repositorio de organización.<span label="fig:clone-example-org"></span></figcaption>
+</figure>
+<h2 id="3.3.3">commits</h2>
+<p>Muestra los <span><em>commits</em></span> (SHA, fecha, autor y mensaje del <span><em>commit</em></span>) de la rama <code>master</code>, en caso de que no se le pase como parámetro una rama en concreto. Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: <strong>organización</strong> o <strong>usuario</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>commits</code> <code>[rama_repositorio]</code> .</p>
+<figure>
+<img src="images/user-commits.png" alt="Mostrar commits en un repositorio de usuario." style="width:59.0%" /><figcaption>Mostrar commits en un repositorio de usuario.<span label="fig:user-commits"></span></figcaption>
+</figure>
+<figure>
+<img src="images/orgs-commits.png" alt="Mostrar commits de la rama de un repositorio de organización." style="width:59.0%" /><figcaption>Mostrar commits de la rama de un repositorio de organización.<span label="fig:user-commits"></span></figcaption>
+</figure>
+<h2 id="3.3.4">exit</h2>
+<p>Temina la ejecución de <span><em>ghedsh</em></span>, guardando el contexto actual. Es decir, si el usuario se encontraba dentro de una organización, la próxima vez que entre en <span><em>ghedsh</em></span> estará dentro de la organización.</p>
+<p><strong>Sintaxis</strong>: <code>exit</code> .</p>
+<h2 id="3.3.5">files</h2>
+<p>Muestra el contenido y el tipo de contenido (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de <strong>usuario</strong> o repositorio de <strong>organización</strong>. Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.</p>
+<p><strong>Sintaxis</strong>: <code>files</code> <code>[subdirectorio]</code> .</p>
+<figure>
+<img src="images/dir-content.png" alt="Listar contenido del repositorio." style="width:50.0%" /><figcaption>Listar contenido del repositorio.<span label="fig:dir-content"></span></figcaption>
+</figure>
+<figure>
+<img src="images/subdir-content.png" alt="Listar contenido de un subdirectorio." style="width:50.0%" /><figcaption>Listar contenido de un subdirectorio.<span label="fig:subdir-content"></span></figcaption>
+</figure>
+<h2 id="3.3.6">invite_member</h2>
+<p>Añade nuevos miembros a una organización. Recibe como parámetros el/los nombres de usuario de GitHub, separados por comas o por espacios.</p>
+<p>Sólo puede ejecutarse en el contexto de una <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>invite_member</code> <code>&lt;user1,</code> <code>user2,</code> <code>user3,</code> <code>...,</code> <code>n&gt;</code> .</p>
+<figure>
+<img src="images/invite-member.png" alt="Añadir miembros específicos." style="width:100.0%" /><figcaption>Añadir miembros específicos.<span label="fig:invite-member"></span></figcaption>
+</figure>
+<h2 id="3.3.7">invite_member_from_file</h2>
+<p>Añade nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla <span class="citation" data-cites="B27"></span>) existente en <code>$HOME</code> de la máquina local.</p>
+<p>El comando se ejecuta, exclusivamente, dentro del contexto de una <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>invite_member_from_file</code> <code>&lt;ruta_home_fichero&gt;</code> .</p>
+<figure>
+<img src="images/add-members-file.png" alt="Añadir miembros mediante fichero." style="width:100.0%" /><figcaption>Añadir miembros mediante fichero.<span label="fig:add-members-fil"></span></figcaption>
+</figure>
+<h2 id="3.3.8">invite_outside_collaborators</h2>
+<p>Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla <span class="citation" data-cites="B26"></span>) situado en <code>$HOME</code> de la máquina local.</p>
+<p>Se ejecuta, exclusivamente, cuando el usuario de <span><em>ghedsh</em></span> está situado en el contexto de una <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>invite_outside_collaborators</code> <code>[ruta_home_fichero]</code> .</p>
+<figure>
+<img src="images/invite-collabs.png" alt="Invitación a ser miembros desde fichero." style="width:100.0%" /><figcaption>Invitación a ser miembros desde fichero.<span label="fig:invite-collabs"></span></figcaption>
+</figure>
+<h2 id="3.3.9">issues</h2>
+<p>Abre el navegador por defecto, situando al usuario en la lista de incidencias (<span><em>issues</em></span>). Debe estar posicionado dentro de un repositorio de <strong>usuario</strong> o repositorio de <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>issues</code> .</p>
+<figure>
+<img src="images/list-issues.png" alt="Ver incidencias de un repositorio." style="width:65.0%" /><figcaption>Ver incidencias de un repositorio.<span label="fig:list-issues"></span></figcaption>
+</figure>
+<figure>
+<img src="images/issues-list.png" alt="Listado de incidencias del repositorio en GitHub." style="width:65.0%" /><figcaption>Listado de incidencias del repositorio en GitHub.<span label="fig:issues-list"></span></figcaption>
+</figure>
+<h2 id="3.3.10">new_issue</h2>
+<p>Abre el navegador por defecto, situando al usuario en el formulario de creación de un issue. Para ejecutarlo, es necesario estar posicionado sobre un repositorio.</p>
+<p><strong>Sintaxis</strong>: <code>new_issue</code> .</p>
+<p>Está disponible para:</p>
+<ul>
+<li><p>Contexto <strong>usuario</strong>: abre la página de <span><em>issues</em></span> del repositorio de usuario en el que está posicionado.</p></li>
+<li><p>Contexto <strong>organización</strong>: abre la página de <span><em>issues</em></span> del repositorio de la organización sobre la que está posicionado.</p></li>
+</ul>
+<figure>
+<img src="images/new-issue.png" alt="Nuevo issue en repositorio de organización." style="width:70.0%" /><figcaption>Nuevo issue en repositorio de organización.<span label="fig:new-issue"></span></figcaption>
+</figure>
+<figure>
+<img src="images/issue-form.png" alt="Formulario de creación de incidencias (issues)." style="width:70.0%" /><figcaption>Formulario de creación de incidencias (issues).<span label="fig:new-issue"></span></figcaption>
+</figure>
+<h2 id="3.3.11">new_repo</h2>
+<p>Crea un nuevo repositorio. La herramienta muestra al usuario dos opciones para crearlo (menú):</p>
+<ul>
+<li><p><span><em>Default</em></span>: crea un repositorio público.</p></li>
+<li><p><span><em>Custom</em></span>: crea un repositorio público o privado, al que es posible añadirle opciones específicas mediante una guía que se le mostrará. Si no se quiere especificar alguna de las opciones que se muestran, puede pulsar la tecla retorno y omitir el paso.</p></li>
+</ul>
+<p><strong>Sintaxis</strong>: <code>new_repo</code> <code>&lt;nombre_repositorio&gt;</code>. Disponible para:</p>
+<ul>
+<li><p>Contexto <strong>usuario</strong>: crea un repositorio para el usuario autenticado.</p></li>
+<li><p>Contexto <strong>organización</strong>: crea un repositorio dentro de la organización en la que se encuentre posicionado el usuario.</p></li>
+</ul>
+<p>En la figura <a href="#fig:create-repo" data-reference-type="ref" data-reference="fig:create-repo">[fig:create-repo]</a>, vemos el menú de creación del repositorio.</p>
+<figure>
+<img src="images/create-repo.png" alt="Menú para la creación de un repositorio." style="width:70.0%" /><figcaption>Menú para la creación de un repositorio.<span label="fig:create-repo"></span></figcaption>
+</figure>
+<figure>
+<img src="images/custom-repo.png" alt="Creación de un repositorio de usuario con opciones específicas." style="width:100.0%" /><figcaption>Creación de un repositorio de usuario con opciones específicas.<span label="fig:custom-repo"></span></figcaption>
+</figure>
+<h2 id="3.3.12">new_team</h2>
+<p>Crea un nuevo equipo dentro de la organización en la que esté posicionado el usuario. Si el comando no recibe ningún parámetro, se abrirá la URL del formulario para crear el equipo en la web de GitHub. En caso de especificarle un parámetro, éste tiene que ser un fichero (ver plantilla <span class="citation" data-cites="B25"></span>) que se encuentre en algún lugar de <code>$HOME</code> en la máquina local.</p>
+<p>Una vez más, este comando sólo se puede ejecutar cuando el usuario está posicionado dentro de una organización en <span><em>ghedsh</em></span>.</p>
+<p><strong>Sintaxis</strong>: <code>new_team</code> <code>[ruta_home_fichero]</code> .</p>
+<figure>
+<img src="images/create-team-form.png" alt="Formulario de creación de un equipo en GitHub." style="width:59.0%" /><figcaption>Formulario de creación de un equipo en GitHub.<span label="fig:create-team-form"></span></figcaption>
+</figure>
+<figure>
+<img src="images/create-team-file.png" alt="Creación de un equipo mediante fichero." style="width:90.0%" /><figcaption>Creación de un equipo mediante fichero.<span label="fig:create-team-file"></span></figcaption>
+</figure>
+<h2 id="3.3.13">open</h2>
+<p>Abre el navegador por defecto y muestra información de GitHub según el contexto:</p>
+<ul>
+<li><p>Contexto de <strong>usuario</strong>: si se ejecuta <code>open</code> a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en <span><em>ghedsh</em></span>. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.</p></li>
+<li><p>Contexto de <strong>organización</strong>: a nivel de organización abre el perfil de la organización en GitHub. Si el usuario se encuentra posicionado en un repositorio de la organización, abre la URL del repositorio. Para este contexto en concreto, es posible pasarle un parámetro que consista en una expresión regular o el nombre de algún miembro y abrir su perfil. En este caso, la <strong>sintaxis</strong> sería: <code>open</code> <code>&quot;nombre&quot;</code> (para el nombre del miembro) o bien <code>open</code> <code>/Regexp/</code> .</p></li>
+<li><p>Contexto de <strong>equipo</strong>: abre la URL del equipo en GitHub.</p></li>
+</ul>
+<p><strong>Sintaxis</strong> general: <code>open</code> .</p>
+<h2 id="3.3.14">orgs</h2>
+<p>Muestra las organizaciones a las que pertenece el usuario autenticado en <span><em>ghedsh</em></span>. Si el comando no recibe ningún parámetro, se mostrarán todas las organizaciones. En caso de proporcionarle un parámetro, debe ser una expresión regular y mostrará los resultados que casen.</p>
+<p>Sólo está disponible en contexto de <strong>usuario</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>orgs</code> <code>[/Regexp/]</code> .</p>
+<figure>
+<img src="images/show-all-orgs.png" alt="Mostrar todas las organizaciones del usuario autenticado en ghedsh." style="width:59.0%" /><figcaption>Mostrar todas las organizaciones del usuario autenticado en ghedsh.<span label="fig:show-orgs-regexp"></span></figcaption>
+</figure>
+<figure>
+<img src="images/show-orgs-regexp.png" alt="Filtrar organizaciones mediante expresión regular." style="width:59.0%" /><figcaption>Filtrar organizaciones mediante expresión regular.<span label="fig:show-orgs-regexp"></span></figcaption>
+</figure>
+<h2 id="3.3.15">people</h2>
+<p>Muestra los nombres de los usuarios que componen una organización. Esto incluye miembros y colaboradores externos (si el usuario autenticado en <span><em>ghedsh</em></span> tiene permisos de administrador en la organización). Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una expresión regular, se mostrarán los resultados que hayan casado con ella.</p>
+<p>Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro del contexto de una <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>people</code> <code>[/Regexp/]</code> .</p>
+<figure>
+<img src="images/org-people.png" alt="Mostrar los miembros de una organización." style="width:59.0%" /><figcaption>Mostrar los miembros de una organización.<span label="fig:org-people"></span></figcaption>
+</figure>
+<figure>
+<img src="images/org-people-regexp.png" alt="Mostrar mediante expresión regular los miembros de una organización." style="width:59.0%" /><figcaption>Mostrar mediante expresión regular los miembros de una organización.<span label="fig:org-people-regexp"></span></figcaption>
+</figure>
+<h2 id="3.3.16">repos</h2>
+<p>Muestra los repositorios según el contexto. Si no se le especifica nungún parámetro, mostrará todos los repositorios. Si se le proporciona una expresión regular, mostrará los nombres de los repositorios que hayan casado.</p>
+<p><strong>Sintaxis</strong>: <code>repos</code><code>[/Regexp/]</code>.</p>
+<ul>
+<li><p>Contexto <strong>organización</strong>: muestra los repositorios de la organización en la que se encuentra el usuario de <span><em>ghedsh</em></span>.</p>
+<figure>
+<img src="images/user-repos.png" alt="Comando repos a nivel de usuario." style="width:60.0%" /><figcaption>Comando repos a nivel de usuario.<span label="fig:user-repos"></span></figcaption>
+</figure></li>
+<li><p>Contexto <strong>usuario</strong>: muestra los repositorios del usuario autenticado en <span><em>ghedsh</em></span>.</p>
+<figure>
+<img src="images/org-repos.png" alt="Comando repos a nivel de organización." style="width:70.0%" /><figcaption>Comando repos a nivel de organización.<span label="fig:org-repos"></span></figcaption>
+</figure></li>
+</ul>
+<h2 id="3.3.17">rm_repo</h2>
+<p>Elimina el repositorio especificado. Se puede realizar tanto a nivel de <strong>usuario</strong> como a nivel de <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>rm_repo</code> <code>&lt;nombre_repositorio&gt;</code> .</p>
+<figure>
+<img src="images/delete-repo.png" alt="Eliminación de un repositorio." style="width:50.0%" /><figcaption>Eliminación de un repositorio.<span label="fig:custom-repo"></span></figcaption>
+</figure>
+<h2 id="3.3.18">rm_team</h2>
+<p>Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defecto y el usuario borrará el o los equipos que desee de la lista proporcionada. Se ejecuta sólo en contexto de <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>rm_team</code> .</p>
+<h2 id="3.3.19">teams</h2>
+<p>Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella. Se ejecuta, exclusivamente, en el contexto de una <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>teams</code> <code>[/Regexp/]</code> .</p>
+<figure>
+<img src="images/org-teams.png" alt="Listar los equipos de una organización." style="width:59.0%" /><figcaption>Listar los equipos de una organización.<span label="fig:org-teams"></span></figcaption>
+</figure>
+<figure>
+<img src="images/org-regexp-teams.png" alt="Listar mediante expresión regular los equipos de una organización." style="width:59.0%" /><figcaption>Listar mediante expresión regular los equipos de una organización.<span label="fig:org-regexp-teams"></span></figcaption>
+</figure>
+<h1 id="3:sec:4">Comandos que dan soporte al proceso de evaluación</h1>
+<p>Los comandos que se explicarán en esta sección reflejan uno de los principales objetivos de <span><em>ghedsh</em></span>: aportar funcionalidades específicas que usen las metodologías de <span><em>GitHub Education</em></span>, facilitando al profesorado la gestión de repositorios del alumnado así como la ejecución de <span><em>scripts</em></span> sobre los mismos.</p>
+<p>En este conjunto de comandos tenemos: <code>new_eval</code>, <code>foreach</code> y <code>foreach_try</code>.</p>
+<h2 id="3.4.1">new_eval</h2>
+<p>Permite crear un repositorio de evaluación. Recibe como parámetros el nombre del repositorio de evaluación y una expresión regular que añade como subdirectorios los repositorios que lo conforman. En <span><em>ghedsh</em></span>, un repositorio de evaluación consiste en hacer uso de los submódulos de <span><em>git</em></span>, de manera que se crea un repositorio raíz que contiene como submódulos todos los proyectos que se van a evaluar. Los pasos que realiza son:</p>
+<ul>
+<li><p>En el directorio actual de la máquina local del usuario, crea un directorio con el mismo nombre del repositorio de evaluación.</p></li>
+<li><p>Añade como submódulos los repositorios de la organización que casen con la expresión regular.</p></li>
+<li><p>Ejecuta <code>git</code> <code>push</code> y sube el contenido a la plataforma GitHub.</p></li>
+</ul>
+
+<p>Dado que, para comprender todas las ventajas que ofrece este comando, es necesario conocer los submódulos de git (<span><em>gitsubmodules<span class="citation" data-cites="B28"></span></em></span>), se explicará en qué consisten a continuación.</p>
+<p>Esencialmente, un submódulo es un repositorio que se encuentra contenido dentro de otro repositorio. El submódulo tiene su propio histórico de <span><em>commits</em></span> y, el repositorio raíz que lo contiene, se denomina súper-proyecto o súper-repositorio.</p>
+<p>Es probable que, mientras trabajamos en un proyecto, necesitemos usar otro proyecto dentro de él. Quizás se trate de una librería de terceros o una que desarrollamos nosotros mismos de forma separada dentro de un proyecto principal. En estos casos, surge un problema común: precisamos de ser capaces de tratar los dos proyectos por separado y, aún así, usar uno dentro del otro.</p>
+<p>El control de versiones <span><em>Git</em></span> aborda ese problema usando submódulos. Los submódulos permiten mantener un repositorio como un subdirectorio de otro repositorio <span><em>Git</em></span>. Por lo tanto, permite clonar otro repositorio en nuestro proyecto, separando los <span><em>commits</em></span> de cada uno.</p>
+<p>En <span><em>ghedsh</em></span>, el comando <code>new_eval</code> se encuentra disponible únicamente en el contexto de <strong>organización</strong>.</p>
+<p><strong>Sintaxis</strong>: <code>new_eval</code> <code>&lt;nombre_repo_evaluacion&gt;</code> <code>&lt;/Regexp/&gt;</code> .</p>
+<figure>
+<img src="images/eval-example.png" alt="Ejemplo de creación de un repositorio de evaluación." style="width:90.0%" /><figcaption>Ejemplo de creación de un repositorio de evaluación.<span label="fig:eval-example"></span></figcaption>
+</figure>
+<figure>
+<img src="images/eval-preview.png" alt="Estructura de un repositorio de evaluación en GitHub." style="width:40.0%" /><figcaption>Estructura de un repositorio de evaluación en GitHub.<span label="fig:eval-example"></span></figcaption>
+</figure>
+<h2 id="3.4.2">foreach</h2>
+<p>Ejecuta sobre cada submódulo el comando <span><em>Bash</em></span> especificado como parámetro. No se detiene ante posibles errores en el proceso. Internamente, ejecuta <code>git</code> <code>submodule</code> <code>foreach</code> .</p>
+<p><strong>Sintaxis</strong>: <code>foreach</code> <code>&lt;comando_bash&gt;</code> .</p>
+<p>Para que el comando lleve a cabo su cometido, se necesita lo siguiente:</p>
+<ul>
+<li><p>Estar en contexto de <strong>organización</strong> dentro de <span><em>ghedsh</em></span> (único contexto en el que está disponible <code>foreach</code> ).</p></li>
+<li><p>Estar posicionado dentro de un repositorio que contenga submódulos, dentro de <span><em>ghedsh</em></span>.</p></li>
+<li><p>En la máquina local, el directorio actual (donde hemos ejecutado <span><em>ghedsh</em></span>) debe ser el repositorio de evaluación en cuestión.</p></li>
+</ul>
+<p>Como se indica en la documentación oficial de <span><em>git submodule foreach <span class="citation" data-cites="B29"></span></em></span>, el comando que se le proporciona tiene acceso a las siguientes variables:</p>
+<ul>
+<li><p><code>$name</code>: nombre del submódulo.</p></li>
+<li><p><code>$path</code>: nombre del submódulo relativo al súper-proyecto.</p></li>
+<li><p><code>$sha1</code>: SHA-1<span class="citation" data-cites="B30"></span> del último <span><em>commit</em></span>.</p></li>
+<li><p><code>$toplevel</code>: ruta absoluta al súper-proyecto.</p></li>
+</ul>
+<p>Por otro lado, como también indica la documentación, cuando existe un error en algún submódulo durante la ejecución del comando, se detiene y devuelve un código distinto de cero. No obstante, este comportamiento puede evitarse añadiendo <code></code>|| <code>:</code> al final del comando especificado como parámetro.</p>
+<p>Hay que tener en cuenta que <span><em>foreach</em></span> en <strong><em>ghedsh</em></strong>, <strong>ya incorpora este comportamiento</strong> y no se detendrá ante errores.</p>
+<figure>
+<img src="images/foreach-example.png" alt="Ejemplo de ghedsh foreach." style="width:90.0%" /><figcaption>Ejemplo de ghedsh foreach.<span label="fig:foreach-example"></span></figcaption>
+</figure>
+<h2 id="3.4.3">foreach_try</h2>
+<p>Realiza la misma tarea que <span><em>foreach</em></span>(<a href="#3.4.2" data-reference-type="ref" data-reference="3.4.2">4.2</a>) y requiere las mismas condiciones para su uso. A diferencia de éste, <span><em>foreach_try</em></span> <strong>detendrá su ejecución cuando se produzca un error en el proceso</strong>.</p>
+<h1 id="3:sec:5">Caso de uso</h1>
+<p>Cabe destacar que el director de este Trabajo de Fin de Grado, Casiano Rodríguez León, ha hecho uso de la herramienta <span><em>ghedsh</em></span> en un entorno educativo real.</p>
+<p>En concreto, se ha utilizado para facilitar tareas de gestión de repositorios y evaluación de prácticas en el curso de Procesadores de Lenguajes (año académico 2017-2018) a lo largo del mes de junio. Además, esto ha contribuido a mejorar aspectos de la herramienta, puesto que, en un entorno real, suelen aparecer nuevos casos de uso que han sido cubiertos satisfactoriamente.</p>
+<p>Por otro lado, Casiano ha realizado diversos vídeo tutoriales (ver sección <a href="#3:sec:6" data-reference-type="ref" data-reference="3:sec:6">6</a>) en los que se profundiza en el manejo de comandos que dan soporte al proceso de evaluación.</p>
+<h1 id="3:sec:6">Aprendiendo a evaluar usando Git, GitHub y GitHub Classroom</h1>
+<p>En esta sección se comentará una serie de recursos disponibles que contienen ejemplos e información de cómo <span><em>Git</em></span>, <span><em>GitHub</em></span> y <span><em>GitHub Classroom</em></span> ayudan en el proceso de evaluación. Además, se hará especial mención a los vídeo tutoriales realizados por Casiano Rodríguez León, en los que, mediante el uso de <span><em>ghedsh</em></span>, se gestiona mejor dicho proceso.</p>
+<p>Se debe tener en cuenta que todavía se están incorporando cambios en <span><em>ghedsh</em></span>. Por lo tanto, es posible que el comportamiento de algunos comandos hayan cambiado respecto a los vídeos tutoriales que se indicarán a continuación. No obstante, la filosofía de uso sigue siendo la misma.</p>
+<p>En cuanto a los tutoriales realizados por Casiano tenemos:</p>
+<ul>
+<li><p>“Preparando una tutoria con un alumno usando Git, GitHub, ghedsh y ghi”<span class="citation" data-cites="B31"></span>, donde se muestra un ejemplo de cómo hacer un seguimiento del trabajo de un alumno para poder evaluarlo. En este caso, se utiliza el comando <code>clone</code> con expresión regular de <span><em>ghedsh</em></span>. Para las incidencias se usa <span><em>ghi</em></span>, de esta manera se puede aportar retroalimentación al alumno desde la línea de comandos.</p></li>
+<li><p>“Evaluando múltiples asignaciones con ghedsh usando foreach”<span class="citation" data-cites="B32"></span>. En este otro vídeo se expone cómo es posible evaluar un conjunto grande de prácticas, mediante la ejecución de un script a través de <code>git</code> <code>submodule</code> <code>foreach</code> <code>script</code> .</p></li>
+</ul>
+
+<p>Por otro lado, también existen recursos de la propia plataforma <span><em>GitHub</em></span> y la comunidad <span><em>GitHub Education</em></span>:</p>
+<ul>
+<li><p>Guía <span><em>GitHub Classroom</em></span> para los profesores<span class="citation" data-cites="B33"></span>.</p></li>
+<li><p>Colección de comentarios en el Foro de la <span><em>GitHub Education Community</em></span> sobre evaluar<span class="citation" data-cites="B34"></span>.</p></li>
+<li><p>Blog <span><em>GitHub</em></span>: “How to grade programming assignments on GitHub”<span class="citation" data-cites="B35"></span>.</p></li>
+</ul>

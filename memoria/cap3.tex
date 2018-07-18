@@ -34,7 +34,7 @@ generará de forma automática un {\it token} de acceso con los permisos necesar
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.68\textwidth]{images/login-example}
+	\includegraphics[width=0.68\textwidth]{images/login-example.png}
 	\caption{Ejemplo de autenticación al usar ghedsh por primera vez.}
 	\label{fig:masterv1}
 	\end{center}
@@ -55,11 +55,11 @@ En esta sección, se explicará este primer grupo de comandos, encargado de tare
 Permite interpretar un comando en la terminal del sistema operativo, sin salir de {\it ghedsh}.
 \bigskip
 
-\textbf{Sintaxis:} \verb bash  \verb <comando_terminal>  .
+\textbf{Sintaxis:} \verb|bash| \verb|<comando_terminal>| .
 En la figura \ref{fig:bash-example}, se muestra un ejemplo de uso.
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.30\textwidth]{images/bash-example}
+	\includegraphics[width=0.30\textwidth]{images/bash-example.png}
 	\caption{Ejemplo de uso del comando bash.}
 	\label{fig:bash-example}
 	\end{center}
@@ -74,30 +74,30 @@ En nuestro sistema operativo (tipo Unix)\cite{B18}, cuando realizamos la operaci
 Los contextos en esta herramienta hacen referencia a nivel de usuario, nivel de organización, nivel de repositorio, etcétera.
 \bigskip
 
-Imaginemos por un momento que nuestro usuario se llama \verb ejemplo , disponemos de un repositorio que se llama \verb ejemplo  y una organización denominada \verb ejemplo . Ésto es totalmente válido, puesto que lo que no permite GitHub es que dos usuarios se llamen igual, que el usuario tenga dos repositorios con el mismo nombre o dos organizaciones bajo el mismo nombre.
+Imaginemos por un momento que nuestro usuario se llama \verb|ejemplo|, disponemos de un repositorio que se llama \verb|ejemplo| y una organización denominada \verb|ejemplo|. Ésto es totalmente válido, puesto que lo que no permite GitHub es que dos usuarios se llamen igual, que el usuario tenga dos repositorios con el mismo nombre o dos organizaciones bajo el mismo nombre.
 Entonces, debemos proporcionar alguna manera de desambiguar a qué contexto nos queremos cambiar.
 \bigskip
 
 En {\it ghedsh} se ha optado por el siguiente planteamiento: para realizar la operación de
 {\it cd}, es necesario especificar el tipo de contexto (nivel) al que queremos cambiarnos, así, aunque el usuario se encuentre en el caso anteriormente comentado, {\it ghedsh} es capaz de saber a qué contexto debe cambiar.
-La sintaxis del comando sería \verb cd  \verb <tipo>  \verb <nombre> , donde \verb nombre  es la cadena de texto que identifica al tipo.
+La sintaxis del comando sería \verb|cd| \verb|<tipo>| \verb|<nombre>|, donde \verb|nombre| es la cadena de texto que identifica al tipo.
 \bigskip
 
 Los tipos de contexto (pueden ser ampliables) que actualmente se soportan en {\it ghedsh} son:
 \begin{itemize}
 	\item \textbf{Nivel de usuario}: estando a nivel de usuario, éste se puede cambiar a cualquiera de sus repositorios o a cualquier organización a la que pertenezca, como vemos a continuación:
 		\begin{itemize}
-			\item Repositorio del usuario: \verb cd   \verb repo  \verb <nombre> .
-			\item Organización del usuario: \verb cd   \verb org  \verb <nombre> . {\it ghedsh} soporta el autocompletado de organizaciones, es decir, se puede pulsar el tabulador para completar automáticamente el nombre de la organización.
+			\item Repositorio del usuario: \verb|cd|  \verb|repo| \verb|<nombre>|.
+			\item Organización del usuario: \verb|cd|  \verb|org| \verb|<nombre>|. {\it ghedsh} soporta el autocompletado de organizaciones, es decir, se puede pulsar el tabulador para completar automáticamente el nombre de la organización.
 		\end{itemize}
 	\item \textbf{Nivel de organización}: estando a nivel de una organización de la que es miembro el usuario autenticado, ({\it ghedsh} sabrá que se refiere al entorno de la organización a la que se ha cambiado) se puede mover a:
 		\begin{itemize}
-			\item Repositorio de la organización: \verb cd   \verb repo  \verb <nombre> .
-			\item Equipo de la organización: \verb cd   \verb team  \verb <nombre> .
+			\item Repositorio de la organización: \verb|cd|  \verb|repo| \verb|<nombre>|.
+			\item Equipo de la organización: \verb|cd|  \verb|team| \verb|<nombre>|.
 		\end{itemize}
 \end{itemize}
 
-Además, si deseamos volver al contexto anterior, haremos de la misma manera que en sistemas operativos tipo Unix: \verb cd  \verb ..  . Hay que tener en cuenta que, actualmete, no se puede realizar la operación de volver al contexto anterior y cambiar a otro de manera simultánea (como en Unix \verb cd  \verb ../another/dir  ), es necesario hacerlo por separado.
+Además, si deseamos volver al contexto anterior, haremos de la misma manera que en sistemas operativos tipo Unix: \verb|cd| \verb|..| . Hay que tener en cuenta que, actualmete, no se puede realizar la operación de volver al contexto anterior y cambiar a otro de manera simultánea (como en Unix \verb|cd| \verb|../another/dir| ), es necesario hacerlo por separado.
 
 \subsubsection{Detalles de implementación}
 Puesto que se trata de uno de los comandos más importantes de {\it ghedsh}, se comentarán los aspectos destacados de la implementación del mismo, incluyendo las dificultades encontradas.
@@ -119,17 +119,17 @@ Internamente, el comando {\it cd} contiene una pila (stack\cite{B19}) en la que 
 \end{lstlisting}
 
 \begin{itemize}
-	\item \verb User : permite saber el nombre del usuario autenticado en {\it ghedsh}.
-	\item \verb user_url : contiene la URL ({\it Uniform Resource Locator}\cite{B20}) del perfil del usuairo en GitHub.
-	\item \verb Org : indica el nombre de la organización actual, si el usuario no está posicionado sobre alguna, el valor es nulo.
-	\item \verb org_url : URL de la organización en GitHub.
-	\item \verb Repo : nombre del repositorio actual, en caso de estar dentro de alguno.
-	\item \verb repo_url : URL del repositorio en GitHub.
-	\item \verb Team : nombre del equipo actual si el usuario está posicionado dentro de alguno.
-	\item \verb team_url : URL del equipo en GitHub.
+	\item \verb|User|: permite saber el nombre del usuario autenticado en {\it ghedsh}.
+	\item \verb|user_url|: contiene la URL ({\it Uniform Resource Locator}\cite{B20}) del perfil del usuairo en GitHub.
+	\item \verb|Org|: indica el nombre de la organización actual, si el usuario no está posicionado sobre alguna, el valor es nulo.
+	\item \verb|org_url|: URL de la organización en GitHub.
+	\item \verb|Repo|: nombre del repositorio actual, en caso de estar dentro de alguno.
+	\item \verb|repo_url|: URL del repositorio en GitHub.
+	\item \verb|Team|: nombre del equipo actual si el usuario está posicionado dentro de alguno.
+	\item \verb|team_url|: URL del equipo en GitHub.
 \end{itemize}
 
-En esencia, {\it change directory} irá variando estos parámetros para conocer a qué nivel se encuentra el usuario (\verb User  siempre tendrá un valor asignado porque representa el usuario autenticado).
+En esencia, {\it change directory} irá variando estos parámetros para conocer a qué nivel se encuentra el usuario (\verb|User| siempre tendrá un valor asignado porque representa el usuario autenticado).
 Por ejemplo, para referirnos a un repositorio de una organización en la que el usuario es miembro, tendríamos:
 \begin{lstlisting}[language=Ruby]
 	config = {
@@ -143,13 +143,13 @@ Por ejemplo, para referirnos a un repositorio de una organización en la que el 
     'team_url' => nil
   }
 \end{lstlisting}
-En el caso de un repositorio de usuario, \verb User  tendría valor asignado y \verb Repo  también tendría valor asignado. A diferencia con el caso anterior, \verb Org  sería nulo ya que nos referimos a un repositorio a nivel de usuario.
+En el caso de un repositorio de usuario, \verb|User| tendría valor asignado y \verb|Repo| también tendría valor asignado. A diferencia con el caso anterior, \verb|Org| sería nulo ya que nos referimos a un repositorio a nivel de usuario.
 \bigskip
 
 Una de las dificultades en la implementación de este comando, fue que, antes de reasignar la estructura de datos que respresenta los contextos, era necesario almacenar el contexto actual para poder volver a éste más tarde.
 \bigskip
 
-Ruby proporciona dos métodos para copiar/clonar objetos: \verb dup \cite{B21} y \verb clone \cite{B22}. No obstante, realizan una copia superficial del objeto, es decir, crearán un nuevo identificador de objeto pero
+Ruby proporciona dos métodos para copiar/clonar objetos: \verb|dup|\cite{B21} y \verb|clone|\cite{B22}. No obstante, realizan una copia superficial del objeto, es decir, crearán un nuevo identificador de objeto pero
 el contenido del mismo referenciará al de la entidad original.
 \bigskip
 
@@ -166,7 +166,7 @@ son aquellos que trabajan con los datos de GitHub del usuario de la herramienta.
 Se explicará la sintaxis para cada uno de ellos y se proporcionará ejemplos de uso.
 \bigskip
 
-Como convenio, los parámetros con el formato \verb <parameter> , son obligatorios. Los que tengan el formato \verb [parameter] , son opcionales.
+Como convenio, los parámetros con el formato \verb|<parameter>|, son obligatorios. Los que tengan el formato \verb|[parameter]|, son opcionales.
 \bigskip
 
 Por otro lado, las expresiones regulares admiten las opciones establecidas por Ruby.
@@ -174,17 +174,17 @@ Por otro lado, las expresiones regulares admiten las opciones establecidas por R
 \subsection{clear}
 \label{3.3.1}
 
-Realiza la misma tarea que el comando \verb clear  en Bash. Borra la pantalla si es posible y sitúa el cursor en la parte superior izquierda de la pantalla (ignora cualquier parámetro adicional).
+Realiza la misma tarea que el comando \verb|clear| en Bash. Borra la pantalla si es posible y sitúa el cursor en la parte superior izquierda de la pantalla (ignora cualquier parámetro adicional).
 
-\textbf{Sintaxis}: \verb clear  .
+\textbf{Sintaxis}: \verb|clear| .
 
 \subsection{clone}
 \label{3.3.2}
 
-Clona repositorios y, si ya existe en el directorio local, realizará \verb git  \verb pull  \verb --all . Recibe como parámetro obligatorio el nombre del repositorio que se desea clonar o una expresión regular, que permitirá clonar todos los repositorios que casen con ella.
-Opcionalmente, es posible especificar un directorio dentro de \verb $HOME   de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.
+Clona repositorios y, si ya existe en el directorio local, realizará \verb|git| \verb|pull| \verb|--all|. Recibe como parámetro obligatorio el nombre del repositorio que se desea clonar o una expresión regular, que permitirá clonar todos los repositorios que casen con ella.
+Opcionalmente, es posible especificar un directorio dentro de \verb|$HOME|  de la máquina local. En caso de no exisir, se creará. Por defecto, se clonarán en el directorio actual de la máquina local.
 
-\textbf{Sintaxis}: \verb clone  \verb <nombre_repo|/Regexp/>  \verb [ruta_en_home]  .
+\textbf{Sintaxis}: \verb|clone| \verb|<nombre_repo|/Regexp/>| \verb|[ruta_en_home]| .
 
 Se puede ejecutar en:
 \begin{itemize}
@@ -196,7 +196,7 @@ En la figura \ref{fig:clone-example} y \ref{fig:clone-example-org} se muestran e
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.60\textwidth]{images/clone-example}
+	\includegraphics[width=0.60\textwidth]{images/clone-example.png}
 	\caption{Ejemplo de clonar un repositorio de usuario.}
 	\label{fig:clone-example}
 	\end{center}
@@ -204,7 +204,7 @@ En la figura \ref{fig:clone-example} y \ref{fig:clone-example-org} se muestran e
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.60\textwidth]{images/clone-example-org}
+	\includegraphics[width=0.60\textwidth]{images/clone-example-org.png}
 	\caption{Ejemplo de clonar un repositorio de organización.}
 	\label{fig:clone-example-org}
 	\end{center}
@@ -213,14 +213,14 @@ En la figura \ref{fig:clone-example} y \ref{fig:clone-example-org} se muestran e
 \subsection{commits}
 \label{3.3.3}
 
-Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb master , en caso de que no se le pase como parámetro una rama en concreto.
+Muestra los {\it commits} (SHA, fecha, autor y mensaje del {\it commit}) de la rama \verb|master|, en caso de que no se le pase como parámetro una rama en concreto.
 Es necesario estar posicionado sobre un repositorio de cualquiera de los siguientes contextos: \textbf{organización} o \textbf{usuario}.
 
-\textbf{Sintaxis}: \verb commits  \verb [rama_repositorio]  .
+\textbf{Sintaxis}: \verb|commits| \verb|[rama_repositorio]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/user-commits}
+	\includegraphics[width=0.59\textwidth]{images/user-commits.png}
 	\caption{Mostrar commits en un repositorio de usuario.}
 	\label{fig:user-commits}
 	\end{center}
@@ -228,7 +228,7 @@ Es necesario estar posicionado sobre un repositorio de cualquiera de los siguien
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/orgs-commits}
+	\includegraphics[width=0.59\textwidth]{images/orgs-commits.png}
 	\caption{Mostrar commits de la rama de un repositorio de organización.}
 	\label{fig:user-commits}
 	\end{center}
@@ -239,7 +239,7 @@ Es necesario estar posicionado sobre un repositorio de cualquiera de los siguien
 
 Temina la ejecución de {\it ghedsh}, guardando el contexto actual. Es decir, si el usuario se encontraba dentro de una organización, la próxima vez que entre en {\it ghedsh} estará dentro de la organización.
 
-\textbf{Sintaxis}: \verb exit  .
+\textbf{Sintaxis}: \verb|exit| .
 
 \subsection{files}
 \label{3.3.5}
@@ -247,11 +247,11 @@ Temina la ejecución de {\it ghedsh}, guardando el contexto actual. Es decir, si
 Muestra el contenido y el tipo de contenido  (fichero o directorio) de un repositorio. Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
 Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del repositorio. Si se le especifica un subdirectorio, se mostrará su contenido.
 
-\textbf{Sintaxis}: \verb files  \verb [subdirectorio]  . 
+\textbf{Sintaxis}: \verb|files| \verb|[subdirectorio]| . 
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/dir-content}
+	\includegraphics[width=0.5\textwidth]{images/dir-content.png}
 	\caption{Listar contenido del repositorio.}
 	\label{fig:dir-content}
 	\end{center}
@@ -259,7 +259,7 @@ Si no se le proporciona ningún parámetro, muestra el contenido de la raíz del
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/subdir-content}
+	\includegraphics[width=0.5\textwidth]{images/subdir-content.png}
 	\caption{Listar contenido de un subdirectorio.}
 	\label{fig:subdir-content}
 	\end{center}
@@ -272,11 +272,11 @@ Añade nuevos miembros a una organización. Recibe como parámetros el/los nombr
 
 Sólo puede ejecutarse en el contexto de una \textbf{organización}.
 
-\textbf{Sintaxis}: \verb invite_member  \verb <user1,  \verb user2,  \verb user3,  \verb ...,  \verb n>  .
+\textbf{Sintaxis}: \verb|invite_member| \verb|<user1,| \verb|user2,| \verb|user3,| \verb|...,| \verb|n>| .
  
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=1\textwidth]{images/invite-member}
+	\includegraphics[width=1\textwidth]{images/invite-member.png}
 	\caption{Añadir miembros específicos.}
 	\label{fig:invite-member}
 	\end{center}
@@ -285,15 +285,15 @@ Sólo puede ejecutarse en el contexto de una \textbf{organización}.
 \subsection{invite\_member\_from\_file}
 \label{3.3.7}
 
-Añade  nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla \cite{B27}) existente en \verb $HOME  de la máquina local. 
+Añade  nuevos miembros a una organización, especificando su nombre de usuario en GitHub. Recibe como único parámetro un fichero (ver plantilla \cite{B27}) existente en \verb|$HOME| de la máquina local. 
 
 El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organización}.
 
-\textbf{Sintaxis}: \verb invite_member_from_file  \verb <ruta_home_fichero>  .
+\textbf{Sintaxis}: \verb|invite_member_from_file| \verb|<ruta_home_fichero>| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=1\textwidth]{images/add-members-file}
+	\includegraphics[width=1\textwidth]{images/add-members-file.png}
 	\caption{Añadir miembros mediante fichero.}
 	\label{fig:add-members-fil}
 	\end{center}
@@ -302,15 +302,15 @@ El comando se ejecuta, exclusivamente, dentro del contexto de una \textbf{organi
 \subsection{invite\_outside\_collaborators}
 \label{3.3.8}
 
-Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb $HOME  de la máquina local.
+Invita a ser miembros de la organización a los colaboradores externos de la misma. Si no se especifica ningún parámetro, invita a todos los colaboradores externos. En caso de que reciba un parámetro, tendrá que ser un fichero (ver plantilla \cite{B26}) situado en \verb|$HOME| de la máquina local.
 
 Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en el contexto de una \textbf{organización}.
 
-\textbf{Sintaxis}: \verb invite_outside_collaborators  \verb [ruta_home_fichero]  .
+\textbf{Sintaxis}: \verb|invite_outside_collaborators| \verb|[ruta_home_fichero]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=1\textwidth]{images/invite-collabs}
+	\includegraphics[width=1\textwidth]{images/invite-collabs.png}
 	\caption{Invitación a ser miembros desde fichero.}
 	\label{fig:invite-collabs}
 	\end{center}
@@ -320,11 +320,11 @@ Se ejecuta, exclusivamente, cuando el usuario de {\it ghedsh} está situado en e
 \label{3.3.9}
 Abre el navegador por defecto, situando al usuario en la lista de incidencias ({\it issues}). Debe estar posicionado dentro de un repositorio de \textbf{usuario} o repositorio de \textbf{organización}.
 
-\textbf{Sintaxis}: \verb issues  .
+\textbf{Sintaxis}: \verb|issues| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.65\textwidth]{images/list-issues}
+	\includegraphics[width=0.65\textwidth]{images/list-issues.png}
 	\caption{Ver incidencias de un repositorio.}
 	\label{fig:list-issues}
 	\end{center}
@@ -332,7 +332,7 @@ Abre el navegador por defecto, situando al usuario en la lista de incidencias ({
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.65\textwidth]{images/issues-list}
+	\includegraphics[width=0.65\textwidth]{images/issues-list.png}
 	\caption{Listado de incidencias del repositorio en GitHub.}
 	\label{fig:issues-list}
 	\end{center}
@@ -343,7 +343,7 @@ Abre el navegador por defecto, situando al usuario en la lista de incidencias ({
 
 Abre el navegador por defecto, situando al usuario en el formulario de creación de un issue. Para ejecutarlo, es necesario estar posicionado sobre un repositorio.
 
-\textbf{Sintaxis}: \verb new_issue  .
+\textbf{Sintaxis}: \verb|new_issue| .
 
 Está disponible para:
 \begin{itemize}
@@ -352,7 +352,7 @@ Está disponible para:
 \end{itemize}
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.7\textwidth]{images/new-issue}
+	\includegraphics[width=0.7\textwidth]{images/new-issue.png}
 	\caption{Nuevo issue en repositorio de organización.}
 	\label{fig:new-issue}
 	\end{center}
@@ -360,7 +360,7 @@ Está disponible para:
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.7\textwidth]{images/issue-form}
+	\includegraphics[width=0.7\textwidth]{images/issue-form.png}
 	\caption{Formulario de creación de incidencias (issues).}
 	\label{fig:new-issue}
 	\end{center}
@@ -375,7 +375,7 @@ Crea un nuevo repositorio. La herramienta muestra al usuario dos opciones para c
 	\item {\it Custom}: crea un repositorio público o privado, al que es posible añadirle opciones específicas mediante una guía que se le mostrará.
 	Si no se quiere especificar alguna de las opciones que se muestran, puede pulsar la tecla retorno y omitir el paso.
 \end{itemize}
-\textbf{Sintaxis}: \verb new_repo  \verb <nombre_repositorio> .
+\textbf{Sintaxis}: \verb|new_repo| \verb|<nombre_repositorio>|.
 Disponible para:
 \begin{itemize}
 	\item Contexto \textbf{usuario}: crea un repositorio para el usuario autenticado.
@@ -384,7 +384,7 @@ Disponible para:
 En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.70\textwidth]{images/create-repo}
+	\includegraphics[width=0.70\textwidth]{images/create-repo.png}
 	\caption{Menú para la creación de un repositorio.}
 	\label{fig:create-repo}
 	\end{center}
@@ -392,7 +392,7 @@ En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=1\textwidth]{images/custom-repo}
+	\includegraphics[width=1\textwidth]{images/custom-repo.png}
 	\caption{Creación de un repositorio de usuario con opciones específicas.}
 	\label{fig:custom-repo}
 	\end{center}
@@ -402,15 +402,15 @@ En la figura \ref{fig:create-repo}, vemos el menú de creación del repositorio.
 \label{3.3.12}
 
 Crea un nuevo equipo dentro de la organización en la que esté posicionado el usuario. Si el comando no recibe ningún parámetro, se abrirá la URL del formulario para crear el equipo en la web de GitHub. En caso de especificarle un parámetro,
-éste tiene que ser un fichero (ver plantilla \cite{B25}) que se encuentre en algún lugar de \verb $HOME  en la máquina local.
+éste tiene que ser un fichero (ver plantilla \cite{B25}) que se encuentre en algún lugar de \verb|$HOME| en la máquina local.
 
 Una vez más, este comando sólo se puede ejecutar cuando el usuario está posicionado dentro de una organización en {\it ghedsh}.
 
-\textbf{Sintaxis}: \verb new_team  \verb [ruta_home_fichero]  .
+\textbf{Sintaxis}: \verb|new_team| \verb|[ruta_home_fichero]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/create-team-form}
+	\includegraphics[width=0.59\textwidth]{images/create-team-form.png}
 	\caption{Formulario de creación de un equipo en GitHub.}
 	\label{fig:create-team-form}
 	\end{center}
@@ -418,7 +418,7 @@ Una vez más, este comando sólo se puede ejecutar cuando el usuario está posic
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.9\textwidth]{images/create-team-file}
+	\includegraphics[width=0.9\textwidth]{images/create-team-file.png}
 	\caption{Creación de un equipo mediante fichero.}
 	\label{fig:create-team-file}
 	\end{center}
@@ -429,14 +429,14 @@ Una vez más, este comando sólo se puede ejecutar cuando el usuario está posic
 
 Abre el navegador por defecto y muestra información de GitHub según el contexto:
 \begin{itemize}
-	\item Contexto de \textbf{usuario}: si se ejecuta \verb open  a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en {\it ghedsh}. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.
+	\item Contexto de \textbf{usuario}: si se ejecuta \verb|open| a nivel de usuario, se abre en el navegador el perfil GitHub del usuario autenticado en {\it ghedsh}. En caso de estar en un repositorio de usuario, se abre la URL de este repositorio.
 	\item Contexto de \textbf{organización}: a nivel de organización abre el perfil de la organización en GitHub. Si el usuario se encuentra posicionado en un repositorio de la organización, abre la URL del repositorio.
 	Para este contexto en concreto, es posible pasarle un parámetro que consista en una expresión regular o el nombre de algún miembro y abrir su perfil.
-	En este caso, la \textbf{sintaxis} sería: \verb open  \verb "nombre"  (para el nombre del miembro) o bien \verb open  \verb /Regexp/  .
+	En este caso, la \textbf{sintaxis} sería: \verb|open| \verb|"nombre"| (para el nombre del miembro) o bien \verb|open| \verb|/Regexp/| .
 	\item Contexto de \textbf{equipo}: abre la URL del equipo en GitHub.
 \end{itemize}
 
-\textbf{Sintaxis} general: \verb open  .
+\textbf{Sintaxis} general: \verb|open| .
 
 \subsection{orgs}
 \label{3.3.14}
@@ -445,11 +445,11 @@ Muestra las organizaciones a las que pertenece el usuario autenticado en {\it gh
 
 Sólo está disponible en contexto de \textbf{usuario}.
 
-\textbf{Sintaxis}: \verb orgs  \verb [/Regexp/]  .
+\textbf{Sintaxis}: \verb|orgs| \verb|[/Regexp/]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/show-all-orgs}
+	\includegraphics[width=0.59\textwidth]{images/show-all-orgs.png}
 	\caption{Mostrar todas las organizaciones del usuario autenticado en ghedsh.}
 	\label{fig:show-orgs-regexp}
 	\end{center}
@@ -457,7 +457,7 @@ Sólo está disponible en contexto de \textbf{usuario}.
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/show-orgs-regexp}
+	\includegraphics[width=0.59\textwidth]{images/show-orgs-regexp.png}
 	\caption{Filtrar organizaciones mediante expresión regular.}
 	\label{fig:show-orgs-regexp}
 	\end{center}
@@ -471,11 +471,11 @@ Si no se le proporciona ningún parámetro, lista todos. En caso de utilizar una
 
 Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro del contexto de una \textbf{organización}.
 
-\textbf{Sintaxis}: \verb people  \verb [/Regexp/]  .
+\textbf{Sintaxis}: \verb|people| \verb|[/Regexp/]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-people}
+	\includegraphics[width=0.59\textwidth]{images/org-people.png}
 	\caption{Mostrar los miembros de una organización.}
 	\label{fig:org-people}
 	\end{center}
@@ -483,7 +483,7 @@ Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro 
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-people-regexp}
+	\includegraphics[width=0.59\textwidth]{images/org-people-regexp.png}
 	\caption{Mostrar mediante expresión regular los miembros de una organización.}
 	\label{fig:org-people-regexp}
 	\end{center}
@@ -494,12 +494,12 @@ Este comando se usa, exclusivamente, cuando el usuario está posicionado dentro 
 
 Muestra los repositorios según el contexto. Si no se le especifica nungún parámetro, mostrará todos los repositorios. Si se le proporciona una expresión regular, mostrará los nombres de los repositorios que hayan casado.
 
-\textbf{Sintaxis}: \verb repos \verb [/Regexp/] .
+\textbf{Sintaxis}: \verb|repos|\verb|[/Regexp/]|.
 \begin{itemize}
 	\item Contexto \textbf{organización}: muestra los repositorios de la organización en la que se encuentra el usuario de {\it ghedsh}.
 	\begin{figure}[H]
 		\begin{center}
-		\includegraphics[width=0.60\textwidth]{images/user-repos}
+		\includegraphics[width=0.60\textwidth]{images/user-repos.png}
 		\caption{Comando repos a nivel de usuario.}
 		\label{fig:user-repos}
 		\end{center}
@@ -507,7 +507,7 @@ Muestra los repositorios según el contexto. Si no se le especifica nungún par�
 	\item Contexto \textbf{usuario}: muestra los repositorios del usuario autenticado en {\it ghedsh}.
 	\begin{figure}[H]
 		\begin{center}
-		\includegraphics[width=0.70\textwidth]{images/org-repos}
+		\includegraphics[width=0.70\textwidth]{images/org-repos.png}
 		\caption{Comando repos a nivel de organización.}
 		\label{fig:org-repos}
 		\end{center}
@@ -519,11 +519,11 @@ Muestra los repositorios según el contexto. Si no se le especifica nungún par�
 
 Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{usuario} como a nivel de \textbf{organización}.
 
-\textbf{Sintaxis}: \verb rm_repo  \verb <nombre_repositorio>  .
+\textbf{Sintaxis}: \verb|rm_repo| \verb|<nombre_repositorio>| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.5\textwidth]{images/delete-repo}
+	\includegraphics[width=0.5\textwidth]{images/delete-repo.png}
 	\caption{Eliminación de un repositorio.}
 	\label{fig:custom-repo}
 	\end{center}
@@ -534,7 +534,7 @@ Elimina el repositorio especificado. Se puede realizar tanto a nivel de \textbf{
 
 Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defecto y el usuario borrará el o los equipos que desee de la lista proporcionada. Se ejecuta sólo en contexto de \textbf{organización}.
 
-\textbf{Sintaxis}: \verb rm_team  .
+\textbf{Sintaxis}: \verb|rm_team| .
 
 \subsection{teams}
 \label{3.3.19}
@@ -542,11 +542,11 @@ Elimina un equipo. No recibe ningún parámetro. Se abre el navegador por defect
 Muestra los equipos existentes en una organización. Si no se le especifica ningún parámetro, listará todos los equipos. Si se le proporciona una expresión regular, mostrará los resultados que casen con ella.
 Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 
-\textbf{Sintaxis}: \verb teams  \verb [/Regexp/]  .
+\textbf{Sintaxis}: \verb|teams| \verb|[/Regexp/]| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-teams}
+	\includegraphics[width=0.59\textwidth]{images/org-teams.png}
 	\caption{Listar los equipos de una organización.}
 	\label{fig:org-teams}
 	\end{center}
@@ -554,7 +554,7 @@ Se ejecuta, exclusivamente, en el contexto de una \textbf{organización}.
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams}
+	\includegraphics[width=0.59\textwidth]{images/org-regexp-teams.png}
 	\caption{Listar mediante expresión regular los equipos de una organización.}
 	\label{fig:org-regexp-teams}
 	\end{center}
@@ -568,7 +568,7 @@ Los comandos que se explicarán en esta sección reflejan uno de los principales
 que usen las metodologías de {\it GitHub Education}, facilitando al profesorado la gestión de repositorios del alumnado así como la ejecución de {\it scripts} sobre los mismos.
 \bigskip
 
-En este conjunto de comandos tenemos: \verb new_eval , \verb foreach  y \verb foreach_try .
+En este conjunto de comandos tenemos: \verb|new_eval|, \verb|foreach| y \verb|foreach_try|.
 
 \subsection{new\_eval}
 \label{3.4.1}
@@ -578,7 +578,7 @@ todos los proyectos que se van a evaluar. Los pasos que realiza son:
 \begin{itemize}
 	\item En el directorio actual de la máquina local del usuario, crea un directorio con el mismo nombre del repositorio de evaluación.
 	\item Añade como submódulos los repositorios de la organización que casen con la expresión regular.
-	\item Ejecuta \verb git  \verb push   y sube el contenido a la plataforma GitHub.
+	\item Ejecuta \verb|git| \verb|push|  y sube el contenido a la plataforma GitHub.
 \end{itemize}
 \bigskip
 
@@ -595,13 +595,13 @@ precisamos de ser capaces de tratar los dos proyectos por separado y, aún así,
 El control de versiones {\it Git} aborda ese problema usando submódulos. Los submódulos permiten mantener un repositorio como un subdirectorio de otro repositorio {\it Git}. Por lo tanto, permite clonar otro repositorio en nuestro proyecto, separando los {\it commits} de cada uno.
 \bigskip
 
-En {\it ghedsh}, el comando \verb new_eval  se encuentra disponible únicamente en el contexto de \textbf{organización}.
+En {\it ghedsh}, el comando \verb|new_eval| se encuentra disponible únicamente en el contexto de \textbf{organización}.
 
-\textbf{Sintaxis}: \verb new_eval  \verb <nombre_repo_evaluacion>  \verb </Regexp/>  .
+\textbf{Sintaxis}: \verb|new_eval| \verb|<nombre_repo_evaluacion>| \verb|</Regexp/>| .
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.9\textwidth]{images/eval-example}
+	\includegraphics[width=0.9\textwidth]{images/eval-example.png}
 	\caption{Ejemplo de creación de un repositorio de evaluación.}
 	\label{fig:eval-example}
 	\end{center}
@@ -609,7 +609,7 @@ En {\it ghedsh}, el comando \verb new_eval  se encuentra disponible únicamente 
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.4\textwidth]{images/eval-preview}
+	\includegraphics[width=0.4\textwidth]{images/eval-preview.png}
 	\caption{Estructura de un repositorio de evaluación en GitHub.}
 	\label{fig:eval-example}
 	\end{center}
@@ -618,34 +618,34 @@ En {\it ghedsh}, el comando \verb new_eval  se encuentra disponible únicamente 
 \subsection{foreach}
 \label{3.4.2}
 
-Ejecuta sobre cada submódulo el comando {\it Bash} especificado como parámetro. No se detiene ante posibles errores en el proceso. Internamente, ejecuta \verb git  \verb submodule  \verb foreach  .
+Ejecuta sobre cada submódulo el comando {\it Bash} especificado como parámetro. No se detiene ante posibles errores en el proceso. Internamente, ejecuta \verb|git| \verb|submodule| \verb|foreach| .
 
-\textbf{Sintaxis}: \verb foreach  \verb <comando_bash>  .
+\textbf{Sintaxis}: \verb|foreach| \verb|<comando_bash>| .
 
 Para que el comando lleve a cabo su cometido, se necesita lo siguiente:
 \begin{itemize}
-	\item Estar en contexto de \textbf{organización} dentro de {\it ghedsh} (único contexto en el que está disponible \verb foreach  ).
+	\item Estar en contexto de \textbf{organización} dentro de {\it ghedsh} (único contexto en el que está disponible \verb|foreach| ).
 	\item Estar posicionado dentro de un repositorio que contenga submódulos, dentro de {\it ghedsh}.
 	\item En la máquina local, el directorio actual (donde hemos ejecutado {\it ghedsh}) debe ser el repositorio de evaluación en cuestión.
 \end{itemize}
 
 Como se indica en la documentación oficial de  {\it git submodule foreach \cite{B29}}, el comando que se le proporciona tiene acceso a las siguientes variables:
 \begin{itemize}
-	\item \verb $name : nombre del submódulo.
-	\item \verb $path : nombre del submódulo relativo al súper-proyecto.
-	\item \verb $sha1 : SHA-1\cite{B30} del último {\it commit}.
-	\item \verb $toplevel : ruta absoluta al súper-proyecto.
+	\item \verb|$name|: nombre del submódulo.
+	\item \verb|$path|: nombre del submódulo relativo al súper-proyecto.
+	\item \verb|$sha1|: SHA-1\cite{B30} del último {\it commit}.
+	\item \verb|$toplevel|: ruta absoluta al súper-proyecto.
 \end{itemize}
 
 Por otro lado, como también indica la documentación, cuando existe un error en algún submódulo durante la ejecución del comando, se detiene y devuelve un código distinto de cero.
-No obstante, este comportamiento puede evitarse añadiendo \verb ||  \verb :  al final del comando especificado como parámetro.
+No obstante, este comportamiento puede evitarse añadiendo \verb|||| \verb|:| al final del comando especificado como parámetro.
 \bigskip
 
 Hay que tener en cuenta que {\it foreach} en  \textbf{\it ghedsh}, \textbf{ya incorpora este comportamiento} y no se detendrá ante errores.
 
 \begin{figure}[H]
 	\begin{center}
-	\includegraphics[width=0.9\textwidth]{images/foreach-example}
+	\includegraphics[width=0.9\textwidth]{images/foreach-example.png}
 	\caption{Ejemplo de ghedsh foreach.}
 	\label{fig:foreach-example}
 	\end{center}
@@ -681,9 +681,9 @@ la filosofía de uso sigue siendo la misma.
 
 En cuanto a los tutoriales realizados por Casiano tenemos:
 \begin{itemize}
-	\item ``Preparando una tutoria con un alumno usando Git, GitHub, ghedsh y ghi''\cite{B31}, donde se muestra un ejemplo de cómo hacer un seguimiento del trabajo de un alumno para poder evaluarlo. En este caso, se utiliza el comando \verb clone  con expresión regular
+	\item ``Preparando una tutoria con un alumno usando Git, GitHub, ghedsh y ghi''\cite{B31}, donde se muestra un ejemplo de cómo hacer un seguimiento del trabajo de un alumno para poder evaluarlo. En este caso, se utiliza el comando \verb|clone| con expresión regular
 	de {\it ghedsh}. Para las incidencias se usa {\it ghi}, de esta manera se puede aportar retroalimentación al alumno desde la línea de comandos.
-	\item ``Evaluando múltiples asignaciones con ghedsh usando foreach''\cite{B32}. En este otro vídeo se expone cómo es posible evaluar un conjunto grande de prácticas, mediante la ejecución de un script a través de \verb git  \verb submodule  \verb foreach  \verb script  .
+	\item ``Evaluando múltiples asignaciones con ghedsh usando foreach''\cite{B32}. En este otro vídeo se expone cómo es posible evaluar un conjunto grande de prácticas, mediante la ejecución de un script a través de \verb|git| \verb|submodule| \verb|foreach| \verb|script| .
 \end{itemize}
 \bigskip
 
